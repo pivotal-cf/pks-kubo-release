@@ -20,6 +20,8 @@ main() {
   if ! drain_kubelet; then
     fail_if_master_is_running
   fi
+  drain_kubelet
+  exit_with_code 0
 }
 
 ensure_safe_exit() {
