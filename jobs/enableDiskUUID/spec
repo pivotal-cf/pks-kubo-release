@@ -1,0 +1,34 @@
+---
+name: enableDiskUUID
+
+templates:
+  bin/pre-start.erb: bin/pre-start
+
+packages:
+- kubo-common
+- govc
+
+properties:
+  vsphere.server:
+    description: "vsphere server"
+  vsphere.port:
+    description: "vsphere port"
+    default: 443
+  vsphere.user:
+    description: "vsphere user"
+  vsphere.password:
+    description: "vsphere password"
+  vsphere.insecure-flag:
+    description: "vsphere insecure?"
+  vsphere.datacenter:
+    description: "vsphere data center"
+  http_proxy:
+    description: "http proxy"
+  https_proxy:
+    description: "https proxy"
+  no_proxy:
+    description: "no proxy"
+
+consumes:
+- name: kubernetes-workers
+  type: kubernetes-workers

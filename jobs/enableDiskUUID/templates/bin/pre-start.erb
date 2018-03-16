@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+/etc/init.d/rpcbind stop || echo Already stopped.
+
+export GOVC_URL="<%= p('vsphere.server') %>:<%= p('vsphere.port') %>"
+export GOVC_USERNAME="<%= p('vsphere.user').gsub('\\','\\\\\\') %>"
+export GOVC_PASSWORD='<%= p('vsphere.password').gsub("'", %q(\\\')) %>'
+export GOVC_INSECURE="<%= p('vsphere.insecure-flag') %>"
+export GOVC_DATACENTER="<%= p('vsphere.datacenter') %>"
+
+<% if_p('http_proxy') do |http_proxy| %>
+  export http_proxy=<%= http_proxy %>
+  export HTTP_PROXY=<%= http_proxy %>
+<% end %>
+<% if_p('https_proxy') do |https_proxy| %>
+  export https_proxy=<%= https_proxy %>
+  export HTTPS_PROXY=<%= https_proxy %>
+<% end %>
+<% if_p('no_proxy') do |no_proxy| %>
+  export no_proxy=<%= no_proxy %>
+  export NO_PROXY=<%= no_proxy %>
+<% end %>
+
+<% link("kubernetes-workers").instances.map do |worker| %>
+/var/vcap/packages/govc/bin/govc vm.change -e 'disk.enableUUID=1' -vm.ip=<%= worker.address %>
+<% end %>
+
