@@ -39,3 +39,8 @@ consumes:
 - name: cloud-provider
   type: cloud-provider
   optional: true
+provides:
+- name: kube-controller-manager
+  type: kube-controller-manager
+  properties:
+  - cluster-signing

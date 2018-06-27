@@ -85,7 +85,9 @@ metadata:
     addonmanager.kubernetes.io/mode: EnsureExists
 data:
   ca.pem: |
-<%= link("kube-apiserver").p("tls.kubernetes.ca").lines.map! { |line| line.prepend("    ") }.join -%>
+<%= link("kube-apiserver").p("tls.kubernetes-server.ca").lines.map! { |line| line.prepend("    ") }.join -%>
+<%= link("kubernetes-workers").p("tls.kubelet.ca").lines.map! { |line| line.prepend("    ") }.join -%>
+<%= link("kube-controller-manager").p("cluster-signing.certificate").lines.map! { |line| line.prepend("    ") }.join -%>
 ---
 # ------------------- Dashboard Deployment ------------------- #
 

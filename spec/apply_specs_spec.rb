@@ -11,7 +11,7 @@ describe 'apply-specs' do
         'instances' => [],
         'properties' => {
           'tls' => {
-            'kubernetes' => {
+            'kubernetes-server' => {
               'ca' => 'All scabbards desire scurvy, misty krakens.'
             }
           },
@@ -24,7 +24,7 @@ describe 'apply-specs' do
   end
 
   let(:rendered_ca) do
-    compiled_template('apply-specs', 'config/ca.pem', {}, links)
+    compiled_template('apply-specs', 'config/ca-server.pem', {}, links)
   end
 
   let(:rendered_kubeconfig) do

@@ -36,8 +36,8 @@ processes:
   - --cloud-provider=<%= cloud_provider.p('cloud-provider.type') %>
   - --cloud-config=/var/vcap/jobs/kube-apiserver/config/cloud-provider.ini
   <% end %>
-  - --kubelet-client-key=/var/vcap/jobs/kube-apiserver/config/kubelet-client-key.pem
-  - --kubelet-client-certificate=/var/vcap/jobs/kube-apiserver/config/kubelet-client-cert.pem
+  - --kubelet-client-key=/var/vcap/jobs/kube-apiserver/config/kubernetes-client-key.pem
+  - --kubelet-client-certificate=/var/vcap/jobs/kube-apiserver/config/kubernetes-client.pem
   - --enable-admission-plugins=<%= admission_control_options.join(",") %>
   - --disable-admission-plugins=PersistentVolumeLabel
   - --enable-bootstrap-token-auth
@@ -56,19 +56,19 @@ processes:
   - --service-account-lookup
   - --service-cluster-ip-range=10.100.200.0/24
   - --service-node-port-range=30000-32767
-  - --tls-cert-file=/var/vcap/jobs/kube-apiserver/config/kubernetes.pem
-  - --tls-private-key-file=/var/vcap/jobs/kube-apiserver/config/kubernetes-key.pem
+  - --tls-cert-file=/var/vcap/jobs/kube-apiserver/config/kubernetes-server.pem
+  - --tls-private-key-file=/var/vcap/jobs/kube-apiserver/config/kubernetes-server-key.pem
   - --token-auth-file=/var/vcap/jobs/kube-apiserver/config/tokens.csv
   - --storage-media-type=application/json
   - --enable-aggregator-routing
   - --v=<%=p('logging-level') %>
   - --authorization-mode=RBAC
   - --runtime-config=api/v1,rbac.authorization.k8s.io/v1alpha1
-  - --client-ca-file=/var/vcap/jobs/kube-apiserver/config/kubernetes.pem
-  - --proxy-client-cert-file=/var/vcap/jobs/kube-apiserver/config/kubernetes.pem
-  - --proxy-client-key-file=/var/vcap/jobs/kube-apiserver/config/kubernetes-key.pem
+  - --client-ca-file=/var/vcap/jobs/kube-apiserver/config/kubernetes-client-ca.pem
+  - --proxy-client-cert-file=/var/vcap/jobs/kube-apiserver/config/kubernetes-server.pem
+  - --proxy-client-key-file=/var/vcap/jobs/kube-apiserver/config/kubernetes-server-key.pem
   - --requestheader-allowed-names=aggregator
-  - --requestheader-client-ca-file=/var/vcap/jobs/kube-apiserver/config/kubernetes.pem
+  - --requestheader-client-ca-file=/var/vcap/jobs/kube-apiserver/config/kubernetes-server.pem
   - --requestheader-extra-headers-prefix=X-Remote-Extra-
   - --requestheader-group-headers=X-Remote-Group
   - --requestheader-username-headers=X-Remote-User

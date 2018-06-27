@@ -4,7 +4,9 @@ templates:
   bin/deploy-specs.erb: bin/deploy-specs
   bin/run.erb: bin/run
   config/kubeconfig.erb: config/kubeconfig
-  config/ca.pem.erb: config/ca.pem
+  config/ca-server.pem.erb: config/ca-server.pem
+  config/ca-kubelet.pem.erb: config/ca-kubelet.pem
+  config/ca-cluster.pem.erb: config/ca-cluster.pem
   config/heapster/heapster.crt.erb: config/heapster/heapster.crt
   config/heapster/heapster.key.erb: config/heapster/heapster.key
   config/influxdb/influxdb.crt.erb: config/influxdb/influxdb.crt
@@ -49,3 +51,7 @@ consumes:
 - name: cloud-provider
   type: cloud-provider
   optional: true
+- name: kubernetes-workers
+  type: kubernetes-workers
+- name: kube-controller-manager
+  type: kube-controller-manager
