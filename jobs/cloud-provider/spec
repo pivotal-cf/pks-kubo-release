@@ -40,7 +40,7 @@ provides:
   - cloud-provider.vsphere.working-dir
 
 consumes:
-  credentials: {from: vcenter_password, deployment: pks-api}
+  credentials: {from: pks_vcenter_password}
 
 properties:
   cloud-provider.type:
