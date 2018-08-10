@@ -20,7 +20,7 @@
         cloud_config['user'] = cloud_provider.p('cloud-provider.vsphere.user').gsub('\\','\\\\\\')
 
         password = ""
-        link('credentials').p('password').split("").each do |i|
+        link('credentials').p('vcenter.password').split("").each do |i|
         # check for / and "
         if i == '"' or i == '\\'
           password += '\\' + i

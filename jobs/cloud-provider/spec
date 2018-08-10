@@ -31,7 +31,6 @@ provides:
   - cloud-provider.vsphere.datacenter
   - cloud-provider.vsphere.datastore
   - cloud-provider.vsphere.insecure-flag
-  - cloud-provider.vsphere.password
   - cloud-provider.vsphere.port
   - cloud-provider.vsphere.resourcepool-path
   - cloud-provider.vsphere.scsicontrollertype
@@ -67,8 +66,6 @@ properties:
   # vSphere specific properties
   cloud-provider.vsphere.user:
     description: User name for vCenter
-  cloud-provider.vsphere.password:
-    description: Password for vCenter
   cloud-provider.vsphere.server:
     description: IP/URL for vCenter
   cloud-provider.vsphere.port:
