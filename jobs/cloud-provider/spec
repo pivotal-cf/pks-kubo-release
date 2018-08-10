@@ -40,6 +40,9 @@ provides:
   - cloud-provider.vsphere.vm-uuid
   - cloud-provider.vsphere.working-dir
 
+consumes:
+  credentials: {from: vcenter_password, deployment: pks-api}
+
 properties:
   cloud-provider.type:
     description: "Type of Cloud Provider to use"
