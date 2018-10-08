@@ -21,7 +21,7 @@
     admission_control_options.push("DenyEscalatingExec")
   end
 
-  if !p('allow_privileged')
+  if p('security-context-deny')
     admission_control_options.push("SecurityContextDeny")
   end
 %>
@@ -51,7 +51,6 @@ processes:
   - --etcd-certfile=/var/vcap/jobs/kube-apiserver/config/etcd-client.crt
   - --etcd-keyfile=/var/vcap/jobs/kube-apiserver/config/etcd-client.key
   - --kubelet-https
-  - --repair-malformed-updates=false
   - --secure-port=8443
   - --service-account-key-file=/var/vcap/jobs/kube-apiserver/config/service-account-public-key.pem
   - --service-account-lookup
@@ -64,7 +63,7 @@ processes:
   - --enable-aggregator-routing
   - --v=<%=p('logging-level') %>
   - --authorization-mode=RBAC
-  - --runtime-config=api/v1,rbac.authorization.k8s.io/v1alpha1
+  - --runtime-config=api/v1
   - --client-ca-file=/var/vcap/jobs/kube-apiserver/config/kubernetes.pem
   - --proxy-client-cert-file=/var/vcap/jobs/kube-apiserver/config/kubernetes.pem
   - --proxy-client-key-file=/var/vcap/jobs/kube-apiserver/config/kubernetes-key.pem
@@ -88,13 +87,13 @@ processes:
   - --oidc-username-claim=<%= oidc_username_claim %>
   <% end %>
   <% if_p("oidc.username-prefix") do |oidc_username_prefix| %>
-  - --oidc-username-prefix=<%= oidc_username_prefix %>
+  - "--oidc-username-prefix=<%= oidc_username_prefix %>"
   <% end %>
   <% if_p("oidc.groups-claim") do |oidc_groups_claim| %>
   - --oidc-groups-claim=<%= oidc_groups_claim %>
   <% end %>
   <% if_p("oidc.groups-prefix") do |oidc_groups_prefix| %>
-  - --oidc-groups-prefix=<%= oidc_groups_prefix %>
+  - "--oidc-groups-prefix=<%= oidc_groups_prefix %>"
   <% end %>
   <% if_p("oidc.ca") do %>
   - --oidc-ca-file=/var/vcap/jobs/kube-apiserver/config/oidc-ca.pem
