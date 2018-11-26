@@ -70,30 +70,30 @@ jq-linux64-1.5:
   size: 3027945
   object_id: 41eb1cd1-0377-4e08-5602-51e0af8b9b52
   sha: d8e36831c3c94bb58be34dd544f44a6c6cb88568
-kubernetes-1.10.10/kube-apiserver:
-  size: 226942530
-  object_id: 7cad4b95-3072-49d8-5a22-45e6c8697d8a
-  sha: 1d0a78e42e7aba9f6d48435549b8be9422774e47
-kubernetes-1.10.10/kube-controller-manager:
-  size: 149722843
-  object_id: 052249b5-5275-4116-6262-a4bd7b6d0105
-  sha: b5114c8046e9b8b3670c6c27a80585164fa7e607
-kubernetes-1.10.10/kube-proxy:
-  size: 52154421
-  object_id: 1b97d969-c322-45e9-6c5a-f1c1d31965c8
-  sha: 7ac7fbfe461c571c3d4c4698f72f77bc0fa2c58d
-kubernetes-1.10.10/kube-scheduler:
-  size: 50066071
-  object_id: 4da43b37-97e0-4785-6ee9-818cc18470c9
-  sha: 1bb47e02436e024061fdc191eb316ca1608ec9fc
-kubernetes-1.10.10/kubectl:
-  size: 55088352
-  object_id: 1959c8de-3eea-469d-7789-7adcd80aeabf
-  sha: 4206013089de6260a4c417def7805866bc486486
-kubernetes-1.10.10/kubelet:
-  size: 155830256
-  object_id: a7e3ad6a-537e-4e0a-7ff2-0315afe993e8
-  sha: e5de893ff5b345d93c763aa138d2b2b43cb71bbc
+kubernetes-1.10.11/kube-apiserver:
+  size: 226934438
+  object_id: 2e13dc13-d6b8-46e8-5f15-8ff768a0db54
+  sha: 2fb8f085aa98c6f0bfc24ef818397023db767ffd
+kubernetes-1.10.11/kube-controller-manager:
+  size: 149714651
+  object_id: 4f4fbcb2-36c6-41ae-7772-865bb3593189
+  sha: 9b8084aac337c4b6ab44ca3f412f8df50bf33524
+kubernetes-1.10.11/kube-proxy:
+  size: 52146229
+  object_id: 3bbb00c5-49d7-4109-6fe0-de62571a9708
+  sha: 0a1daba8be7fc0890132f0819d62c84bdf282a91
+kubernetes-1.10.11/kube-scheduler:
+  size: 50057879
+  object_id: 608457b8-b4ff-4cc2-63fd-5c0af2464c4a
+  sha: 77d40d931ddec41436a4490bf5ab385a087b8f3a
+kubernetes-1.10.11/kubectl:
+  size: 55088452
+  object_id: b2a11de8-cc65-48c8-7d8a-f140176732c5
+  sha: 9ee2f78491cbf8dc76d644c23cfc8c955c34d55d
+kubernetes-1.10.11/kubelet:
+  size: 155823400
+  object_id: 88bdfb73-c1e6-4a8f-504b-0c1a2e112c85
+  sha: dbe06f92f4d1878482af0188070c6c0bca5d5e65
 socat-1.7.3.2.tar.gz:
   size: 615818
   object_id: a6f3dcb3-54a0-44a3-4100-f408932aaf8f
