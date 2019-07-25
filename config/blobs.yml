@@ -26,26 +26,26 @@ conntrack/libnetfilter-conntrack3_1.0.4-1.deb:
   size: 45872
   object_id: 42a59368-8ae3-4502-480b-56ecd3f40f7a
   sha: 743b497bd6a6491a8cad11c04103e55c7a9cc93c
-container-images/coredns_coredns:1.3.1.tgz:
-  size: 12119185
-  object_id: 063dda42-b382-45ef-6121-ad5f05dbaa91
-  sha: 9a137c153a37d51377fa78199346b4e0551a2799
-container-images/k8s.gcr.io_kubernetes-dashboard-amd64:v1.10.1.tgz:
-  size: 44852477
-  object_id: 1d8fdcd7-fe1e-431d-5d90-2032b97d8ad0
-  sha: 8a19204a0a3f75c5a4f495b1cd3bb1c7d604fa6c
-container-images/k8s.gcr.io_metrics-server-amd64:v0.3.3.tgz:
-  size: 10376132
-  object_id: e74f3c71-252b-47a0-7357-f54feebaf0dd
-  sha: 3ef24cca1418d8e00104e2f87abefe8f4777db8b
-container-images/k8s.gcr.io_pause:3.1.tgz:
-  size: 315592
-  object_id: f6ba8b90-9a60-454d-73e0-cab4b1c4a554
-  sha: d4095b6513b3d5ef770c44d651ae5601878906d8
-container-images/pcfkubo_nginx-bionic:1.0.0.tgz:
-  size: 77661967
-  object_id: f2575255-59f6-442e-5f69-d10e5a24e178
-  sha: c677df2c93e1a15604285ea0f32b121011dcacdd
+container-images/vmware_coredns:1.3.1.tgz:
+  size: 10296406
+  object_id: 7ec0f8ab-5316-408e-731d-1389a46cb393
+  sha: sha256:a3bfaf9d63b6b5b4e5c5a9a53bfa6bdfc7067887a0781bdbb9ade734621810e2
+container-images/vmware_kubernetes-dashboard-amd64:v1.10.1.tgz:
+  size: 44276932
+  object_id: 5df59876-85a6-4a82-7ce0-42b02e40468f
+  sha: sha256:4a26bef5de642d089ad93db9707e1df31c0c9069d4abbea25078d1e951a48cf8
+container-images/vmware_metrics-server-amd64:v0.3.3.tgz:
+  size: 12059532
+  object_id: 876a3f5f-40dd-4f03-614d-bc77aa3b3a8b
+  sha: sha256:602e6d08842dd51e099839af097b4e7dc865018e0576b9abb91f6b174ec34380
+container-images/vmware_nginx-bionic:1.0.0.tgz:
+  size: 63146472
+  object_id: 5fa4320c-21be-4cce-5a18-408959aff5b6
+  sha: sha256:612377dbf688769080d52eab5d603e688c059fb703cdd77d0988b1bd87ddf935
+container-images/vmware_pause:3.1.tgz:
+  size: 314768
+  object_id: 2224d7c6-0395-49ea-7356-0b04d413e8ae
+  sha: sha256:8b7f7da2677ac899f712ea89cb2f0683f8a42c8cd339512c58df0aa4d162e8cb
 etcdctl-3.0.7:
   size: 18427584
   object_id: 32221476-5c3d-4ec7-5869-44c989cc3077
