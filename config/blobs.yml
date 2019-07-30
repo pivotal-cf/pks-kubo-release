@@ -39,9 +39,9 @@ container-images/vmware_metrics-server-amd64:v0.3.3.tgz:
   object_id: 876a3f5f-40dd-4f03-614d-bc77aa3b3a8b
   sha: sha256:602e6d08842dd51e099839af097b4e7dc865018e0576b9abb91f6b174ec34380
 container-images/vmware_nginx-bionic:1.0.0.tgz:
-  size: 63146472
-  object_id: 5fa4320c-21be-4cce-5a18-408959aff5b6
-  sha: sha256:612377dbf688769080d52eab5d603e688c059fb703cdd77d0988b1bd87ddf935
+  size: 66797183
+  object_id: 370b05ca-2ad8-4f1b-6002-22ea8ce709fc
+  sha: sha256:27ed75ab7de88b3b58c5117357eee4baa77e53140b3cba7ed3f678a0bfa253ee
 container-images/vmware_pause:3.1.tgz:
   size: 314768
   object_id: 2224d7c6-0395-49ea-7356-0b04d413e8ae
