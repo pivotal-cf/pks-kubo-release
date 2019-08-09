@@ -18,14 +18,14 @@ cni/util-linux_2.27.1-6ubuntu3_amd64.deb:
   size: 847730
   object_id: 27eb3ec3-220f-4a25-6c4f-ec219c37ac8d
   sha: 568f62cb031608ab09ba1e3c2121e9e8b92dcae4
-conntrack/conntrack_1.4.5-2_amd64.deb:
-  size: 33284
-  object_id: 775dfe48-6f11-4f55-58d1-144c67f6f2b1
-  sha: sha256:893976f1717540d77bdea9d0bd4a9996488f7ad4e2a9e6127fb4499efefd0887
-conntrack/libnetfilter-conntrack3_1.0.7-1_amd64.deb:
-  size: 42376
-  object_id: bee14ade-bc9f-4b48-71f4-73e67108d56f
-  sha: sha256:436b400f58a33426809d7f43c3aaadd658ed1f0a0a5a45ec4dc75652baf99f5f
+conntrack/conntrack_1.4.1-1.deb:
+  size: 25112
+  object_id: 9bf859c2-93aa-48b0-69f9-5903f0b4acbe
+  sha: 494df11d77a1dd31fbc1e0e8c7946957ef5a74af
+conntrack/libnetfilter-conntrack3_1.0.4-1.deb:
+  size: 45872
+  object_id: 42a59368-8ae3-4502-480b-56ecd3f40f7a
+  sha: 743b497bd6a6491a8cad11c04103e55c7a9cc93c
 container-images/vmware_coredns:1.3.1.tgz:
   size: 10279315
   object_id: fafcefe7-767e-4c93-4f8a-9b4bfe09dadf
@@ -66,30 +66,30 @@ jq-linux64-1.6:
   size: 3953824
   object_id: efdcc8cd-7155-47d4-65c9-d3d74700633f
   sha: 056ba5d6bbc617c29d37158ce11fd5a443093949
-kubernetes-1.14.4/kube-apiserver:
-  size: 167628128
-  object_id: 565c4284-e522-4da4-6aa5-4bcafad48990
-  sha: 922c28e877a3b5d3368e91f873837c9e1398dcb3
-kubernetes-1.14.4/kube-controller-manager:
-  size: 115649056
-  object_id: b9e5614f-8b4a-4457-60c7-1f6f29f6b80e
-  sha: c7872505be52c483131f2f5c06b33c8afbb91f8c
-kubernetes-1.14.4/kube-proxy:
+kubernetes-1.14.5/kube-apiserver:
+  size: 167624032
+  object_id: cda57957-d41d-4538-4d97-5046d2b58f8d
+  sha: fa4379ee28e67d2cb4dba88cb2627b87e26609aa
+kubernetes-1.14.5/kube-controller-manager:
+  size: 115644960
+  object_id: d59c5846-b2d0-447e-4452-488e8c79178d
+  sha: a029c93aa5617fb3a88f1b1bd01a316090f10d4e
+kubernetes-1.14.5/kube-proxy:
   size: 36685440
-  object_id: 711092c9-8478-4b50-622f-68b1b2e71783
-  sha: f9b1e1339530f6f529450120cf72a08a189f0f25
-kubernetes-1.14.4/kube-scheduler:
+  object_id: fe98b448-16b9-4141-4234-e48f588503db
+  sha: 14f2cc598ec316d578be73c40404a320254aade0
+kubernetes-1.14.5/kube-scheduler:
   size: 39258304
-  object_id: 68ae6557-3732-4ded-7b0e-4ca3e9736419
-  sha: ac0ae65fd2391a4b5df6b147a1430de45795d03e
-kubernetes-1.14.4/kubectl:
+  object_id: 6ef99be0-72b0-46ff-6b3f-d5d8c1fff3e2
+  sha: adfcbe149918c762713af531ea6a18aad1fa6058
+kubernetes-1.14.5/kubectl:
   size: 43107136
-  object_id: 741f99f2-7305-40c2-76b9-e58c49d9be36
-  sha: c055ce78bebd3af14050d3e3f6ea4306daa37b5f
-kubernetes-1.14.4/kubelet:
+  object_id: ba88b1a7-76fe-45a4-6986-aad0e9ae236a
+  sha: f9a872d38d1a63d120fe4711fc5782155c73fe2e
+kubernetes-1.14.5/kubelet:
   size: 128026560
-  object_id: 3bda3a98-572f-4b8f-79b3-23e40ab03dfe
-  sha: e4d3e655890614e8ceaf2dd00a0613e87764cdd3
+  object_id: 97234c6a-39b1-483e-55df-95ffd3c2f888
+  sha: ce8a010c362f298f62ce94d7a6f7b3d949635633
 libmnl0_1.0.3-3.deb:
   size: 11416
   object_id: 245e085f-1ad2-447d-67bb-1894b960c571
@@ -102,10 +102,10 @@ nfs-debs/keyutils_1.5.9-8ubuntu1_amd64.deb:
   size: 47054
   object_id: e1b42c34-4e88-426b-7268-99d1bdfd40c1
   sha: ec2e96e73feb5215605c9f0254cad05d9cc5688a
-nfs-debs/libevent-2.1-6_2.1.8-stable-4_amd64.deb:
-  size: 176942
-  object_id: 03b46be1-f8d8-4dbf-74ec-66f412c02415
-  sha: sha256:ffebc078745662d2308c0026cc50e37cb54344bde61b1f92b979a2a4e8138efe
+nfs-debs/libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb:
+  size: 114014
+  object_id: cbdc50ad-e7f5-4a3b-6115-77392061bd76
+  sha: 57d69f44f3e058e48a7b79595d36076eb21f5942
 nfs-debs/libnfsidmap2_0.25-5_amd64.deb:
   size: 32182
   object_id: 59ba4d66-fb63-4a62-75da-8502169d85cd
@@ -114,10 +114,10 @@ nfs-debs/nfs-common_1:1.2.8-9ubuntu12.1_amd64.deb:
   size: 184334
   object_id: 6c99be77-1ba2-4be4-409a-36c090035646
   sha: 38f7234fade7c15ffecf4c043c877b01ead92d3d
-nfs-debs/rpcbind_1.2.5-0.3_amd64.deb:
-  size: 46116
-  object_id: 2b61e2df-9303-4fd8-7eb4-52ed2d775342
-  sha: sha256:652b1d97d2d87907004f11ec7554ddd939dc7c353cdccc433ab32a8fe7c40c54
+nfs-debs/rpcbind_0.2.3-0.2_amd64.deb:
+  size: 40252
+  object_id: 56ad455e-38be-40da-7815-a9d4774d55e4
+  sha: 8fa58cfcb1862c6d337d10496fada5f1a6e94a03
 pkg-config-0.29.2.tar.gz:
   size: 2016830
   object_id: 2a0b553f-c65d-42ef-6317-dd0cfcdc7c06
