@@ -122,10 +122,10 @@ nfs-debs/keyutils_1.5.9-8ubuntu1_amd64.deb:
   size: 47054
   object_id: e1b42c34-4e88-426b-7268-99d1bdfd40c1
   sha: ec2e96e73feb5215605c9f0254cad05d9cc5688a
-nfs-debs/libevent-2.1-6_2.1.8-stable-4build1_amd64.deb:
-  size: 133328
-  object_id: 8cc8df4c-0064-4d1b-5877-66c08b9c713b
-  sha: sha256:76bc94b3bb4356673c61dd2a4a7b06f40de21dab051aa4b31282aa9d7798b383
+nfs-debs/libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb:
+  size: 114014
+  object_id: 0fa38188-cd2c-417f-7407-02367bc99c7d
+  sha: sha256:e1acdffde386a4da7de46166ffd199771a13498f5d4fc38d61b3fa0eba305572
 nfs-debs/libnfsidmap2_0.25-5_amd64.deb:
   size: 32182
   object_id: 59ba4d66-fb63-4a62-75da-8502169d85cd
