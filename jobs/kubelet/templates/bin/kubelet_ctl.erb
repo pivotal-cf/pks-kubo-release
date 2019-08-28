@@ -29,9 +29,9 @@ DATA_DIR=/var/vcap/store/kubernetes
 <% end %>
 
 <%
-  labels = ["spec.ip=#{spec.ip}","bosh.id=#{spec.id}","bosh.zone=#{spec.az}"]
+  labels = ["spec.ip=#{spec.ip}","bosh.id=#{spec.id}","bosh.zone=\'#{spec.az}\'"]
   if iaas=="vsphere"
-    labels << "failure-domain.beta.kubernetes.io/zone=#{spec.az}"
+    labels << "failure-domain.beta.kubernetes.io/zone=\'#{spec.az}\'"
   end
 
   if_p('k8s-args') do |args|
