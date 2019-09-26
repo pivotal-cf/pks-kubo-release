@@ -43,7 +43,3 @@ properties:
         cluster-name: kubernetes
         enable-garbage-collector: true
 
-consumes:
-- name: cloud-provider
-  type: cloud-provider
-  optional: true

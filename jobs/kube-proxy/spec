@@ -15,8 +15,6 @@ packages:
 properties:
   api-token:
     description: The password for the kube-proxy user
-  cloud-provider:
-    description: The type of cloud-provider that is being deployed
   tls.kubernetes:
     description: Certificate and private key for the Kubernetes master
   kube-proxy-configuration:

@@ -8,9 +8,7 @@ RUN_DIR=/var/vcap/sys/run/kubernetes
 PIDFILE=$RUN_DIR/kube-proxy.pid
 LOG_DIR=/var/vcap/sys/log/kube-proxy
 
-<% if_p('cloud-provider') do |cloud_provider| %>
-  cloud_provider="<%= cloud_provider %>"
-<% end %>
+  cloud_provider=external
 
 # shellcheck disable=SC1091
 . /var/vcap/packages/pid_utils/pid_utils.sh

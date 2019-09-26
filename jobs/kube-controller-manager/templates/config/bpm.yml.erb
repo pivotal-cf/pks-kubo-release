@@ -2,8 +2,8 @@
 processes:
 - name: kube-controller-manager
   executable: /var/vcap/packages/kubernetes/bin/kube-controller-manager
-  args: 
-  <% 
+  args:
+  <%
     if_p('k8s-args') do |args|
       args.each do |flag, value|
         valueString = ""
@@ -23,9 +23,7 @@ processes:
       end
     end
   %>
-  <%- if_link('cloud-provider') do |cloud_provider| -%>
-  - --cloud-provider=<%= cloud_provider.p('cloud-provider.type') %>
-  - --cloud-config=/var/vcap/jobs/kube-controller-manager/config/cloud-provider.ini
+  - --cloud-provider=external
   <%- end -%>
   hooks:
     pre_start: /var/vcap/jobs/kube-controller-manager/bin/chmod-product-serial

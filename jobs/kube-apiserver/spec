@@ -72,9 +72,6 @@ consumes:
   type: etcd
 - name: kube-apiserver
   type: kube-apiserver
-- name: cloud-provider
-  optional: true
-  type: cloud-provider
 provides:
 - name: kube-apiserver
   properties:
