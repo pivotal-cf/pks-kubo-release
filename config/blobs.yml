@@ -34,11 +34,10 @@ container-images/vmware_kubernetes-dashboard-amd64:v1.10.1.tgz:
   size: 44276932
   object_id: 5df59876-85a6-4a82-7ce0-42b02e40468f
   sha: sha256:4a26bef5de642d089ad93db9707e1df31c0c9069d4abbea25078d1e951a48cf8
-# TODO
-container-images/k8s.gcr.io_metrics-server-amd64:v0.3.3.tgz:
-  size: 10376132
-  object_id: e74f3c71-252b-47a0-7357-f54feebaf0dd
-  sha: 3ef24cca1418d8e00104e2f87abefe8f4777db8b
+container-images/vmware_metrics-server-amd64:v0.3.3.tgz:
+  size: 12059532
+  object_id: 876a3f5f-40dd-4f03-614d-bc77aa3b3a8b
+  sha: sha256:602e6d08842dd51e099839af097b4e7dc865018e0576b9abb91f6b174ec34380
 container-images/vmware_pause:3.1.tgz:
   size: 314768
   object_id: 2224d7c6-0395-49ea-7356-0b04d413e8ae
