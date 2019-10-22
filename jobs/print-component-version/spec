@@ -1,0 +1,19 @@
+---
+name: print-component-version
+
+templates:
+    run.erb: bin/run
+
+packages:
+- cifs-utils
+- cni
+- conntrack
+- etcdctl
+- flanneld
+- golang-1.12-linux # is this needed?
+- ipset
+- kubernetes
+- nfs
+- socat
+
+properties: {}
