@@ -4,98 +4,140 @@ set -euo pipefail
 
 cd /var/vcap/jobs/print-component-version/packages
 
-echo "------------------------------------------------------------------"
-echo "cifs-utils version:"
-pushd cifs-utils > /dev/null
-  # TODO: run as sudo
-  ./mount.cifs -V
-popd > /dev/null
-echo ""
+# cifs-utils/mount.cifs must run as root, which is fine for an errand
+MOUNT_CIFS_VERSION="$(cifs-utils/mount.cifs -V)"
 
-echo "------------------------------------------------------------------"
-echo "cni versions:"
-pushd cni > /dev/null
-  ./bin/nsenter -V
-  # TODO: cni-plugins
+pushd conntrack > /dev/null
+  LIBNETFILTER_VERSION="$(dpkg -f libnetfilter*.deb Version)"
+  CONNTRACK_VERSION="$(dpkg -f conntrack*.deb Version)"
+popd > /dev/null
+
+pushd cni/bin > /dev/null
+  NSENTER_VERSION="$(./nsenter -V)"
+  declare -a CNI_BINARIES=("bridge" "flannel" "host-local" "loopback" "ptp" "tuning" "dhcp" "host-device" "ipvlan" "macvlan" "portmap" "sample" "vlan")
+  export CNI_COMMAND=VERSION
+
+  for binaryName in "${CNI_BINARIES[@]}"; do
+    varName=$(echo "$binaryName"_VERSION | tr "-" "_")
+    declare "$varName"="$(echo '{}' | ./$binaryName)"
+  done
+
   # export CNI_COMMAND=VERSION
   # export CNI_PATH=`pwd`
   # TODO: other env vars from here: https://github.com/containernetworking/cni/blob/master/SPEC.md
   # TODO: this doesn't work yet
   # ./bin/dhcp
 popd > /dev/null
-echo ""
 
-echo "------------------------------------------------------------------"
-echo "conntrack version:"
-pushd conntrack > /dev/null
-  dpkg -x libnetfilter*.deb conntrack
-  dpkg -x conntrack_*.deb conntrack
-  export LD_LIBRARY_PATH=$PWD/conntrack/usr/lib/x86_64-linux-gnu
-  ./conntrack/usr/sbin/conntrack -V
-  unset LD_LIBRARY_PATH
-popd > /dev/null
-echo ""
-
-echo "------------------------------------------------------------------"
-echo "etcdctl version:"
 pushd etcdctl > /dev/null
-  ./etcdctl -v
+  # somehow combining the ./etcdctl and head in same line creates 141 error, so keep separate
+  ETCDCTL_VERSION="$(./etcdctl -v)"
+  ETCDCTL_VERSION="$(echo "$ETCDCTL_VERSION" | head -n 1)"
 popd > /dev/null
-echo ""
 
-echo "------------------------------------------------------------------"
-echo "flanneld version:"
 pushd flanneld > /dev/null
   # flanneld directs version output to stderr, so redirect it
   # https://github.com/coreos/flannel/blob/master/main.go#L185
-  ./flanneld -version 2>&1
+  FLANNELD_VERSION="$(./flanneld -version 2>&1)"
 popd > /dev/null
-echo ""
 
-echo "------------------------------------------------------------------"
-echo "golang versions:"
-pushd golang-1.12-linux > /dev/null
-  ./bin/go version
+pushd golang-*-linux > /dev/null
+  GO_VERSION="$(./bin/go version)"
 popd > /dev/null
-echo ""
 
-echo "------------------------------------------------------------------"
-echo "ipset versions:"
 pushd ipset > /dev/null
-  dpkg -x ipset_*.deb .
-  dpkg -x libipset*.deb .
-  export LD_LIBRARY_PATH=$PWD/lib/x86_64-linux-gnu
-  ./sbin/ipset --version
-  unset LD_LIBRARY_PATH
+  LIBIPSET_VERSION="$(dpkg -f libipset*.deb Version)"
+  IPSET_VERSION="$(dpkg -f ipset*.deb Version)"
 popd > /dev/null
-echo ""
 
-echo "------------------------------------------------------------------"
-echo "kubernetes versions:"
-pushd kubernetes > /dev/null
-  ./bin/kube-apiserver --version
-popd > /dev/null
-echo ""
-
-echo "------------------------------------------------------------------"
-echo "nfs versions:"
 pushd nfs > /dev/null
-  dpkg -x keyutils_*.deb .
-  dpkg -x libevent-*.deb .
-  dpkg -x libnfsidmap*.deb .
-  dpkg -x nfs-common_*.deb .
-  dpkg -x rpcbind_*.deb .
-  ./sbin/mount.nfs --version
-  # rpcbind doesn't have a built in way to print a version number, so extract from the file name instead
-  echo "The rpcbind version extracted just from the '.deb' file name is:"
-  dpkg -f rpcbind_0.2.3-0.2_amd64.deb Version
+  KEYUTILS_VERSION="$(dpkg -f keyutils*.deb Version)"
+  LIBEVENT_VERSION="$(dpkg -f libevent*.deb Version)"
+  LIBNFSIDMAP_VERSION="$(dpkg -f libnfsidmap*.deb Version)"
+  NFS_COMMON_VERSION="$(dpkg -f nfs-common*.deb Version)"
+  RPCBIND_VERSION="$(dpkg -f rpcbind*.deb Version)"
 popd > /dev/null
-echo ""
 
-echo "------------------------------------------------------------------"
-echo "socat versions:"
 pushd socat > /dev/null
-  # the head command is needed because the version output includes a lot of useless info that OSM does not need
-  ./bin/socat -V | head -n 2
+  # the version output includes a lot of useless info, so trim to suit
+  SOCAT_VERSION="$(./bin/socat -V | head -n 2 | tail -n 1)"
 popd > /dev/null
-echo ""
+
+
+cat <<EOF
+---
+packages:
+- name: "cifs-utils"
+  components:
+  - "marketing_name": "mount.cifs"
+    "marketing_version": "$MOUNT_CIFS_VERSION"
+- name: "conntrack"
+  components:
+  - "marketing_name": "conntrack"
+    "marketing_version": "$CONNTRACK_VERSION"
+  - "marketing_name": "libnetfilter"
+    "marketing_version": "$LIBNETFILTER_VERSION"
+- name: "cni"
+  components:
+  - "marketing_name": "nsenter"
+    "marketing_version": "$NSENTER_VERSION"
+EOF
+
+# Print out values for CNI binaries
+  for binaryName in "${CNI_BINARIES[@]}"; do
+    varName=$(echo "$binaryName"_VERSION | tr "-" "_")
+    echo "  - \"marketing_name\": \"$binaryName\""
+    echo "    \"marketing_version\": \"${!varName}\""
+  done
+
+
+cat <<EOF
+- name: "etcdctl"
+  components:
+  - "marketing_name": "etcdctl"
+    "marketing_version": "$ETCDCTL_VERSION"
+- name: "flanneld"
+  components:
+  - "marketing_name": "flanneld"
+    "marketing_version": "$FLANNELD_VERSION"
+- name: "go"
+  components:
+  - "marketing_name": "go"
+    "marketing_version": "$GO_VERSION"
+- name: "ipset"
+  components:
+  - "marketing_name": "ipset"
+    "marketing_version": "$IPSET_VERSION"
+  - "marketing_name": "libipset"
+    "marketing_version": "$LIBIPSET_VERSION"
+- name: "kubernetes"
+  components:
+  - "marketing_name": "kube-apiserver"
+    "marketing_version": "$(./kubernetes/bin/kube-apiserver --version)"
+  - "marketing_name": "kube-controller-manager"
+    "marketing_version": "$(./kubernetes/bin/kube-controller-manager --version)"
+  - "marketing_name": "kubectl"
+    "marketing_version": "$(./kubernetes/bin/kubectl version --short --client=true)"
+  - "marketing_name": "kubelet"
+    "marketing_version": "$(./kubernetes/bin/kubelet --version)"
+  - "marketing_name": "kube-proxy"
+    "marketing_version": "$(./kubernetes/bin/kube-proxy --version)"
+  - "marketing_name": "kube-scheduler"
+    "marketing_version": "$(./kubernetes/bin/kube-scheduler --version)"
+- name: "nfs"
+  components:
+  - "marketing_name": "keyutils"
+    "marketing_version": "$KEYUTILS_VERSION"
+  - "marketing_name": "libevent"
+    "marketing_version": "$LIBEVENT_VERSION"
+  - "marketing_name": "libnfsidmap"
+    "marketing_version": "$LIBNFSIDMAP_VERSION"
+  - "marketing_name": "nfs-common"
+    "marketing_version": "$NFS_COMMON_VERSION"
+  - "marketing_name": "rpcbind"
+    "marketing_version": "$RPCBIND_VERSION"
+- name: "socat"
+  components:
+  - "marketing_name": "socat"
+    "marketing_version": "$SOCAT_VERSION"
+EOF
