@@ -15,18 +15,11 @@ popd > /dev/null
 pushd cni/bin > /dev/null
   NSENTER_VERSION="$(./nsenter -V)"
   declare -a CNI_BINARIES=("bridge" "flannel" "host-local" "loopback" "ptp" "tuning" "dhcp" "host-device" "ipvlan" "macvlan" "portmap" "sample" "vlan")
-  export CNI_COMMAND=VERSION
 
-  for binaryName in "${CNI_BINARIES[@]}"; do
-    varName=$(echo "$binaryName"_VERSION | tr "-" "_")
-    declare "$varName"="$(echo '{}' | ./$binaryName)"
-  done
+  # sadly, these binaries (besides 'nsenter') do NOT have the release's version number burned in to them,
+  # so we report a version that was previously extracted from the tarball name
 
-  # export CNI_COMMAND=VERSION
-  # export CNI_PATH=`pwd`
-  # TODO: other env vars from here: https://github.com/containernetworking/cni/blob/master/SPEC.md
-  # TODO: this doesn't work yet
-  # ./bin/dhcp
+  CNI_RELEASE_VERSION=$(cat BOSHCYCLE_CNI_RELEASE_VERSION)
 popd > /dev/null
 
 pushd etcdctl > /dev/null
@@ -83,13 +76,11 @@ packages:
     "marketing_version": "$NSENTER_VERSION"
 EOF
 
-# Print out values for CNI binaries
+# Print out values for CNI binaries besides 'nsenter'
   for binaryName in "${CNI_BINARIES[@]}"; do
-    varName=$(echo "$binaryName"_VERSION | tr "-" "_")
     echo "  - \"marketing_name\": \"$binaryName\""
-    echo "    \"marketing_version\": \"${!varName}\""
+    echo "    \"marketing_version\": \"${CNI_RELEASE_VERSION}\""
   done
-
 
 cat <<EOF
 - name: "etcdctl"
