@@ -10,6 +10,7 @@ MOUNT_CIFS_VERSION="$(cifs-utils/mount.cifs -V)"
 pushd conntrack > /dev/null
   LIBNETFILTER_VERSION="$(dpkg -f libnetfilter*.deb Version)"
   CONNTRACK_VERSION="$(dpkg -f conntrack*.deb Version)"
+  LIBMLN0_VERSION="$(dpkg -f libmnl0*.deb Version)"
 popd > /dev/null
 
 pushd cni/bin > /dev/null
@@ -43,6 +44,10 @@ pushd ipset > /dev/null
   IPSET_VERSION="$(dpkg -f ipset*.deb Version)"
 popd > /dev/null
 
+pushd jq > /dev/null
+  JQ_VERSION="$(./bin/jq --version)"
+popd > /dev/null
+
 pushd nfs > /dev/null
   KEYUTILS_VERSION="$(dpkg -f keyutils*.deb Version)"
   LIBEVENT_VERSION="$(dpkg -f libevent*.deb Version)"
@@ -70,6 +75,8 @@ packages:
     "marketing_version": "$CONNTRACK_VERSION"
   - "marketing_name": "libnetfilter"
     "marketing_version": "$LIBNETFILTER_VERSION"
+  - "marketing_name": "libmln0"
+    "marketing_version": "$LIBMLN0_VERSION"
 - name: "cni"
   components:
   - "marketing_name": "nsenter"
@@ -101,6 +108,10 @@ cat <<EOF
     "marketing_version": "$IPSET_VERSION"
   - "marketing_name": "libipset"
     "marketing_version": "$LIBIPSET_VERSION"
+- name: "jq"
+  components:
+  - "marketing_name": "jq"
+    "marketing_version": "$JQ_VERSION"
 - name: "kubernetes"
   components:
   - "marketing_name": "kube-apiserver"

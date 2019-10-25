@@ -12,6 +12,7 @@ packages:
 - flanneld
 - golang-1.12-linux # is this needed?
 - ipset
+- jq
 - kubernetes
 - nfs
 - socat
