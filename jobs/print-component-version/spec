@@ -10,7 +10,7 @@ packages:
 - conntrack
 - etcdctl
 - flanneld
-- golang-1.12-linux # is this needed?
+- golang-1.12-linux
 - ipset
 - jq
 - kubernetes

@@ -35,8 +35,8 @@ pushd flanneld > /dev/null
   FLANNELD_VERSION="$(./flanneld -version 2>&1)"
 popd > /dev/null
 
-pushd golang-*-linux > /dev/null
-  GO_VERSION="$(./bin/go version)"
+pushd golang-1.12-linux > /dev/null
+  GOLANG_VERSION="$(./bin/go version)"
 popd > /dev/null
 
 pushd ipset > /dev/null
@@ -98,10 +98,10 @@ cat <<EOF
   components:
   - "marketing_name": "flanneld"
     "marketing_version": "$FLANNELD_VERSION"
-- name: "go"
+- name: "golang"
   components:
-  - "marketing_name": "go"
-    "marketing_version": "$GO_VERSION"
+  - "marketing_name": "golang"
+    "marketing_version": "$GOLANG_VERSION"
 - name: "ipset"
   components:
   - "marketing_name": "ipset"
