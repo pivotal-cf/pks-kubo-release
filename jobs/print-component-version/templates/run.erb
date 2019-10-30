@@ -61,85 +61,62 @@ pushd socat > /dev/null
   SOCAT_VERSION="$(./bin/socat -V | head -n 2 | tail -n 1)"
 popd > /dev/null
 
-
-cat <<EOF
----
-packages:
-- name: "cifs-utils"
-  components:
-  - "marketing_name": "mount.cifs"
-    "marketing_version": "$MOUNT_CIFS_VERSION"
-- name: "conntrack"
-  components:
-  - "marketing_name": "conntrack"
-    "marketing_version": "$CONNTRACK_VERSION"
-  - "marketing_name": "libnetfilter"
-    "marketing_version": "$LIBNETFILTER_VERSION"
-  - "marketing_name": "libmln0"
-    "marketing_version": "$LIBMLN0_VERSION"
-- name: "cni"
-  components:
-  - "marketing_name": "nsenter"
-    "marketing_version": "$NSENTER_VERSION"
+# $1 = package name
+# $2 = package version
+# $3 = license
+# $4 = tgz name
+# $5 = url
+# ex. print_osm_format ctop "$CTOP_VERSION" GPL2 name-of-ctop.tgz URL
+print_osm_format() {
+  cat <<EOF
+other:$1:$2:
+  name: $1
+  version: '$2'
+  repository: Other
+  license: $3
+  other-distribution: /tmp/osl/$4
+  url: $5
 EOF
+}
 
-# Print out values for CNI binaries besides 'nsenter'
-  for binaryName in "${CNI_BINARIES[@]}"; do
-    echo "  - \"marketing_name\": \"$binaryName\""
-    echo "    \"marketing_version\": \"${CNI_RELEASE_VERSION}\""
-  done
+print_osm_format cifs-utils "$MOUNT_CIFS_VERSION" LICENSE path-to-cifs-utils.tgz URL
+print_osm_format conntrack "$CONNTRACK_VERSION" LICENSE path-to-contrack.tgz URL
+print_osm_format libnetfilter "$LIBNETFILTER_VERSION" LICENSE path-to-libnetfilter.tgz URL
+print_osm_format libmln0 "$LIBMLN0_VERSION" LICENSE path-to-libmln0.tgz URL
+# TODO: should there be CNI itself?
+print_osm_format nsenter "$NSENTER_VERSION" LICENSE path-to-nsenter.tgz URL
+for binaryName in "${CNI_BINARIES[@]}"; do
+  print_osm_format "$binaryName" "${CNI_RELEASE_VERSION}" LICENSE path-to-binary.tgz URL
+done
+print_osm_format etcdctl "$ETCDCTL_VERSION" LICENSE path-to-etcdctl.tgz URL
+print_osm_format flanneld "$FLANNELD_VERSION" LICENSE path-to-flanneld.tgz URL
+print_osm_format golang "$GOLANG_VERSION" LICENSE path-to-golang.tgz URL
+print_osm_format ipset "$IPSET_VERSION" LICENSE path-to-ipset.tgz URL
+print_osm_format libipset "$LIBIPSET_VERSION" LICENSE path-to-libipset.tgz URL
+print_osm_format jq "$JQ_VERSION" LICENSE path-to-jq.tgz URL
+# TODO: should we print each individual component of kubernetes?
+print_osm_format kubernetes "$(./kubernetes/bin/kube-apiserver --version)" LICENSE path-to-k8s.tgz URL
+print_osm_format keyutils "$KEYUTILS_VERSION" LICENSE path-to-keyutils.tgz URL
+print_osm_format libevent "$LIBEVENT_VERSION" LICENSE path-to-libevent.tgz URL
+print_osm_format libnfsidmap "$LIBNFSIDMAP_VERSION" LICENSE path-to-libnfsidmap.tgz URL
+print_osm_format nfs-common "$NFS_COMMON_VERSION" LICENSE path-to-nfs-common.tgz URL
+print_osm_format rpcbind "$RPCBIND_VERSION" LICENSE path-to-rpcbind.tgz URL
+print_osm_format socat "$SOCAT_VERSION" LICENSE path-to-socat.tgz URL
 
-cat <<EOF
-- name: "etcdctl"
-  components:
-  - "marketing_name": "etcdctl"
-    "marketing_version": "$ETCDCTL_VERSION"
-- name: "flanneld"
-  components:
-  - "marketing_name": "flanneld"
-    "marketing_version": "$FLANNELD_VERSION"
-- name: "golang"
-  components:
-  - "marketing_name": "golang"
-    "marketing_version": "$GOLANG_VERSION"
-- name: "ipset"
-  components:
-  - "marketing_name": "ipset"
-    "marketing_version": "$IPSET_VERSION"
-  - "marketing_name": "libipset"
-    "marketing_version": "$LIBIPSET_VERSION"
-- name: "jq"
-  components:
-  - "marketing_name": "jq"
-    "marketing_version": "$JQ_VERSION"
-- name: "kubernetes"
-  components:
-  - "marketing_name": "kube-apiserver"
-    "marketing_version": "$(./kubernetes/bin/kube-apiserver --version)"
-  - "marketing_name": "kube-controller-manager"
-    "marketing_version": "$(./kubernetes/bin/kube-controller-manager --version)"
-  - "marketing_name": "kubectl"
-    "marketing_version": "$(./kubernetes/bin/kubectl version --short --client=true)"
-  - "marketing_name": "kubelet"
-    "marketing_version": "$(./kubernetes/bin/kubelet --version)"
-  - "marketing_name": "kube-proxy"
-    "marketing_version": "$(./kubernetes/bin/kube-proxy --version)"
-  - "marketing_name": "kube-scheduler"
-    "marketing_version": "$(./kubernetes/bin/kube-scheduler --version)"
-- name: "nfs"
-  components:
-  - "marketing_name": "keyutils"
-    "marketing_version": "$KEYUTILS_VERSION"
-  - "marketing_name": "libevent"
-    "marketing_version": "$LIBEVENT_VERSION"
-  - "marketing_name": "libnfsidmap"
-    "marketing_version": "$LIBNFSIDMAP_VERSION"
-  - "marketing_name": "nfs-common"
-    "marketing_version": "$NFS_COMMON_VERSION"
-  - "marketing_name": "rpcbind"
-    "marketing_version": "$RPCBIND_VERSION"
-- name: "socat"
-  components:
-  - "marketing_name": "socat"
-    "marketing_version": "$SOCAT_VERSION"
-EOF
+# leaving this here for reference to get individual component versions of k8s if needed
+#cat <<EOF
+#- name: "kubernetes"
+#  components:
+#  - "marketing_name": "kube-apiserver"
+#    "marketing_version": "$(./kubernetes/bin/kube-apiserver --version)"
+#  - "marketing_name": "kube-controller-manager"
+#    "marketing_version": "$(./kubernetes/bin/kube-controller-manager --version)"
+#  - "marketing_name": "kubectl"
+#    "marketing_version": "$(./kubernetes/bin/kubectl version --short --client=true)"
+#  - "marketing_name": "kubelet"
+#    "marketing_version": "$(./kubernetes/bin/kubelet --version)"
+#  - "marketing_name": "kube-proxy"
+#    "marketing_version": "$(./kubernetes/bin/kube-proxy --version)"
+#  - "marketing_name": "kube-scheduler"
+#    "marketing_version": "$(./kubernetes/bin/kube-scheduler --version)"
+#EOF
