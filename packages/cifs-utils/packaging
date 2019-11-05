@@ -1,12 +1,18 @@
 set -e
 
+# NOTE: if you touch any PACKAGE, VERSION, LICENSE, or SOURCE_URL information,
+# you should probably file an OSM ticket.
+# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
+
 temp_path=${PWD}/temp
 mkdir $temp_path
 
 AUTOCONF_PACKAGE=autoconf
-AUTOCONF_VERSION="2.69"
-tar xf ${AUTOCONF_PACKAGE}-${AUTOCONF_VERSION}.tar.gz
-pushd ${AUTOCONF_PACKAGE}-${AUTOCONF_VERSION}
+AUTOCONF_VERSION=2.69
+
+tar xf $AUTOCONF_PACKAGE-$AUTOCONF_VERSION.tar.gz
+
+pushd $AUTOCONF_PACKAGE-$AUTOCONF_VERSION
   ./configure --prefix=${temp_path}
   make
   make install
@@ -14,45 +20,55 @@ pushd ${AUTOCONF_PACKAGE}-${AUTOCONF_VERSION}
 popd
 
 AUTOMAKE_PACKAGE=automake
-AUTOMAKE_VERSION="1.15"
-tar xf ${AUTOMAKE_PACKAGE}-${AUTOMAKE_VERSION}.tar.gz
-pushd ${AUTOMAKE_PACKAGE}-${AUTOMAKE_VERSION}
+AUTOMAKE_VERSION=1.15
+
+tar xf $AUTOMAKE_PACKAGE-$AUTOMAKE_VERSION.tar.gz
+
+pushd $AUTOMAKE_PACKAGE-$AUTOMAKE_VERSION
   ./configure --prefix=${temp_path}
   make
   make install
 popd
 
 LIBTOOL_PACKAGE=libtool
-LIBTOOL_VERSION="2.4.6"
-tar xf ${LIBTOOL_PACKAGE}-${LIBTOOL_VERSION}.tar.gz
-pushd ${LIBTOOL_PACKAGE}-${LIBTOOL_VERSION}
+LIBTOOL_VERSION=2.4.6
+
+tar xf $LIBTOOL_PACKAGE-$LIBTOOL_VERSION.tar.gz
+
+pushd $LIBTOOL_PACKAGE-$LIBTOOL_VERSION
   ./configure --prefix=${temp_path}
   make
   make install
 popd
 
 TALLOC_PACKAGE=talloc
-TALLOC_VERSION="2.1.9"
-tar xf ${TALLOC_PACKAGE}-${TALLOC_VERSION}.tar.gz
-pushd ${TALLOC_PACKAGE}-${TALLOC_VERSION}
+TALLOC_VERSION=2.1.9
+
+tar xf $TALLOC_PACKAGE-$TALLOC_VERSION.tar.gz
+
+pushd $TALLOC_PACKAGE-$TALLOC_VERSION
   ./configure --prefix=${temp_path}
   make
   make install
 popd
 
-PKGCONFIG_PACKAGE="pkg-config"
-PKGCONFIG_VERSION="0.29.2"
-tar xf ${PKGCONFIG_PACKAGE}-${PKGCONFIG_VERSION}.tar.gz
-pushd ${PKGCONFIG_PACKAGE}-${PKGCONFIG_VERSION}
+PKG_CONFIG_PACKAGE=pkg-config
+PKG_CONFIG_VERSION=0.29.2
+
+tar xf $PKG_CONFIG_PACKAGE-$PKG_CONFIG_VERSION.tar.gz
+
+pushd $PKG_CONFIG_PACKAGE-$PKG_CONFIG_VERSION
   ./configure --prefix=${temp_path} --with-internal-glib
   make
   make install
 popd
 
-CIFSUTILS_PACKAGE="cifs-utils"
-CIFSUTILS_VERSION="6.7"
-tar jxf ${CIFSUTILS_PACKAGE}-${CIFSUTILS_VERSION}.tar.bz2
-pushd ${CIFSUTILS_PACKAGE}-${CIFSUTILS_VERSION}
+CIFS_PACKAGE=cifs-utils
+CIFS_VERSION=6.7
+
+tar jxf $CIFS_PACKAGE-$CIFS_VERSION.tar.bz2
+
+pushd $CIFS_PACKAGE-$CIFS_VERSION
   autoreconf -i
   ./configure --prefix=${temp_path}
   make CPPFLAGS="-I${temp_path}/include"
@@ -66,16 +82,16 @@ popd
 
 AUTOCONF_LICENSE=GPL2.0
 AUTOCONF_SOURCE_URL="http://ftp.gnu.org/gnu/autoconf/$AUTOCONF_PACKAGE-$AUTOCONF_VERSION.tar.gz"
-AUTOMAKE_LICENSE="GPL2.0"
-AUTOMAKE_SOURCE_URL="https://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz"
-LIBTOOL_LICENSE="GPL2.0"
-LIBTOOL_SOURCE_URL="https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz"
-TALLOC_LICENSE="LGPL3.0"
-TALLOC_SOURCE_URL="http://ftp.debian.org/debian/pool/main/t/talloc/talloc_2.1.9.orig.tar.gz"
-PKGCONFIG_LICENSE="GPL2.0"
-PKGCONFIG_SOURCE_URL="https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz"
-CIFSUTILS_LICENSE="GPL3.0"
-CIFSUTILS_SOURCE_URL="https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.7.tar.bz2"
+AUTOMAKE_LICENSE=GPL2.0
+AUTOMAKE_SOURCE_URL="https://ftp.gnu.org/gnu/automake/$AUTOMAKE_PACKAGE-$AUTOMAKE_VERSION.tar.gz"
+LIBTOOL_LICENSE=GPL2.0
+LIBTOOL_SOURCE_URL="https://ftp.gnu.org/gnu/libtool/$LIBTOOL_PACKAGE-$LIBTOOL_VERSION.tar.gz"
+TALLOC_LICENSE=LGPL3.0
+TALLOC_SOURCE_URL="http://ftp.debian.org/debian/pool/main/t/talloc/$TALLOC_PACKAGE_$TALLOC_VERSION.orig.tar.gz"
+PKG_CONFIG_LICENSE=GPL2.0
+PKG_CONFIG_SOURCE_URL="https://pkgconfig.freedesktop.org/releases/$PKG_CONFIG_PACKAGE-$PKG_CONFIG_VERSION.tar.gz"
+CIFS_LICENSE=BSD-3
+CIFS_SOURCE_URL="https://download.samba.org/pub/linux-cifs/cifs-utils/$CIFS_PACKAGE-$CIFS_VERSION.tar.bz2"
 
 cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
 { "packages": [
@@ -104,16 +120,16 @@ cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
     "license": "$TALLOC_LICENSE"
     },
     {
-    "name": "$PKGCONFIG_PACKAGE",
-    "version": "$PKGCONFIG_VERSION",
-    "url": "$PKGCONFIG_SOURCE_URL",
-    "license": "$PKGCONFIG_LICENSE"
+    "name": "$PKG_CONFIG_PACKAGE",
+    "version": "$PKG_CONFIG_VERSION",
+    "url": "$PKG_CONFIG_SOURCE_URL",
+    "license": "$PKG_CONFIG_LICENSE"
     },
-     {
-     "name": "$CIFSUTILS_PACKAGE",
-     "version": "$CIFSUTILS_VERSION",
-     "url": "$CIFSUTILS_SOURCE_URL",
-     "license": "$CIFSUTILS_LICENSE"
-     }
+    {
+    "name": "$CIFS_PACKAGE",
+    "version": "$CIFS_VERSION",
+    "url": "$CIFS_SOURCE_URL",
+    "license": "$CIFS_LICENSE"
+    }
 ]}
 EOF

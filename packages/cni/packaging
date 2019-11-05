@@ -7,6 +7,12 @@ CNI_VERSION="0.7.1"
 
 tar -xzf cni/${CNI_PACKAGE}-amd64-${CNI_VERSION}.tgz -C ${BOSH_INSTALL_TARGET}/bin/
 
+# sadly, the binaries just copied do NOT have the release's version number burned in to them,
+# so we must extract version from the tarball just expanded and pass that along via a text file
+REGEX='.*cni-plugins-amd64-([a-zA-Z\.0-9]+)\.tgz.*'
+[[ "$(ls cni/cni-plugins-amd64*.tgz)" =~ $REGEX ]]
+echo ${BASH_REMATCH[1]} > ${BOSH_INSTALL_TARGET}/bin/BOSHCYCLE_CNI_RELEASE_VERSION
+
 mkdir -p utillocal
 dpkg -x cni/util-linux*.deb utillocal/
 
