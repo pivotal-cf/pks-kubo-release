@@ -3,52 +3,117 @@ set -e
 temp_path=${PWD}/temp
 mkdir $temp_path
 
-tar xf autoconf-2.69.tar.gz
-
-pushd autoconf-2.69
+AUTOCONF_PACKAGE=autoconf
+AUTOCONF_VERSION="2.69"
+tar xf ${AUTOCONF_PACKAGE}-${AUTOCONF_VERSION}.tar.gz
+pushd ${AUTOCONF_PACKAGE}-${AUTOCONF_VERSION}
   ./configure --prefix=${temp_path}
   make
   make install
   export PATH=${PATH}:${temp_path}/bin
 popd
 
-tar xf automake-1.15.tar.gz
-
-pushd automake-1.15
+AUTOMAKE_PACKAGE=automake
+AUTOMAKE_VERSION="1.15"
+tar xf ${AUTOMAKE_PACKAGE}-${AUTOMAKE_VERSION}.tar.gz
+pushd ${AUTOMAKE_PACKAGE}-${AUTOMAKE_VERSION}
   ./configure --prefix=${temp_path}
   make
   make install
 popd
 
-tar xf libtool-2.4.6.tar.gz
-
-pushd libtool-2.4.6
+LIBTOOL_PACKAGE=libtool
+LIBTOOL_VERSION="2.4.6"
+tar xf ${LIBTOOL_PACKAGE}-${LIBTOOL_VERSION}.tar.gz
+pushd ${LIBTOOL_PACKAGE}-${LIBTOOL_VERSION}
   ./configure --prefix=${temp_path}
   make
   make install
 popd
 
-tar xf talloc-2.1.9.tar.gz
-
-pushd talloc-2.1.9
+TALLOC_PACKAGE=talloc
+TALLOC_VERSION="2.1.9"
+tar xf ${TALLOC_PACKAGE}-${TALLOC_VERSION}.tar.gz
+pushd ${TALLOC_PACKAGE}-${TALLOC_VERSION}
   ./configure --prefix=${temp_path}
   make
   make install
 popd
 
-tar xf pkg-config-0.29.2.tar.gz
-
-pushd pkg-config-0.29.2
+PKGCONFIG_PACKAGE="pkg-config"
+PKGCONFIG_VERSION="0.29.2"
+tar xf ${PKGCONFIG_PACKAGE}-${PKGCONFIG_VERSION}.tar.gz
+pushd ${PKGCONFIG_PACKAGE}-${PKGCONFIG_VERSION}
   ./configure --prefix=${temp_path} --with-internal-glib
   make
   make install
 popd
 
-tar jxf cifs-utils-6.7.tar.bz2
-
-pushd cifs-utils-6.7
+CIFSUTILS_PACKAGE="cifs-utils"
+CIFSUTILS_VERSION="6.7"
+tar jxf ${CIFSUTILS_PACKAGE}-${CIFSUTILS_VERSION}.tar.bz2
+pushd ${CIFSUTILS_PACKAGE}-${CIFSUTILS_VERSION}
   autoreconf -i
   ./configure --prefix=${temp_path}
   make CPPFLAGS="-I${temp_path}/include"
   cp mount.cifs ${BOSH_INSTALL_TARGET}
 popd
+
+
+# Open Source Licensing Information, used by the vmware OSM system
+# These license abbreviations are defined by the OSM system
+# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
+
+AUTOCONF_LICENSE=GPL2.0
+AUTOCONF_SOURCE_URL="http://ftp.gnu.org/gnu/autoconf/$AUTOCONF_PACKAGE-$AUTOCONF_VERSION.tar.gz"
+AUTOMAKE_LICENSE="GPL2.0"
+AUTOMAKE_SOURCE_URL="https://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz"
+LIBTOOL_LICENSE="GPL2.0"
+LIBTOOL_SOURCE_URL="https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz"
+TALLOC_LICENSE="LGPL3.0"
+TALLOC_SOURCE_URL="http://ftp.debian.org/debian/pool/main/t/talloc/talloc_2.1.9.orig.tar.gz"
+PKGCONFIG_LICENSE="GPL2.0"
+PKGCONFIG_SOURCE_URL="https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz"
+CIFSUTILS_LICENSE="GPL3.0"
+CIFSUTILS_SOURCE_URL="https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.7.tar.bz2"
+
+cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
+{ "packages": [
+    {
+    "name": "$AUTOCONF_PACKAGE",
+    "version": "$AUTOCONF_VERSION",
+    "url": "$AUTOCONF_SOURCE_URL",
+    "license": "$AUTOCONF_LICENSE"
+    },
+    {
+    "name": "$AUTOMAKE_PACKAGE",
+    "version": "$AUTOMAKE_VERSION",
+    "url": "$AUTOMAKE_SOURCE_URL",
+    "license": "$AUTOMAKE_LICENSE"
+    },
+    {
+    "name": "$LIBTOOL_PACKAGE",
+    "version": "$LIBTOOL_VERSION",
+    "url": "$LIBTOOL_SOURCE_URL",
+    "license": "$LIBTOOL_LICENSE"
+    },
+    {
+    "name": "$TALLOC_PACKAGE",
+    "version": "$TALLOC_VERSION",
+    "url": "$TALLOC_SOURCE_URL",
+    "license": "$TALLOC_LICENSE"
+    },
+    {
+    "name": "$PKGCONFIG_PACKAGE",
+    "version": "$PKGCONFIG_VERSION",
+    "url": "$PKGCONFIG_SOURCE_URL",
+    "license": "$PKGCONFIG_LICENSE"
+    },
+     {
+     "name": "$CIFSUTILS_PACKAGE",
+     "version": "$CIFSUTILS_VERSION",
+     "url": "$CIFSUTILS_SOURCE_URL",
+     "license": "$CIFSUTILS_LICENSE"
+     }
+]}
+EOF

@@ -1,5 +1,6 @@
 set -e
 
+KUBERNETES_PACKAGE=kubernetes
 KUBERNETES_VERSION="1.15.4"
 
 main() {
@@ -15,7 +16,7 @@ create_target_dir() {
 
 copy_depedencies_to_bosh() {
   cp -a container-images/* "${BOSH_INSTALL_TARGET:?}/container-images"
-  cp -a kubernetes-${KUBERNETES_VERSION}/* "${BOSH_INSTALL_TARGET:?}/bin"
+  cp -a ${KUBERNETES_PACKAGE}-${KUBERNETES_VERSION}/* "${BOSH_INSTALL_TARGET:?}/bin"
 }
 
 make_binaries_executable() {
@@ -23,3 +24,23 @@ make_binaries_executable() {
 }
 
 main
+
+
+# Open Source Licensing Information, used by the vmware OSM system
+# These license abbreviations are defined by the OSM system
+# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
+
+KUBERNETES_LICENSE="Apache2.0"
+KUBERNETES_SOURCE_URL="https://github.com/kubernetes/kubernetes/archive/v1.15.4.tar.gz"
+
+cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
+{ "packages": [
+    {
+    "name": "$KUBERNETES_PACKAGE",
+    "version": "$KUBERNETES_VERSION",
+    "url": "$KUBERNETES_SOURCE_URL",
+    "license": "$KUBERNETES_LICENSE"
+    }
+]}
+EOF
+
