@@ -1,4 +1,70 @@
 set -e
 
+NFSCOMMON_PACKAGE="nfs-common"
+NFSCOMMON_VERSION="1.2.8"
+KEYUTILS_PACKAGE=keyutils
+KEYUTILS_VERSION="1.5.9"
+LIBEVENT_PACKAGE=libevent
+LIBEVENT_VERSION="2.0.21"
+LIBNFSIDMAP_PACKAGE=libnfsidmap2
+LIBNFSIDMAP_VERSION="0.25"
+RPCBIND_PACKAGE=rpcbind
+RPCBIND_VERSION="0.2.3"
+
 mkdir -p "${BOSH_INSTALL_TARGET:?}/"
-cp -a nfs-debs/* "${BOSH_INSTALL_TARGET:?}"
+cp -a nfs-debs/${NFSCOMMON_PACKAGE}_1:${NFSCOMMON_VERSION}-9ubuntu12.1_amd64.deb "${BOSH_INSTALL_TARGET:?}/"
+cp -a nfs-debs/${KEYUTILS_PACKAGE}_${KEYUTILS_VERSION}-8ubuntu1_amd64.deb "${BOSH_INSTALL_TARGET:?}/"
+cp -a nfs-debs/${LIBEVENT_PACKAGE}-2.0-5_${LIBNFSIDMAP_VERSION}-stable-2ubuntu0.16.04.1_amd64.deb "${BOSH_INSTALL_TARGET:?}/"
+cp -a nfs-debs/${LIBNFSIDMAP_PACKAGE}_${LIBNFSIDMAP_VERSION}-5_amd64.deb "${BOSH_INSTALL_TARGET:?}/"
+cp -a nfs-debs/${RPCBIND_PACKAGE}_${RPCBIND_VERSION}-0.2_amd64.deb "${BOSH_INSTALL_TARGET:?}/"
+
+
+# Open Source Licensing Information, used by the vmware OSM system
+# These license abbreviations are defined by the OSM system
+# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
+
+NFSCOMMON_LICENSE=GPL2.0
+NFSCOMMON_SOURCE_URL="https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/nfs-utils/1:1.2.8-9ubuntu12/nfs-utils_${NFSCOMMON_VERSION}.orig.tar.bz2"
+KEYUTILS_LICENSE=GPL2.0
+KEYUTILS_SOURCE_URL="http://ftp.debian.org/debian/pool/main/k/keyutils/${KEYUTILS_PACKAGE}_${KEYUTILS_VERSION}.orig.tar.bz2"
+LIBEVENT_LICENSE=BSD-3
+LIBEVENT_SOURCE_URL="https://github.com/libevent/libevent/archive/release-${LIBEVENT_VERSION}-stable.tar.gz"
+LIBNFSIDMAP_LICENSE=BSD-3
+LIBNFSIDMAP_SOURCE_URL="http://cdn-fastly.deb.debian.org/debian/pool/main/libn/libnfsidmap/libnfsidmap_${LIBNFSIDMAP_VERSION}.orig.tar.bz2"
+RPCBIND_LICENSE=BSD-3
+RPCBIND_SOURCE_URL="http://ftp.debian.org/debian/pool/main/r/rpcbind/${RPCBIND_PACKAGE}_${RPCBIND_VERSION}.orig.tar.bz2"
+
+cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
+{ "packages": [
+    {
+    "name": "$NFSCOMMON_PACKAGE",
+    "version": "$NFSCOMMON_VERSION",
+    "url": "$NFSCOMMON_SOURCE_URL",
+    "license": "$NFSCOMMON_LICENSE"
+    },
+    {
+    "name": "$KEYUTILS_PACKAGE",
+    "version": "$KEYUTILS_VERSION",
+    "url": "$KEYUTILS_SOURCE_URL",
+    "license": "$KEYUTILS_LICENSE"
+    },
+    {
+    "name": "$LIBEVENT_PACKAGE",
+    "version": "$LIBEVENT_VERSION",
+    "url": "$LIBEVENT_SOURCE_URL",
+    "license": "$LIBEVENT_LICENSE"
+    },
+    {
+    "name": "$LIBNFSIDMAP_PACKAGE",
+    "version": "$LIBNFSIDMAP_VERSION",
+    "url": "$LIBNFSIDMAP_SOURCE_URL",
+    "license": "$LIBNFSIDMAP_LICENSE"
+    },
+    {
+    "name": "$RPCBIND_PACKAGE",
+    "version": "$RPCBIND_VERSION",
+    "url": "$RPCBIND_SOURCE_URL",
+    "license": "$RPCBIND_LICENSE"
+    }
+]}
+EOF

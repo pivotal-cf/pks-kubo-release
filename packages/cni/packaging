@@ -7,16 +7,10 @@ CNI_VERSION="0.7.1"
 
 tar -xzf cni/${CNI_PACKAGE}-amd64-${CNI_VERSION}.tgz -C ${BOSH_INSTALL_TARGET}/bin/
 
-# sadly, the binaries just copied do NOT have the release's version number burned in to them,
-# so we must extract version from the tarball just expanded and pass that along via a text file
-REGEX='.*cni-plugins-amd64-([a-zA-Z\.0-9]+)\.tgz.*'
-[[ "$(ls cni/cni-plugins-amd64*.tgz)" =~ $REGEX ]]
-echo ${BASH_REMATCH[1]} > ${BOSH_INSTALL_TARGET}/bin/BOSHCYCLE_CNI_RELEASE_VERSION
-
 mkdir -p utillocal
 dpkg -x cni/util-linux*.deb utillocal/
 
-cp utillocal/usr/bin/nsenter ${BOSH_INSTALL_TARGET}/bin
+cp -a utillocal/usr/bin/nsenter ${BOSH_INSTALL_TARGET}/bin
 
 chmod +x ${BOSH_INSTALL_TARGET}/bin/*
 
@@ -26,7 +20,7 @@ chmod +x ${BOSH_INSTALL_TARGET}/bin/*
 # See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
 
 CNI_LICENSE="Apache2.0"
-CNI_SOURCE_URL="https://github.com/containernetworking/cni/archive/v0.7.1.tar.gz"
+CNI_SOURCE_URL="https://github.com/containernetworking/cni/archive/v${CNI_VERSION}.tar.gz"
 
 cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
 { "packages": [

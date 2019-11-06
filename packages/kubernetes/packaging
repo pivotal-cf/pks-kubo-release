@@ -1,5 +1,6 @@
 set -e
 
+KUBERNETES_PACKAGE=kubernetes
 KUBERNETES_VERSION="1.15.5"
 
 main() {
@@ -30,7 +31,7 @@ main
 # See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
 
 KUBERNETES_LICENSE="Apache2.0"
-KUBERNETES_SOURCE_URL="https://github.com/kubernetes/kubernetes/archive/v1.15.4.tar.gz"
+KUBERNETES_SOURCE_URL="https://github.com/kubernetes/kubernetes/archive/v${KUBERNETES_VERSION}.tar.gz"
 
 cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
 { "packages": [
