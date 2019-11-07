@@ -5,7 +5,7 @@ mkdir -p $BOSH_INSTALL_TARGET/bin
 JQ_PACKAGE=jq
 JQ_VERSION="1.6"
 
-cp -a ${JQ_PACKAGE}-linux64-${JQ_VERSION} $BOSH_INSTALL_TARGET/bin/jq/
+cp -a ${JQ_PACKAGE}-linux64-${JQ_VERSION} $BOSH_INSTALL_TARGET/bin/jq
 chmod +x $BOSH_INSTALL_TARGET/bin/jq
 
 

@@ -25,7 +25,7 @@ SOCAT_SOURCE_URL="http://ftp.debian.org/debian/pool/main/s/socat/${SOCAT_PACKAGE
 cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
 { "packages": [
     {
-    "name": "$SOC√AT_PACKAGE",
+    "name": "$SOCAT_PACKAGE",
     "version": "$SOCAT_VERSION",
     "url": "$SOCAT_SOURCE_URL",
     "license": "$SOCAT_LICENSE"
