@@ -1,0 +1,17 @@
+---
+name: osl-collector
+
+dependencies:
+  - cifs-utils
+  - cni
+  - conntrack
+  - etcdctl
+  - flanneld
+  - golang-1.12-linux
+  - ipset
+  - jq
+  - kubernetes
+  - nfs
+  - socat
+files:
+  - osl-collector/**/*
