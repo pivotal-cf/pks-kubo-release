@@ -32,7 +32,6 @@ func ParseOSLData(inputs [][]byte) []OSLData {
 			log.Fatal(err)
 		}
 		data = append(data, datum)
-		fmt.Printf("Found %d entries\n", len(datum.Packages))
 	}
 
 	return data

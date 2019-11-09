@@ -1,7 +1,6 @@
 package jsonReader
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -24,7 +23,6 @@ jsonReader/
 Will return only ["testDir2/boshcycle_osm.json"] with the default value of jsonFile
  */
 func FindFiles(folder string, jsonFile string) []string {
-	fmt.Println("Opening "+ folder)
 	files, err := ioutil.ReadDir(folder)
 	if err != nil {
 		log.Fatal(err)
@@ -32,13 +30,12 @@ func FindFiles(folder string, jsonFile string) []string {
 	var directories []string
 	for _, f := range files {
 		if f.IsDir() {
-			fmt.Println(f.Name() + " is a dir")
 			directories = append(directories, path.Join(folder, f.Name()))
+			// TODO: not sure how to write unit tests for this, as git will not preserve symlinks in a repo
 		} else if f.Mode() & os.ModeSymlink != 0 {
-			fmt.Println(f.Name() + " is a symlink")
 			directories = append(directories, path.Join(folder, f.Name()))
 		} else {
-			fmt.Printf("%s is a file\n", f.Name())
+			// ignore a file
 		}
 	}
 
@@ -47,10 +44,8 @@ func FindFiles(folder string, jsonFile string) []string {
 		testFile := f + "/" + jsonFile
 		_, err = os.Stat(testFile)
 		if err == nil {
-			fmt.Printf("%s exists!\n", testFile)
 			jsonFiles = append(jsonFiles, testFile)
 		} else if os.IsNotExist(err) {
-			fmt.Printf("%s does not exist\n", testFile)
 			// permissible
 		} else {
 			log.Fatal(err)
