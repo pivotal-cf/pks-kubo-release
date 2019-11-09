@@ -1,7 +1,7 @@
-package jsonReader_test
+package core_test
 
 import (
-	jsonReader "osl-collector/jsonReader"
+	jsonReader "osl-collector/core"
 	"testing"
 )
 

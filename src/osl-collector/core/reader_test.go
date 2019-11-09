@@ -1,7 +1,7 @@
-package jsonReader
+package core
 
 import (
-	"osl-collector/oslStructs"
+	"osl-collector/core/oslStructs"
 	"reflect"
 	"strings"
 	"testing"

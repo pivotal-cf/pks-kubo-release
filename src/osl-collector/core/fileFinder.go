@@ -1,4 +1,4 @@
-package jsonReader
+package core
 
 import (
 	"io/ioutil"
@@ -13,7 +13,7 @@ const DefaultJsonFile = "boshcycle_osm.json"
 /**
 Searches the given folder for subdirectories containing jsonFile at the root
 For example, this tree:
-jsonReader/
+core/
 ├── fileFinder.go
 ├── fileFinder_test.go
 ├── testDir1

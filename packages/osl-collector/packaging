@@ -11,4 +11,4 @@ go test -v ./...
 go build
 
 cp -a osl-collector ${BOSH_INSTALL_TARGET}/
-${BOSH_INSTALL_TARGET}/osl-collector -folder /var/vcap/packages -outputFile ${BOSH_INSTALL_TARGET}/osl-output.json
+${BOSH_INSTALL_TARGET}/osl-collector -folder /var/vcap/packages -outputFile ${BOSH_INSTALL_TARGET}/osl-output.json collect
