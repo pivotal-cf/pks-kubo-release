@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 )
 
 const DefaultFolder = "."
@@ -32,7 +33,7 @@ func FindFiles(folder string, jsonFile string) []string {
 	for _, f := range files {
 		if f.IsDir() {
 			fmt.Println(f.Name() + " is a dir")
-			directories = append(directories, f.Name())
+			directories = append(directories, path.Join(folder, f.Name()))
 		} else if f.Mode() & os.ModeSymlink != 0 {
 			fmt.Println(f.Name() + " is a symlink")
 			directories = append(directories, f.Name())
