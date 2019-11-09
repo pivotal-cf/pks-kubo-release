@@ -19,7 +19,7 @@ func main() {
 func gatherFlags() OslCollectorInputs {
 	folderPtr := flag.String("folder", jsonReader.DefaultFolder, "Folder to search for sub directories")
 	jsonFileNamePtr := flag.String("jsonFileName", jsonReader.DefaultJsonFile, "File name to search for")
-	outputFilePtr := flag.String("OutputFile", jsonReader.DefaultOutputFile, "File name to write output to")
+	outputFilePtr := flag.String("outputFile", jsonReader.DefaultOutputFile, "File name to write output to")
 
 	flag.Parse()
 
