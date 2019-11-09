@@ -47,7 +47,7 @@ func MyFunction(folder string, jsonFile string, outputFile string) {
 }
 
 func writeOutput(flattened OSLData, outputFile string) {
-	output, err := json.Marshal(flattened)
+	output, err := json.MarshalIndent(flattened, "", "    ")
 	if err != nil {
 		log.Fatal(err)
 	}
