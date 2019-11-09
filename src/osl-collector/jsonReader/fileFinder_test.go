@@ -6,13 +6,14 @@ import (
 )
 
 func TestFindFiles(t *testing.T) {
-	jsonFiles := jsonReader.FindFiles(jsonReader.DefaultFolder, jsonReader.DefaultJsonFile)
+	jsonFiles := jsonReader.FindFiles("testNested", jsonReader.DefaultJsonFile)
 
 	if len(jsonFiles) != 1 {
 		t.Errorf("Should have found 1 test json file but found %d", len(jsonFiles))
 	}
-	if jsonFiles[0] != "testDir2/"+jsonReader.DefaultJsonFile {
-		t.Errorf("Should have found testDir2/"+jsonReader.DefaultJsonFile+" but found %s", jsonFiles[0])
+	expected := "testNested/testDir2/" + jsonReader.DefaultJsonFile
+	if jsonFiles[0] != expected {
+		t.Errorf("Should have found %s but found %s\n", expected, jsonFiles[0])
 	}
 
 }

@@ -16,7 +16,7 @@ func TestReadFiles_EmptyArray(t *testing.T) {
 }
 
 func TestReadFiles_HappyCase(t *testing.T) {
-	output := ReadFiles([]string{"testDir1/temp.json", "testDir2/boshcycle_osm.json"})
+	output := ReadFiles([]string{"testNested/testDir1/temp.json", "testNested/testDir2/boshcycle_osm.json"})
 
 	if len(output) != 2 {
 		t.Errorf("Should have found 2 json files but found %d\n", len(output))
