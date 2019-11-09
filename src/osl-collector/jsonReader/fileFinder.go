@@ -36,7 +36,7 @@ func FindFiles(folder string, jsonFile string) []string {
 			directories = append(directories, path.Join(folder, f.Name()))
 		} else if f.Mode() & os.ModeSymlink != 0 {
 			fmt.Println(f.Name() + " is a symlink")
-			directories = append(directories, f.Name())
+			directories = append(directories, path.Join(folder, f.Name()))
 		} else {
 			fmt.Printf("%s is a file\n", f.Name())
 		}
