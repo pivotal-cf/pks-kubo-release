@@ -8,6 +8,8 @@ import (
 	. "osl-collector/oslStructs"
 )
 
+const DefaultOutputFile = "output.json"
+
 func ReadFiles(files []string) [][]byte {
 	var jsonData [][]byte
 	for _, fileName := range files {
@@ -36,12 +38,20 @@ func ParseOSLData(inputs [][]byte) []OSLData {
 	return data
 }
 
-func MyFunction(folder string, jsonFile string) {
+func MyFunction(folder string, jsonFile string, outputFile string) {
 	files := FindFiles(folder, jsonFile)
 	contents := ReadFiles(files)
 	rawOslData := ParseOSLData(contents)
 	flattened := FlattenPackages(rawOslData)
+	writeOutput(flattened, outputFile)
+}
+
+func writeOutput(flattened OSLData, outputFile string) {
 	output, err := json.Marshal(flattened)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = ioutil.WriteFile(outputFile, output, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
