@@ -1,9 +1,10 @@
 package main
 
 import (
-	json_reader "osl-collector/json-reader"
+	"os"
+	jsonReader "osl-collector/jsonReader"
 )
 
 func main() {
-	json_reader.MyFunction()
+	jsonReader.MyFunction(os.Args[1], os.Args[2])
 }

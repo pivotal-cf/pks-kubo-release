@@ -7,10 +7,9 @@ mkdir $GOPATH/src
 cp -r osl-collector $GOPATH/src
 cd $GOPATH/src/osl-collector
 
-go test **/*
+go test ./...
 go build
 
-./osl-collector
 cp -a osl-collector ${BOSH_INSTALL_TARGET}/
 
 # TODO: figure out flags

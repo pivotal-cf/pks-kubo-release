@@ -4,4 +4,4 @@ set -euo pipefail
 
 cd /var/vcap/jobs/print-component-version/
 
-./packages/osl-collector/osl-collector
+./packages/osl-collector/osl-collector ${PWD}/packages boshcycle_osm.json
