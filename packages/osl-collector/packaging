@@ -11,6 +11,7 @@ go test ./...
 go build
 
 cp -a osl-collector ${BOSH_INSTALL_TARGET}/
+${BOSH_INSTALL_TARGET}/osl-collector -folder /var/vcap/packages -output ${BOSH_INSTALL_TARGET}/osl-output.json
 
 # TODO: figure out flags
 # go test -c -v -o  ${BOSH_INSTALL_TARGET}/run-smoke-tests
