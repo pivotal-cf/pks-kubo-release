@@ -23,9 +23,9 @@ type OSLPackage struct {
 }
 
 /**
-Takes several OSLData structures and flattens their `packages` arrays together, returning a single OSLData struct
+Takes several OSLData structures and merges their `packages` arrays together, returning a single OSLData struct
  */
-func FlattenPackages(data []OSLData) OSLData {
+func MergePackages(data []OSLData) OSLData {
 	var packages []OSLPackage = make([]OSLPackage, 0)
 	for _, datum := range data {
 		for _, singlePackage := range datum.Packages {

@@ -13,12 +13,12 @@ func Collect(folder string, jsonFile string, outputFile string) {
 	files := FindFiles(folder, jsonFile)
 	contents := ReadFiles(files)
 	rawOslData := ParseOSLData(contents)
-	flattened := FlattenPackages(rawOslData)
-	writeOutput(flattened, outputFile)
+	merged := MergePackages(rawOslData)
+	writeOutput(merged, outputFile)
 }
 
-func writeOutput(flattened OSLData, outputFile string) {
-	output, err := json.MarshalIndent(flattened, "", "    ")
+func writeOutput(merged OSLData, outputFile string) {
+	output, err := json.MarshalIndent(merged, "", "    ")
 	if err != nil {
 		log.Fatal(err)
 	}
