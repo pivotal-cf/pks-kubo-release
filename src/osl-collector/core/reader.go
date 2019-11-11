@@ -7,31 +7,37 @@ import (
 	. "osl-collector/core/oslStructs"
 )
 
-const DefaultOutputFile = "output.json"
+const DefaultOslAggregateFile = "osl-output.json"
 
 func ReadFiles(files []string) [][]byte {
 	var jsonData [][]byte
 	for _, fileName := range files {
-		bytes, err := ioutil.ReadFile(fileName)
-		if err != nil {
-			log.Fatal(err)
-		}
-		jsonData = append(jsonData, bytes)
+		jsonData = append(jsonData, ReadFile(fileName))
 	}
-
 	return jsonData
+}
+
+func ReadFile(file string) []byte {
+	bytes, err := ioutil.ReadFile(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return bytes
 }
 
 func ParseOSLData(inputs [][]byte) []OSLData {
 	var data []OSLData
 	for _, input := range inputs {
-		var datum OSLData
-		err := json.Unmarshal(input, &datum)
-		if err != nil {
-			log.Fatal(err)
-		}
-		data = append(data, datum)
+		data = append(data, ParseOSLDatum(input))
 	}
-
 	return data
+}
+
+func ParseOSLDatum(input []byte) OSLData {
+	var datum OSLData
+	err := json.Unmarshal(input, &datum)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return datum
 }

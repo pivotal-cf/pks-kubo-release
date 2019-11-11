@@ -1,4 +1,4 @@
-package commands
+package collect
 
 import (
 	"encoding/json"
@@ -9,12 +9,18 @@ import (
 	. "osl-collector/core/oslStructs"
 )
 
-func Collect(folder string, jsonFile string, outputFile string) {
-	files := FindFiles(folder, jsonFile)
+type OslCollectorInputs struct {
+	Folder       string
+	JsonFileName string
+	OutputFile   string
+}
+
+func Collect(inputs OslCollectorInputs) {
+	files := FindFiles(inputs.Folder, inputs.JsonFileName)
 	contents := ReadFiles(files)
 	rawOslData := ParseOSLData(contents)
 	merged := MergePackages(rawOslData)
-	writeOutput(merged, outputFile)
+	writeOutput(merged, inputs.OutputFile)
 }
 
 func writeOutput(merged OSLData, outputFile string) {

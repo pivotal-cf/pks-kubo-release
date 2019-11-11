@@ -8,7 +8,7 @@ import (
 )
 
 const DefaultFolder = "."
-const DefaultJsonFile = "boshcycle_osm.json"
+const DefaultOslPackageFile = "boshcycle_osm.json"
 
 /**
 Searches the given folder for subdirectories containing jsonFile at the root
