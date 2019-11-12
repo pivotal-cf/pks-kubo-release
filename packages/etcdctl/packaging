@@ -26,7 +26,7 @@ main
 ETCDCTL_LICENSE="Apache2.0"
 ETCDCTL_SOURCE_URL="https://github.com/etcd-io/etcd/archive/v${ETCDCTL_VERSION}.tar.gz"
 
-cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
 { "packages": [
     {
     "name": "$ETCDCTL_PACKAGE",

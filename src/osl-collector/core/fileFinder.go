@@ -8,7 +8,7 @@ import (
 )
 
 const DefaultFolder = "."
-const DefaultOslPackageFile = "boshcycle_osm.json"
+const DefaultOslPackageFile = "osl-package.json"
 
 /**
 Searches the given folder for subdirectories containing jsonFile at the root
@@ -19,8 +19,8 @@ core/
 ├── testDir1
 │   └── temp.json
 └── testDir2
-    └── boshcycle_osm.json
-Will return only ["testDir2/boshcycle_osm.json"] with the default value of jsonFile
+    └── osl-package.json
+Will return only ["testDir2/osl-package.json"] with the default value of jsonFile
  */
 func FindFiles(folder string, jsonFile string) []string {
 	files, err := ioutil.ReadDir(folder)

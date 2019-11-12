@@ -14,7 +14,7 @@ chmod +x "${BOSH_INSTALL_TARGET:?}/flanneld"
 FLANNEL_LICENSE="Apache2.0"
 FLANNEL_SOURCE_URL="https://github.com/coreos/flannel/archive/v0.11.0.tar.gz"
 
-cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
 { "packages": [
     {
     "name": "$FLANNEL_PACKAGE",

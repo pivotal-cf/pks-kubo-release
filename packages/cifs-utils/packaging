@@ -81,7 +81,7 @@ PKG_CONFIG_SOURCE_URL="https://pkgconfig.freedesktop.org/releases/$PKG_CONFIG_PA
 CIFS_LICENSE=BSD-3
 CIFS_SOURCE_URL="https://download.samba.org/pub/linux-cifs/cifs-utils/$CIFS_PACKAGE-$CIFS_VERSION.tar.bz2"
 
-cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
 { "packages": [
     {
     "name": "$AUTOCONF_PACKAGE",

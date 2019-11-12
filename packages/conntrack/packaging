@@ -25,7 +25,7 @@ LIBNETFILTER_SOURCE_URL="http://archive.ubuntu.com/ubuntu/pool/main/libn/libnetf
 LIBMN_LICENSE="LGPL2.1"
 LIBMN_SOURCE_URL="https://www.netfilter.org/projects/libmnl/files/libmnl-${LIBMN_VERSION}.tar.bz2"
 
-cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
 { "packages": [
     {
     "name": "$CONNTRACK_PACKAGE",

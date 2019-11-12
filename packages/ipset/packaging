@@ -17,7 +17,7 @@ cp -a ipset/${LIBIPSET_PACKAGE}_${LIBIPSET_VERSION}-1_amd64.deb "${BOSH_INSTALL_
 IPSET_LICENSE="GPL2.0"
 IPSET_SOURCE_URL="http://ftp.netfilter.org/pub/ipset/${IPSET_PACKAGE}-${IPSET_VERSION}.tar.bz2"
 
-cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
 { "packages": [
     {
     "name": "$IPSET_PACKAGE",

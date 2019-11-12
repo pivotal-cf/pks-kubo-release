@@ -34,7 +34,7 @@ LIBNFSIDMAP_SOURCE_URL="http://cdn-fastly.deb.debian.org/debian/pool/main/libn/l
 RPCBIND_LICENSE=BSD-3
 RPCBIND_SOURCE_URL="http://ftp.debian.org/debian/pool/main/r/rpcbind/${RPCBIND_PACKAGE}_${RPCBIND_VERSION}.orig.tar.bz2"
 
-cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
 { "packages": [
     {
     "name": "$NFSCOMMON_PACKAGE",
