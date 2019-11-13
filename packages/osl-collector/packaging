@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e -x
+
+source /var/vcap/packages/golang-1.12-linux/bosh/compile.env
+
+mkdir $GOPATH/src
+cp -r osl-collector $GOPATH/src
+cd $GOPATH/src/osl-collector
+
+go test -v ./...
+go build
+
+cp -a osl-collector ${BOSH_INSTALL_TARGET}/
+${BOSH_INSTALL_TARGET}/osl-collector -folder /var/vcap/packages -outputFile ${BOSH_INSTALL_TARGET}/osl-output.json collect

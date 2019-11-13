@@ -22,7 +22,7 @@ chmod +x $BOSH_INSTALL_TARGET/bin/socat
 SOCAT_LICENSE="GPL2.0"
 SOCAT_SOURCE_URL="http://ftp.debian.org/debian/pool/main/s/socat/${SOCAT_PACKAGE}_${SOCAT_VERSION}.orig.tar.bz2"
 
-cat <<EOF > ${BOSH_INSTALL_TARGET}/boshcycle_osm.json
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
 { "packages": [
     {
     "name": "$SOCAT_PACKAGE",
