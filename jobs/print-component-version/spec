@@ -1,0 +1,10 @@
+---
+name: print-component-version
+
+templates:
+    run.erb: bin/run
+
+packages:
+- osl-collector
+
+properties: {}

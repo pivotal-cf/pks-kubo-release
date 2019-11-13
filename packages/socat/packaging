@@ -1,12 +1,34 @@
-set -e # exit immediately if a simple command exits with a non-zero status
-set -u # report the usage of uninitialized variables
+set -eu
 
 mkdir -p $BOSH_INSTALL_TARGET/bin
-tar xzf socat-1.7.3.2.tar.gz
+
+SOCAT_PACKAGE=socat
+SOCAT_VERSION="1.7.3.2"
+
+tar xzf ${SOCAT_PACKAGE}-${SOCAT_VERSION}.tar.gz
 pushd socat-1.7.3.2
   ./configure
   make
-  cp socat ${BOSH_INSTALL_TARGET}/bin
+  cp -a socat ${BOSH_INSTALL_TARGET}/bin
   chmod 755 ${BOSH_INSTALL_TARGET}/bin/socat
 popd
 chmod +x $BOSH_INSTALL_TARGET/bin/socat
+
+
+# Open Source Licensing Information, used by the vmware OSM system
+# These license abbreviations are defined by the OSM system
+# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
+
+SOCAT_LICENSE="GPL2.0"
+SOCAT_SOURCE_URL="http://ftp.debian.org/debian/pool/main/s/socat/${SOCAT_PACKAGE}_${SOCAT_VERSION}.orig.tar.bz2"
+
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
+{ "packages": [
+    {
+    "name": "$SOCAT_PACKAGE",
+    "version": "$SOCAT_VERSION",
+    "url": "$SOCAT_SOURCE_URL",
+    "license": "$SOCAT_LICENSE"
+    }
+]}
+EOF

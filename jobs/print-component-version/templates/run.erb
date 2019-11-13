@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -euo pipefail
+
+cd /var/vcap/jobs/print-component-version/
+
+./packages/osl-collector/osl-collector -inputFile packages/osl-collector/osl-output.json -outputFile osm.yml osm

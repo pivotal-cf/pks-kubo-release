@@ -1,6 +1,26 @@
 set -e
 
-FLANNELD_VERSION="0.11.0"
-tar xvf flannel-v${FLANNELD_VERSION}-linux-amd64.tar.gz
+FLANNEL_PACKAGE=flannel
+FLANNEL_VERSION="0.11.0"
+tar xvf ${FLANNEL_PACKAGE}-v${FLANNEL_VERSION}-linux-amd64.tar.gz
 cp -a flanneld "${BOSH_INSTALL_TARGET:?}/flanneld"
 chmod +x "${BOSH_INSTALL_TARGET:?}/flanneld"
+
+
+# Open Source Licensing Information, used by the vmware OSM system
+# These license abbreviations are defined by the OSM system
+# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
+
+FLANNEL_LICENSE="Apache2.0"
+FLANNEL_SOURCE_URL="https://github.com/coreos/flannel/archive/v0.11.0.tar.gz"
+
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
+{ "packages": [
+    {
+    "name": "$FLANNEL_PACKAGE",
+    "version": "$FLANNEL_VERSION",
+    "url": "$FLANNEL_SOURCE_URL",
+    "license": "$FLANNEL_LICENSE"
+    }
+]}
+EOF

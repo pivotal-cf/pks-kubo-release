@@ -1,5 +1,6 @@
 set -e
 
+ETCDCTL_PACKAGE=etcdctl
 ETCDCTL_VERSION="3.0.7"
 
 main() {
@@ -8,7 +9,7 @@ main() {
 }
 
 copy_binary() {
-  cp -a etcdctl-${ETCDCTL_VERSION} "${BOSH_INSTALL_TARGET:?}/etcdctl"
+  cp -a ${ETCDCTL_PACKAGE}-${ETCDCTL_VERSION} "${BOSH_INSTALL_TARGET:?}/etcdctl"
 }
 
 make_executable() {
@@ -16,3 +17,22 @@ make_executable() {
 }
 
 main
+
+
+# Open Source Licensing Information, used by the vmware OSM system
+# These license abbreviations are defined by the OSM system
+# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
+
+ETCDCTL_LICENSE="Apache2.0"
+ETCDCTL_SOURCE_URL="https://github.com/etcd-io/etcd/archive/v${ETCDCTL_VERSION}.tar.gz"
+
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
+{ "packages": [
+    {
+    "name": "$ETCDCTL_PACKAGE",
+    "version": "$ETCDCTL_VERSION",
+    "url": "$ETCDCTL_SOURCE_URL",
+    "license": "$ETCDCTL_LICENSE"
+    }
+]}
+EOF
