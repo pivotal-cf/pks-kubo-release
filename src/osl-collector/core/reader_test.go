@@ -1,14 +1,17 @@
-package core
+package core_test
 
 import (
+	"os"
+	"osl-collector/core"
 	"osl-collector/core/oslStructs"
+	"path"
 	"reflect"
 	"strings"
 	"testing"
 )
 
 func TestReadFiles_EmptyArray(t *testing.T) {
-	output := ReadFiles([]string{})
+	output := core.ReadFiles([]string{})
 
 	if len(output) != 0 {
 		t.Errorf("Should have not found any json files, but found %d\n", len(output))
@@ -16,7 +19,14 @@ func TestReadFiles_EmptyArray(t *testing.T) {
 }
 
 func TestReadFiles_HappyCase(t *testing.T) {
-	output := ReadFiles([]string{"testNested/testDir1/temp.json", "testNested/testDir2/osl-package.json"})
+	dir, err := os.Getwd()
+	if err != nil {
+		t.Error(err)
+	}
+	output := core.ReadFiles([]string{
+		path.Join(dir, "testNested/testDir1/temp.json"),
+		path.Join(dir, "testNested/testDir2/osl-package.json"),
+	})
 
 	if len(output) != 2 {
 		t.Errorf("Should have found 2 json files but found %d\n", len(output))
@@ -32,7 +42,7 @@ func TestReadFiles_HappyCase(t *testing.T) {
 }
 
 func TestParseOSLData(t *testing.T) {
-	data := ParseOSLData([][]byte{
+	data := core.ParseOSLData([][]byte{
 		[]byte(`
 { "packages": [
   {
