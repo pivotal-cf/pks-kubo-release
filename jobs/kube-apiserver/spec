@@ -57,7 +57,7 @@ properties:
     description: Public key used to verify service account tokens
   tls-cipher-suites:
     description: Comma-separated list of cipher suites
-    default: TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+    default: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
   tls.kubelet-client:
     description: kubelet client cert
   tls.kubernetes.ca:
