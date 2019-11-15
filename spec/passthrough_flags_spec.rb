@@ -147,7 +147,8 @@ describe 'flag_generation_tests' do
       kube_scheduler = compiled_template(
         'kube-scheduler',
         'config/bpm.yml',
-        k8s_args)
+        k8s_args,
+        link_spec)
 
       test_bpm(kube_scheduler)
     end

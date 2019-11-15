@@ -24,3 +24,4 @@ processes:
     end
   %>
   - --config=/var/vcap/jobs/kube-scheduler/config/config.yml
+  <%= "- --tls-cipher-suites=#{link('kube-apiserver').p('tls-cipher-suites')}" %>
