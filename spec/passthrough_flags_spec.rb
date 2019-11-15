@@ -152,5 +152,15 @@ describe 'flag_generation_tests' do
 
       test_bpm(kube_scheduler)
     end
+
+    it 'rejects tls-cipher-suites in k8s_args' do
+      expect {
+        kube_scheduler = compiled_template(
+          'kube-scheduler',
+          'config/bpm.yml',
+          k8s_args_with_tls_cipher_suites,
+          link_spec)
+      }.to raise_error.with_message(/do not set tls-cipher-suites in k8s-args/)
+    end
   end
 end

@@ -19,7 +19,6 @@ describe 'kube-apiserver' do
     }
   end
 
-
   it 'has default tls-cipher-suites' do
     kube_apiserver = compiled_template(
       'kube-apiserver',
@@ -32,8 +31,8 @@ describe 'kube-apiserver' do
   end
 
   it 'rejects invalid tls-cipher-suites' do
-    new_link = link_spec.clone
-    new_link["kube-apiserver"]["properties"]["tls-cipher-suites"] = 'INVALID_CIPHER'
+    # let is executed for each test, so this does not affect other tests
+    link_spec["kube-apiserver"]["properties"]["tls-cipher-suites"] = 'INVALID_CIPHER'
     expect {
       compiled_template(
       'kube-apiserver',
