@@ -1,8 +1,8 @@
 ---
-final_name: kubo
+final_name: pks-kubernetes
 blobstore:
   provider: s3
   options:
-    bucket_name: kubo-release-blobs
+    bucket_name: pks-kubernetes-release-blobs
     region: us-east1
     host: storage.googleapis.com
