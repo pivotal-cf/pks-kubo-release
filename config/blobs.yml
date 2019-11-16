@@ -86,30 +86,30 @@ jq-linux64-1.5:
   size: 3027945
   object_id: 41eb1cd1-0377-4e08-5602-51e0af8b9b52
   sha: d8e36831c3c94bb58be34dd544f44a6c6cb88568
-kubernetes-1.11.3/kube-apiserver:
-  size: 185513792
-  object_id: 4c880436-6ded-49a1-4758-99584145da4a
-  sha: 1d92823bcfe71d0c694f219961276405286766be
-kubernetes-1.11.3/kube-controller-manager:
-  size: 154113026
-  object_id: 0d790d64-378a-47cc-7982-1ee222c3809d
-  sha: cddddf92038341053a2ac84a71ce2f147c453604
-kubernetes-1.11.3/kube-proxy:
-  size: 52068695
-  object_id: ecb11b3c-0ef0-4953-5602-6b7547fd4a5d
-  sha: b3c7f41171986bd45eeac5d841cee07b89544888
-kubernetes-1.11.3/kube-scheduler:
-  size: 55636875
-  object_id: 7cfc98ef-6f87-44fe-4cf1-718bf785420e
-  sha: 2a7d78c8354a38add1971dca957d28945eab10d7
-kubernetes-1.11.3/kubectl:
-  size: 55414436
-  object_id: 916cb124-bea1-4428-528d-89da5e4b7758
-  sha: 5a336ea470a0053b1893fda89a538b6197566137
-kubernetes-1.11.3/kubelet:
-  size: 163041864
-  object_id: 39062b5b-80c6-4fe8-4ac3-12c2121f15ad
-  sha: 2c24374244482fc629776366df4f416a1b25ade4
+kubernetes-1.14.9/kube-apiserver:
+  size: 167148800
+  object_id: 21e786e5-e473-4f49-57d3-fdf81047a927
+  sha: 2da4156d13760439891abc21638dc48a1cca124c
+kubernetes-1.14.9/kube-controller-manager:
+  size: 115169728
+  object_id: 0d3ab044-df20-4728-5c92-97cdcad50984
+  sha: f5f07bab03edca820a01a16348a70d1d99d60483
+kubernetes-1.14.9/kube-proxy:
+  size: 36693632
+  object_id: 32b4b8ec-a7ba-4622-5a05-7bd1c6d680f6
+  sha: dad920980405da7ceb698eb04e010980fd441004
+kubernetes-1.14.9/kube-scheduler:
+  size: 39266496
+  object_id: 6bdc6977-2d57-404d-5f16-c8c69aeb211e
+  sha: 543995b102acf18ea1ec87412790779b2c704429
+kubernetes-1.14.9/kubectl:
+  size: 43115328
+  object_id: b4bd281d-027c-43cc-61a9-c586db07d29f
+  sha: 90579134a6ae9693cb39fb2c6150de1b36e8af76
+kubernetes-1.14.9/kubelet:
+  size: 128104272
+  object_id: 47976298-6aee-43e3-7a3e-bff7f144cbde
+  sha: f84c48d5368d6f1d687b530b673d2d093c12fe56
 nfs/keyutils_1.5.9-8ubuntu1_amd64.deb:
   size: 47054
   object_id: e1b42c34-4e88-426b-7268-99d1bdfd40c1
