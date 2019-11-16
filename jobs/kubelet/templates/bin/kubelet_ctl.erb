@@ -33,10 +33,14 @@ DATA_DIR=/var/vcap/store/kubernetes
   if iaas=="vsphere"
     labels << "failure-domain.beta.kubernetes.io/zone=#{spec.az}"
   end
-  if_p("labels") do |node_labels|
-    labels += node_labels.map {|k,v| "#{k}=#{v}"}
+
+  if_p('k8s-args') do |args|
+    custom_labels = args.fetch('node-labels', "").split(",")
+    labels = custom_labels + labels
+    args.delete('node-labels')
   end
-  labels = labels.join(',')
+
+  labels = labels.join(",")
 %>
 
 # shellcheck disable=SC1091
@@ -78,7 +82,6 @@ delete_stale_drained_node() {
 
 get_hostname_override() {
   if [[ "gce" == "$cloud_provider" ]]; then
-    # The hostname needs to be set to the instance name so the gce cloud provider can manage the instance
     hostname_override=$(curl http://metadata.google.internal/computeMetadata/v1/instance/name -H "Metadata-Flavor: Google")
   elif [[ "azure" == "$cloud_provider" ]]; then
     # K8s 1.9 Azure provider assumes  the hostname == nodename and is required to resolve the VM instance ID
@@ -102,29 +105,32 @@ start_kubelet() {
     end
   -%>
 
-  kubelet \<% if_p('k8s-args') do
-    p('k8s-args').each do |flag, value|
-      if_p('k8s-args.'+flag) do |v|
-        argString = "--#{flag}"
-        if v
-          if v.is_a? Array
-            values = v.join(",")
-          elsif v.is_a? Hash
-            values = v.map { |k,v| "#{k}=#{v}" }.join(",")
-          else
-            values = v
-          end
-          argString += "=#{values}" %>
-    <%= argString %> \<%
+  kubelet \
+  <%-
+    if_p('k8s-args') do |args|
+      args.each do |flag, value|
+        valueString = ""
+
+        if value.nil?
+          # Do nothing to supports args-less flags (--example)
+        elsif value.is_a? Array
+          valueString = "=#{value.join(",")}"
+        elsif value.is_a? Hash
+          valueString = "=#{value.map { |k,v| "#{k}=#{v}" }.join(",")}"
+        else
+          valueString = "=#{value}"
         end
+  -%>
+    <%= "--#{flag}#{valueString}" %> \
+  <%-
       end
     end
-  end %>
+  -%>
     <% if include_config -%>--cloud-config=${cloud_config}<% end %> \
     <% if !iaas.nil? -%>--cloud-provider=${cloud_provider}<% end %> \
     --hostname-override=$(get_hostname_override) \
     --node-labels=<%= labels %> \
-    --config="/var/vcap/jobs/kubelet/config/kubeletconfig.yml"
+    --config="/var/vcap/jobs/kubelet/config/kubeletconfig.yml" \
   1>> $LOG_DIR/kubelet.stdout.log \
   2>> $LOG_DIR/kubelet.stderr.log
 }
