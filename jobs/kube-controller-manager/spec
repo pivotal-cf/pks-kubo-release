@@ -12,6 +12,8 @@ templates:
   config/service_key.json.erb: config/service_key.json
   config/cluster-signing-ca.pem.erb: config/cluster-signing-ca.pem
   config/cluster-signing-key.pem.erb: config/cluster-signing-key.pem
+  config/kube-controller-manager-cert.pem.erb: config/kube-controller-manager-cert.pem
+  config/kube-controller-manager-private-key.pem.erb: config/kube-controller-manager-private-key.pem
 
 packages:
 - kubernetes
@@ -21,19 +23,6 @@ properties:
     description: "API Token for the system:kube-controller-manager user"
   cluster-signing:
     description: "CA Certificate and private key for the certificate controller to issue certificates"
-  horizontal-pod-autoscaler.downscale-delay:
-    description: "The duration that specifies how long the autoscaler has to wait before another downscale"
-  horizontal-pod-autoscaler.sync-period:
-    description: "The period for syncing the number of pods in horizontal pod autoscaler"
-  horizontal-pod-autoscaler.tolerance:
-    description: "The minimum change (from 1.0) in the desired-to-actual metrics ratio for the horizontal pod autoscaler to consider scaling"
-  horizontal-pod-autoscaler.upscale-delay:
-    description: "The duration that specifies how long the autoscaler has to wait before another upscale operation"
-  horizontal-pod-autoscaler.use-rest-clients:
-    description: "If true, horizontal pod autoscaler controller will use REST clients through the kube-aggregator, instead of using the legacy metrics client through the API server proxy"
-  cluster-name:
-    description: Kubernetes cluster name
-    default: kubernetes
   http_proxy:
     description: http_proxy env var for the kubernetes-controller-manager binary (i.e. for cloud provider interactions)
   https_proxy:
@@ -42,14 +31,17 @@ properties:
     description: no_proxy env var for cloud provider interactions, i.e. for the kubelet
   tls.kubernetes:
     description: "Certificate and private key for the Kubernetes master"
-  service-cluster-cidr:
-    description: The service cluster IP for hosting cluster services
-    default: "10.100.200.0/24"
+  tls.kube-controller-manager:
+    description: "Certificate and private key for serving HTTPS from kube-controller-manager"
   service-account-private-key:
     description: "Private key used to sign generated tokens"
-  logging-level:
-    description: "V-leveled logging at the specified level. See https://github.com/golang/glog"
-    default: 2
+  k8s-args:
+    description: "Pass-through options for Kubernetes runtime arguments. See https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/ for reference."
+    example: |
+      k8s-args:
+        bind-address: 0.0.0.0
+        cluster-name: kubernetes
+        enable-garbage-collector: true
 
 consumes:
 - name: cloud-provider

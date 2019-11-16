@@ -5,6 +5,13 @@ require 'spec_helper'
 require 'fileutils'
 require 'open3'
 
+def get_node_labels(rendered_kubelet_ctl)
+  node_labels = rendered_kubelet_ctl.split("\n").select { |line| line[/--node-labels=/i] }
+  expect(node_labels.length).to be(1)
+  labels = node_labels[0].match(/--node-labels=(.*) \\/).captures[0]
+  labels.split(",")
+end
+
 describe 'kubelet_ctl' do
   let(:rendered_template) do
     compiled_template('kubelet', 'bin/kubelet_ctl', {}, {}, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
@@ -20,6 +27,35 @@ describe 'kubelet_ctl' do
 
   it 'labels the kubelet with the bosh id' do
     expect(rendered_template).to include(',bosh.id=fake-bosh-id')
+  end
+
+  it 'labels the kubelet with custom labels' do
+    manifest_properties = {
+      'k8s-args' => {
+        'node-labels' => 'foo=bar,k8s.node=custom'
+      }
+    }
+    rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, {}, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
+    labels = get_node_labels(rendered_kubelet_ctl)
+
+    expect(labels).to include('bosh.zone=z1')
+    expect(labels).to include('spec.ip=fake-bosh-ip')
+    expect(labels).to include('bosh.id=fake-bosh-id')
+    expect(labels).to include('k8s.node=custom')
+    expect(labels).to include('foo=bar')
+  end
+
+  it 'labels the kubelet with default labels' do
+    manifest_properties = {
+      'k8s-args' => {
+      }
+    }
+    rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, {}, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
+    labels = get_node_labels(rendered_kubelet_ctl)
+
+    expect(labels).to include('bosh.zone=z1')
+    expect(labels).to include('spec.ip=fake-bosh-ip')
+    expect(labels).to include('bosh.id=fake-bosh-id')
   end
 
   it 'has no http proxy when no proxy is defined' do
@@ -104,8 +140,8 @@ describe 'kubelet_ctl setting of --hostname-override property' do
   end
 
   describe 'when cloud-provider is gce' do
-    it 'sets hostname_override to google container hostname' do
-      expected_google_hostname = 'foohost'
+    it 'sets hostname_override to gcp cloud id' do
+      expected_google_hostname = 'i_am_groot'
 
       # mock out curl because this code path will try to use it.
       echo_mock_file = test_context['mock_dir'] + '/curl'

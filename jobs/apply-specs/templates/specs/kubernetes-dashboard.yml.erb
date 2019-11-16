@@ -25,7 +25,6 @@ kind: ServiceAccount
 metadata:
   labels:
     k8s-app: kubernetes-dashboard
-    addonmanager.kubernetes.io/mode: Reconcile
   name: kubernetes-dashboard
   namespace: kube-system
 
@@ -37,14 +36,14 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   labels:
     k8s-app: kubernetes-dashboard
-    addonmanager.kubernetes.io/mode: Reconcile
   name: kubernetes-dashboard-minimal
   namespace: kube-system
 rules:
-  # Allow Dashboard to create 'kubernetes-dashboard-key-holder' secret.
+  # Allow Dashboard to create 'kubernetes-dashboard-key-holder' secret. Added separately from Addons Spec
 - apiGroups: [""]
   resources: ["secrets"]
   verbs: ["create"]
+
   # Allow Dashboard to get, update and delete Dashboard exclusive secrets.
 - apiGroups: [""]
   resources: ["secrets"]
@@ -55,15 +54,6 @@ rules:
   resources: ["configmaps"]
   resourceNames: ["kubernetes-dashboard-settings"]
   verbs: ["get", "update"]
-  # Allow Dashboard to get metrics from heapster.
-- apiGroups: [""]
-  resources: ["services"]
-  resourceNames: ["heapster"]
-  verbs: ["proxy"]
-- apiGroups: [""]
-  resources: ["services/proxy"]
-  resourceNames: ["heapster", "http:heapster:", "https:heapster:"]
-  verbs: ["get"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -73,7 +63,6 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: kubernetes-dashboard
-    addonmanager.kubernetes.io/mode: Reconcile
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -93,10 +82,6 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: kubernetes-dashboard
-    addonmanager.kubernetes.io/mode: EnsureExists
-data:
-  ca.pem: |
-<%= p("tls.heapster.ca").lines.map! { |line| line.prepend("    ") }.join -%>
 ---
 # ------------------- Dashboard Deployment ------------------- #
 
@@ -107,11 +92,7 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: kubernetes-dashboard
-    kubernetes.io/cluster-service: "true"
-    addonmanager.kubernetes.io/mode: Reconcile
 spec:
-  replicas: 1
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
       k8s-app: kubernetes-dashboard
@@ -126,7 +107,7 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
       - name: kubernetes-dashboard
-        image: k8s.gcr.io/kubernetes-dashboard-amd64:v1.10.0
+        image: vmware/kubernetes-dashboard-amd64:v1.10.1
         resources:
           limits:
             cpu: 100m
@@ -138,7 +119,6 @@ spec:
         - containerPort: 8443
           protocol: TCP
         args:
-          - --heapster-host=https://heapster.kube-system.svc.cluster.local:8443
           - --default-cert-dir=/certs
           - --tls-cert-file=kubernetes-dashboard-cert
           - --tls-key-file=kubernetes-dashboard-key
@@ -149,9 +129,6 @@ spec:
           name: tmp-volume
         - mountPath: /certs
           name: kubernetes-dashboard-certs
-          readOnly: true
-        - mountPath: /etc/ssl/certs/
-          name: heapster-ca
           readOnly: true
         livenessProbe:
           httpGet:
@@ -166,12 +143,6 @@ spec:
           secretName: kubernetes-dashboard-certs
       - name: tmp-volume
         emptyDir: {}
-      - name: heapster-ca
-        configMap:
-          name: kubernetes-dashboard-settings
-          items:
-          - key: ca.pem
-            path: ca-certificates.crt
       serviceAccountName: kubernetes-dashboard
       tolerations:
       - key: "CriticalAddonsOnly"
@@ -191,8 +162,6 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: kubernetes-dashboard
-    kubernetes.io/cluster-service: "true"
-    addonmanager.kubernetes.io/mode: Reconcile
 spec:
   selector:
     k8s-app: kubernetes-dashboard
