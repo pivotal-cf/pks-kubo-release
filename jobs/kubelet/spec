@@ -76,6 +76,7 @@ consumes:
 - name: cloud-provider
   optional: true
   type: cloud-provider
+# TODO: it doesn't make sense for kubelet to depend on kube-apiserver, should we extract a common config package / job?
 - name: kube-apiserver
   type: kube-apiserver
 provides:

@@ -148,6 +148,7 @@ start_kubelet() {
         raise 'invalid tls-cipher-suites, please use one of '+ valid_ciphers.join('; ')
       end
     %>
+    # TODO: move this to a yml array in the config file itself
     --tls-cipher-suites=<%= link('kube-apiserver').p('tls-cipher-suites') %> \
   1>> $LOG_DIR/kubelet.stdout.log \
   2>> $LOG_DIR/kubelet.stderr.log
