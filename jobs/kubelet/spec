@@ -76,6 +76,8 @@ consumes:
 - name: cloud-provider
   optional: true
   type: cloud-provider
+- name: kube-apiserver
+  type: kube-apiserver
 provides:
 - name: kubernetes-workers
   type: kubernetes-workers

@@ -114,6 +114,9 @@ start_kubelet() {
   <%-
     if_p('k8s-args') do |args|
       args.each do |flag, value|
+        if flag.eql? "tls-cipher-suites"
+          raise 'do not set tls-cipher-suites in k8s-args, please set as its own property'
+        end
         valueString = ""
 
         if value.nil?
@@ -136,6 +139,16 @@ start_kubelet() {
     --hostname-override=$(get_hostname_override) \
     --node-labels=<%= labels %> \
     --config="/var/vcap/jobs/kubelet/config/kubeletconfig.yml" \
+    <%
+      valid_ciphers = [
+        'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
+        'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256'
+      ]
+      unless valid_ciphers.include?(link('kube-apiserver').p('tls-cipher-suites'))
+        raise 'invalid tls-cipher-suites, please use one of '+ valid_ciphers.join('; ')
+      end
+    %>
+    --tls-cipher-suites=<%= link('kube-apiserver').p('tls-cipher-suites') %> \
   1>> $LOG_DIR/kubelet.stdout.log \
   2>> $LOG_DIR/kubelet.stderr.log
 }
