@@ -77,8 +77,8 @@ consumes:
   optional: true
   type: cloud-provider
 # TODO: it doesn't make sense for kubelet to depend on kube-apiserver, should we extract a common config package / job?
-- name: kube-apiserver
-  type: kube-apiserver
+- name: kube-common-config
+  type: kube-common-config
 provides:
 - name: kubernetes-workers
   type: kubernetes-workers
