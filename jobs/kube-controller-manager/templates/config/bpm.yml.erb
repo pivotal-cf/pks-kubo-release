@@ -6,9 +6,6 @@ processes:
   <% 
     if_p('k8s-args') do |args|
       args.each do |flag, value|
-        if flag.eql? "tls-cipher-suites"
-          raise 'do not set tls-cipher-suites in k8s-args, please set as its own property'
-        end
         valueString = ""
 
         if value.nil?
@@ -30,15 +27,6 @@ processes:
   - --cloud-provider=<%= cloud_provider.p('cloud-provider.type') %>
   - --cloud-config=/var/vcap/jobs/kube-controller-manager/config/cloud-provider.ini
   <%- end -%>
-  <%
-    valid_ciphers = [
-      'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
-      'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256'
-    ]
-    unless valid_ciphers.include?(link('kube-apiserver').p('tls-cipher-suites'))
-      raise 'invalid tls-cipher-suites, please use one of '+ valid_ciphers.join('; ')
-    end
-  %>
   <%= "- --tls-cipher-suites=#{link('kube-apiserver').p('tls-cipher-suites')}" %>
   hooks:
     pre_start: /var/vcap/jobs/kube-controller-manager/bin/chmod-product-serial
@@ -66,3 +54,36 @@ processes:
     AWS_SECRET_ACCESS_KEY: <%= secret_access_key %>
     <% end %>
     <% end %>
+<%
+  ######################################################################################################
+  # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, AND KUBELET #
+  ######################################################################################################
+  def validateCiphers()
+    valid_ciphers = [
+      'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
+    ]
+    givenSuites = link('kube-apiserver').p('tls-cipher-suites')
+    unless valid_ciphers.include?(givenSuites)
+      raise "invalid tls-cipher-suites (#{givenSuites}), please use " + valid_ciphers.join('; ')
+    end
+  end
+
+  def validateK8sArgs()
+    if_p('k8s-args') do
+      if p('k8s-args').key?('tls-cipher-suites')
+        raise 'do not set tls-cipher-suites in k8s-args, please set as its own property'
+      end
+    end
+  end
+
+  def validateAll()
+    validateK8sArgs()
+    validateCiphers()
+  end
+
+  validateAll()
+
+  ############
+  # END SYNC #
+  ############
+%>

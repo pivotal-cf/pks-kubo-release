@@ -58,7 +58,7 @@ describe 'kubelet_ctl' do
       'bin/kubelet_ctl',
       {},
       link_spec)
-    }.to raise_error(/invalid tls-cipher-suites/)
+    }.to raise_error(/invalid tls-cipher-suites \(INVALID_CIPHER\)/)
   end
 
   it 'labels the kubelet with its own az' do

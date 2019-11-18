@@ -66,7 +66,7 @@ describe 'kube_controller_manager' do
       'config/bpm.yml',
       {},
       links = link_spec)
-    }.to raise_error(/invalid tls-cipher-suites/)
+    }.to raise_error(/invalid tls-cipher-suites \(INVALID_CIPHER\)/)
   end
 
   it 'has no http proxy when no proxy is defined' do

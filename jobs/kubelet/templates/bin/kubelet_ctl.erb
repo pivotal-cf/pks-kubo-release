@@ -114,9 +114,6 @@ start_kubelet() {
   <%-
     if_p('k8s-args') do |args|
       args.each do |flag, value|
-        if flag.eql? "tls-cipher-suites"
-          raise 'do not set tls-cipher-suites in k8s-args, please set as its own property'
-        end
         valueString = ""
 
         if value.nil?
@@ -139,15 +136,6 @@ start_kubelet() {
     --hostname-override=$(get_hostname_override) \
     --node-labels=<%= labels %> \
     --config="/var/vcap/jobs/kubelet/config/kubeletconfig.yml" \
-    <%
-      valid_ciphers = [
-        'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
-        'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256'
-      ]
-      unless valid_ciphers.include?(link('kube-apiserver').p('tls-cipher-suites'))
-        raise 'invalid tls-cipher-suites, please use one of '+ valid_ciphers.join('; ')
-      end
-    %>
     # TODO: move this to a yml array in the config file itself
     --tls-cipher-suites=<%= link('kube-apiserver').p('tls-cipher-suites') %> \
   1>> $LOG_DIR/kubelet.stdout.log \
@@ -198,3 +186,36 @@ case $1 in
     ;;
 
 esac
+
+<%
+  ######################################################################################################
+  # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, AND KUBELET #
+  ######################################################################################################
+  def validateCiphers()
+    valid_ciphers = [
+      'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
+    ]
+    givenSuites = link('kube-apiserver').p('tls-cipher-suites')
+    unless valid_ciphers.include?(givenSuites)
+      raise "invalid tls-cipher-suites (#{givenSuites}), please use " + valid_ciphers.join('; ')
+    end
+  end
+
+  def validateK8sArgs()
+    if_p('k8s-args') do
+      if p('k8s-args').key?('tls-cipher-suites')
+        raise 'do not set tls-cipher-suites in k8s-args, please set as its own property'
+      end
+    end
+  end
+
+  def validateAll()
+    validateK8sArgs()
+    validateCiphers()
+  end
+
+  validateAll()
+  ############
+  # END SYNC #
+  ############
+%>

@@ -39,7 +39,7 @@ describe 'kube-apiserver' do
       'config/bpm.yml',
       {},
       link_spec)
-    }.to raise_error(/invalid tls-cipher-suites/)
+    }.to raise_error(/invalid tls-cipher-suites \(INVALID_CIPHER\)/)
   end
 
   it 'has no http proxy when no proxy is defined' do

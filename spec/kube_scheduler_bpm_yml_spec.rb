@@ -39,6 +39,6 @@ describe 'kube_controller_manager' do
       'config/bpm.yml',
       {},
       link_spec)
-    }.to raise_error(/invalid tls-cipher-suites/)
+    }.to raise_error(/invalid tls-cipher-suites \(INVALID_CIPHER\)/)
   end
 end

@@ -58,9 +58,8 @@ properties:
   tls-cipher-suites:
     description: Comma-separated list of cipher suites.
     example: |
-      Allowed values are:
+      Allowed value is:
         'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
-        'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256'
     default: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
   tls.kubelet-client:
     description: kubelet client cert
