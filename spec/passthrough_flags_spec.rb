@@ -10,10 +10,13 @@ describe 'flag_generation_tests' do
     {
       'kube-apiserver' => {
         'address' => 'fake.kube-api-address',
-        'instances' => [],
-        'properties' => {
-          'tls-cipher-suites' => 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
-        }
+        'instances' => []
+      },
+      'kube-common-config' => {
+          'instances' => [],
+          'properties' => {
+              'tls-cipher-suites' => 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
+          }
       },
       'etcd' => {
         'address' => 'fake-etcd-address',

@@ -27,5 +27,5 @@ properties:
         log-flush-frequency: 30s
 
 consumes:
-- name: kube-apiserver
-  type: kube-apiserver
+- name: kube-common-config
+  type: kube-common-config

@@ -7,15 +7,11 @@ require 'yaml'
 describe 'kube_controller_manager' do
   let(:link_spec) do
     {
-          'kube-apiserver' => {
+          'kube-common-config' => {
             'instances' => [],
             'properties' => {
               'tls-cipher-suites' => 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
             }
-          },
-          'etcd' => {
-            'properties' => { },
-            'instances' => [ ]
           }
         }
   end
@@ -59,10 +55,10 @@ describe 'kube_controller_manager' do
 
   it 'rejects invalid tls-cipher-suites' do
     new_link = link_spec.clone
-    new_link["kube-apiserver"]["properties"]["tls-cipher-suites"] = 'INVALID_CIPHER'
+    new_link["kube-common-config"]["properties"]["tls-cipher-suites"] = 'INVALID_CIPHER'
     expect {
       compiled_template(
-      'kube-apiserver',
+      'kube-controller-manager',
       'config/bpm.yml',
       {},
       links = link_spec)

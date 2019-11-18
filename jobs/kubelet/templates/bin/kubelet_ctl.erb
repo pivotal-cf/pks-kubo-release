@@ -137,7 +137,7 @@ start_kubelet() {
     --node-labels=<%= labels %> \
     --config="/var/vcap/jobs/kubelet/config/kubeletconfig.yml" \
     # TODO: move this to a yml array in the config file itself
-    --tls-cipher-suites=<%= link('kube-apiserver').p('tls-cipher-suites') %> \
+    --tls-cipher-suites=<%= link('kube-common-config').p('tls-cipher-suites') %> \
   1>> $LOG_DIR/kubelet.stdout.log \
   2>> $LOG_DIR/kubelet.stderr.log
 }
@@ -195,7 +195,7 @@ esac
     valid_ciphers = [
       'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
     ]
-    givenSuites = link('kube-apiserver').p('tls-cipher-suites')
+    givenSuites = link('kube-common-config').p('tls-cipher-suites')
     unless valid_ciphers.include?(givenSuites)
       raise "invalid tls-cipher-suites (#{givenSuites}), please use " + valid_ciphers.join('; ')
     end
