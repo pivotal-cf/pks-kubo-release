@@ -94,7 +94,7 @@ describe 'flag_generation_tests' do
           'config/bpm.yml',
           k8s_args_with_tls_cipher_suites,
           link_spec)
-      }.to raise_error.with_message(/do not set tls-cipher-suites in k8s-args/)
+      }.to raise_error.with_message(/tls-cipher-suites cannot be changed/)
     end
   end
 
@@ -116,7 +116,7 @@ describe 'flag_generation_tests' do
           'config/bpm.yml',
           k8s_args_with_tls_cipher_suites,
           link_spec)
-      }.to raise_error.with_message(/do not set tls-cipher-suites in k8s-args/)
+      }.to raise_error.with_message(/tls-cipher-suites cannot be changed/)
     end
   end
 
@@ -138,7 +138,7 @@ describe 'flag_generation_tests' do
           'bin/kubelet_ctl',
           k8s_args_with_tls_cipher_suites,
           link_spec)
-      }.to raise_error.with_message(/do not set tls-cipher-suites in k8s-args/)
+      }.to raise_error.with_message(/tls-cipher-suites cannot be changed/)
     end
   end
 
@@ -171,7 +171,7 @@ describe 'flag_generation_tests' do
           'config/bpm.yml',
           k8s_args_with_tls_cipher_suites,
           link_spec)
-      }.to raise_error.with_message(/do not set tls-cipher-suites in k8s-args/)
+      }.to raise_error.with_message(/tls-cipher-suites cannot be changed/)
     end
   end
 end

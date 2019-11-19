@@ -20,7 +20,7 @@ describe 'kube_controller_manager' do
     }
   end
 
-  it 'has default tls-cipher-suites' do
+  it 'has no default setting for tls-cipher-suites' do
     kube_scheduler = compiled_template(
       'kube-scheduler',
       'config/bpm.yml',
@@ -28,17 +28,16 @@ describe 'kube_controller_manager' do
       link_spec)
 
     bpm_yml = YAML.safe_load(kube_scheduler)
-    expect(bpm_yml['processes'][0]['args']).to include('--tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384')
+    expect(bpm_yml['processes'][0]['args']).not_to include('--tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384')
   end
 
-  it 'rejects invalid tls-cipher-suites' do
-    link_spec["kube-apiserver"]["properties"]["tls-cipher-suites"] = 'INVALID_CIPHER'
+  it 'rejects any k8s_args setting for tls-cipher-suites' do
     expect {
       compiled_template(
       'kube-scheduler',
       'config/bpm.yml',
-      {},
+      {'k8s-args' => { 'tls-cipher-suites' => 'foobar'}},
       link_spec)
-    }.to raise_error(/invalid tls-cipher-suites \(INVALID_CIPHER\)/)
+    }.to raise_error(/tls-cipher-suites cannot be changed/)
   end
 end

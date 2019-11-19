@@ -95,7 +95,7 @@ processes:
   def validateK8sArgs()
     if_p('k8s-args') do
       if p('k8s-args').key?('tls-cipher-suites')
-        raise 'do not set tls-cipher-suites in k8s-args, please set as its own property'
+        raise 'tls-cipher-suites cannot be changed'
       end
     end
   end

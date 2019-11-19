@@ -1,0 +1,3 @@
+set -exu
+
+cp -r ciphers/ciphers.txt ${BOSH_INSTALL_TARGET}/
