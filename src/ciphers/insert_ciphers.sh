@@ -15,7 +15,6 @@ validate_no_cipher_suites() {
     #printf "I guess you pass this time ($declaredCipherSuites) -- wait, what's your favourite color?\n"
   fi
 }
-validate_no_cipher_suites $1
 
 merge_cipher_suites() {
   local ymlSource=$1
@@ -25,6 +24,8 @@ merge_cipher_suites() {
   local ciphers=`cat $ciphersFile`
   yq w $ymlSource "processes[0].args[+]" -- "--tls-cipher-suites=$ciphers" > $ymlOutput
 }
+
+validate_no_cipher_suites sourceYaml
 # TODO: consider where to find ciphers.txt
 merge_cipher_suites sourceYaml outputYaml 'ciphers.txt'
 
