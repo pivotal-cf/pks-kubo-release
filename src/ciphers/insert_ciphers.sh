@@ -22,6 +22,7 @@ merge_cipher_suites() {
   local ciphersFile=$3
 
   local ciphers=`cat $ciphersFile`
+  # TODO: make sure the cipher file exists and is not empty
   yq w $ymlSource "processes[0].args[+]" -- "--tls-cipher-suites=$ciphers" > $ymlOutput
 }
 
