@@ -27,6 +27,7 @@ processes:
   - --cloud-provider=<%= cloud_provider.p('cloud-provider.type') %>
   - --cloud-config=/var/vcap/jobs/kube-controller-manager/config/cloud-provider.ini
   <%- end -%>
+  <%= "- --tls-cipher-suites=#{link('kube-apiserver').p('tls-cipher-suites')}" %>
   hooks:
     pre_start: /var/vcap/jobs/kube-controller-manager/bin/chmod-product-serial
   env:
@@ -53,3 +54,20 @@ processes:
     AWS_SECRET_ACCESS_KEY: <%= secret_access_key %>
     <% end %>
     <% end %>
+<%
+  ######################################################################################################
+  # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, AND KUBELET #
+  ######################################################################################################
+  def validateK8sArgs()
+    if_p('k8s-args') do
+      if p('k8s-args').key?('tls-cipher-suites')
+        raise 'do not set tls-cipher-suites in k8s-args. It is set in kube-apiserver and cannot be changed.'
+      end
+    end
+  end
+
+  validateK8sArgs()
+  ############
+  # END SYNC #
+  ############
+%>

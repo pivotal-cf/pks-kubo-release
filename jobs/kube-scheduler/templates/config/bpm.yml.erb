@@ -24,3 +24,22 @@ processes:
     end
   %>
   - --config=/var/vcap/jobs/kube-scheduler/config/config.yml
+  <%= "- --tls-cipher-suites=#{link('kube-apiserver').p('tls-cipher-suites')}" %>
+
+<%
+  ######################################################################################################
+  # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, AND KUBELET #
+  ######################################################################################################
+  def validateK8sArgs()
+    if_p('k8s-args') do
+      if p('k8s-args').key?('tls-cipher-suites')
+        raise 'do not set tls-cipher-suites in k8s-args. It is set in kube-apiserver and cannot be changed.'
+      end
+    end
+  end
+
+  validateK8sArgs()
+  ############
+  # END SYNC #
+  ############
+%>
