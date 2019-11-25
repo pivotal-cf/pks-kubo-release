@@ -25,3 +25,7 @@ properties:
       k8s-args:
         leader-elect: false
         log-flush-frequency: 30s
+
+consumes:
+- name: kube-apiserver
+  type: kube-apiserver
