@@ -55,6 +55,12 @@ properties:
       interactions)
   service-account-public-key:
     description: Public key used to verify service account tokens
+  tls-cipher-suites:
+    description: Comma-separated list of cipher suites.
+    example: |
+      Allowed value is:
+        'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
+    default: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
   tls.kubelet-client:
     description: kubelet client cert
   tls.kubernetes.ca:
@@ -81,4 +87,6 @@ provides:
   - admin-username
   - admin-password
   - tls.kubernetes.ca
+  - k8s-args
+  - tls-cipher-suites
   type: kube-apiserver
