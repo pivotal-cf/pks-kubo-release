@@ -58,31 +58,15 @@ processes:
   ######################################################################################################
   # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, AND KUBELET #
   ######################################################################################################
-  def validateCiphers()
-    valid_ciphers = [
-      'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
-    ]
-    givenSuites = link('kube-apiserver').p('tls-cipher-suites')
-    unless valid_ciphers.include?(givenSuites)
-      raise "invalid tls-cipher-suites (#{givenSuites}), please use " + valid_ciphers.join('; ')
-    end
-  end
-
   def validateK8sArgs()
     if_p('k8s-args') do
       if p('k8s-args').key?('tls-cipher-suites')
-        raise 'do not set tls-cipher-suites in k8s-args, please set as its own property'
+        raise 'do not set tls-cipher-suites in k8s-args. It is set in kube-apiserver and cannot be changed.'
       end
     end
   end
 
-  def validateAll()
-    validateK8sArgs()
-    validateCiphers()
-  end
-
-  validateAll()
-
+  validateK8sArgs()
   ############
   # END SYNC #
   ############
