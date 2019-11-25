@@ -33,7 +33,7 @@ processes:
   def validateK8sArgs()
     if_p('k8s-args') do
       if p('k8s-args').key?('tls-cipher-suites')
-        raise 'do not set tls-cipher-suites in k8s-args. It is set in kube-apiserver and cannot be changed.'
+        raise "Do not set tls-cipher-suites in k8s-args. 'tls-cipher-suites' is set by default and cannot be changed."
       end
     end
   end
