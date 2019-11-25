@@ -8,27 +8,38 @@ describe 'kube-apiserver' do
   let(:link_spec) do
     {
       'kube-apiserver' => {
-        'address' => 'fake.kube-api-address',
         'instances' => [],
-        'properties' => {}
+        'properties' => {
+          'tls-cipher-suites' => 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
+        }
       },
       'etcd' => {
-        'address' => 'fake-etcd-address',
-        'properties' => { 'etcd' => { 'advertise_urls_dns_suffix' => 'dns-suffix' } },
-        'instances' => [
-          {
-            'name' => 'etcd',
-            'index' => 0,
-            'address' => 'fake-etcd-address-0'
-          },
-          {
-            'name' => 'etcd',
-            'index' => 1,
-            'address' => 'fake-etcd-address-1'
-          }
-        ]
+        'instances' => []
       }
     }
+  end
+
+  it 'has default tls-cipher-suites' do
+    kube_apiserver = compiled_template(
+      'kube-apiserver',
+      'config/bpm.yml',
+      {},
+      link_spec)
+
+    bpm_yml = YAML.safe_load(kube_apiserver)
+    expect(bpm_yml['processes'][0]['args']).to include('--tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384')
+  end
+
+  it 'rejects invalid tls-cipher-suites' do
+    # let is executed for each test, so this does not affect other tests
+    link_spec["kube-apiserver"]["properties"]["tls-cipher-suites"] = 'INVALID_CIPHER'
+    expect {
+      compiled_template(
+      'kube-apiserver',
+      'config/bpm.yml',
+      {},
+      link_spec)
+    }.to raise_error(/invalid tls-cipher-suites \(INVALID_CIPHER\)/)
   end
 
   it 'has no http proxy when no proxy is defined' do

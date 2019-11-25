@@ -5,18 +5,36 @@ require 'spec_helper'
 require 'yaml'
 
 describe 'kube_controller_manager' do
+  let(:link_spec) do
+    {
+          'kube-apiserver' => {
+            'instances' => [],
+            'properties' => {
+              'tls-cipher-suites' => 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
+            }
+          },
+          'etcd' => {
+            'properties' => { },
+            'instances' => [ ]
+          }
+        }
+  end
+
   context 'horizontal pod autoscaling' do
     it 'sets the properties' do
       rendered_kube_controller_manager_bpm_yml = compiled_template(
         'kube-controller-manager',
         'config/bpm.yml',
-        'k8s-args' => {
-          'horizontal-pod-autoscaler-downscale-delay' => '2m0s',
-          'horizontal-pod-autoscaler-upscale-delay' => '2m0s',
-          'horizontal-pod-autoscaler-sync-period' => '40s',
-          'horizontal-pod-autoscaler-tolerance' => '0.2',
-          'horizontal-pod-autoscaler-use-rest-clients' => false
-        }
+        {
+          'k8s-args' => {
+            'horizontal-pod-autoscaler-downscale-delay' => '2m0s',
+            'horizontal-pod-autoscaler-upscale-delay' => '2m0s',
+            'horizontal-pod-autoscaler-sync-period' => '40s',
+            'horizontal-pod-autoscaler-tolerance' => '0.2',
+            'horizontal-pod-autoscaler-use-rest-clients' => false
+          }
+        },
+        links = link_spec
       )
 
       bpm_yml = YAML.safe_load(rendered_kube_controller_manager_bpm_yml)
@@ -27,12 +45,24 @@ describe 'kube_controller_manager' do
       expect(bpm_yml['processes'][0]['args']).to include('--horizontal-pod-autoscaler-use-rest-clients=false')
     end
   end
+
+  it 'has default tls-cipher-suites' do
+    kube_controller_manager = compiled_template(
+      'kube-controller-manager',
+      'config/bpm.yml',
+      {},
+      link_spec)
+
+    bpm_yml = YAML.safe_load(kube_controller_manager)
+    expect(bpm_yml['processes'][0]['args']).to include('--tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384')
+  end
+
   it 'has no http proxy when no proxy is defined' do
     rendered_kube_controller_manager_bpm_yml = compiled_template(
       'kube-controller-manager',
       'config/bpm.yml',
-      {}
-    )
+      {},
+      links = link_spec)
 
     bpm_yml = YAML.safe_load(rendered_kube_controller_manager_bpm_yml)
     expect(bpm_yml['processes'][0]['env']).to be_nil
@@ -42,7 +72,8 @@ describe 'kube_controller_manager' do
     rendered_kube_controller_manager_bpm_yml = compiled_template(
       'kube-controller-manager',
       'config/bpm.yml',
-      'http_proxy' => 'proxy.example.com:8090'
+      {'http_proxy' => 'proxy.example.com:8090'},
+      links = link_spec
     )
 
     bpm_yml = YAML.safe_load(rendered_kube_controller_manager_bpm_yml)
@@ -54,7 +85,8 @@ describe 'kube_controller_manager' do
     rendered_kube_controller_manager_bpm_yml = compiled_template(
       'kube-controller-manager',
       'config/bpm.yml',
-      'https_proxy' => 'proxy.example.com:8100'
+      {'https_proxy' => 'proxy.example.com:8100'},
+      links = link_spec
     )
 
     bpm_yml = YAML.safe_load(rendered_kube_controller_manager_bpm_yml)
@@ -66,7 +98,8 @@ describe 'kube_controller_manager' do
     rendered_kube_controller_manager_bpm_yml = compiled_template(
       'kube-controller-manager',
       'config/bpm.yml',
-      'no_proxy' => 'noproxy.example.com,noproxy.example.net'
+      {'no_proxy' => 'noproxy.example.com,noproxy.example.net'},
+      links = link_spec
     )
 
     bpm_yml = YAML.safe_load(rendered_kube_controller_manager_bpm_yml)
