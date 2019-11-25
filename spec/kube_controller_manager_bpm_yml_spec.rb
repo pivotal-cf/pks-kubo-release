@@ -57,18 +57,6 @@ describe 'kube_controller_manager' do
     expect(bpm_yml['processes'][0]['args']).to include('--tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384')
   end
 
-  it 'rejects invalid tls-cipher-suites' do
-    new_link = link_spec.clone
-    new_link["kube-apiserver"]["properties"]["tls-cipher-suites"] = 'INVALID_CIPHER'
-    expect {
-      compiled_template(
-      'kube-apiserver',
-      'config/bpm.yml',
-      {},
-      links = link_spec)
-    }.to raise_error(/invalid tls-cipher-suites \(INVALID_CIPHER\)/)
-  end
-
   it 'has no http proxy when no proxy is defined' do
     rendered_kube_controller_manager_bpm_yml = compiled_template(
       'kube-controller-manager',

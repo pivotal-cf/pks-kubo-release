@@ -49,18 +49,6 @@ describe 'kubelet_ctl' do
     expect(rendered_template).to include('--tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384')
   end
 
-  it 'rejects invalid tls-cipher-suites' do
-    # let is executed for each test, so this does not affect other tests
-    link_spec["kube-apiserver"]["properties"]["tls-cipher-suites"] = 'INVALID_CIPHER'
-    expect {
-      compiled_template(
-      'kubelet',
-      'bin/kubelet_ctl',
-      {},
-      link_spec)
-    }.to raise_error(/invalid tls-cipher-suites \(INVALID_CIPHER\)/)
-  end
-
   it 'labels the kubelet with its own az' do
     expect(rendered_template).to include(',bosh.zone=z1')
   end
