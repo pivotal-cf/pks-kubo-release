@@ -1,0 +1,121 @@
+#!/bin/bash
+
+set -e -o pipefail
+
+[ -z "${DEBUG}" ] || set -x
+
+set -u
+
+ci_dir="$(cd "$(dirname "$0")"; pwd)"
+
+echo "======================================="
+echo "| Setting kubo Concourse pipeline     |"
+echo "======================================="
+echo ""
+
+print_usage() {
+  echo "Usage:"
+  echo "    $0 <pipeline name> [branch name] "
+  echo ""
+  echo "    valid pipeline names:"
+  for name in ${ci_dir}/*.yml; do
+    local pipeline_name
+    pipeline_name="$(basename "${name}")"
+    echo "        - ${pipeline_name%.yml}"
+  done
+  echo
+  echo 'Use following command to set all pipelines'
+  echo 'find * -maxdepth 0 -name \*.yml -exec ./set_pipeline  {} \;'
+}
+
+extract_pipeline_name() {
+  local pipeline_name="$1"
+
+  local pipeline_filename="${ci_dir}/${pipeline_name}.yml"
+  if [ ! -f "${pipeline_filename}" ]; then
+    pipeline_filename="${ci_dir}/${pipeline_name}"
+    if [ ! -f "${pipeline_filename}" ]; then
+      echo "Unknown pipeline name ${pipeline_name}"
+      print_usage
+      exit 1
+    fi
+  fi
+
+  pipeline_name=$(basename "${pipeline_filename}")
+  echo -n "${pipeline_name%.*}"
+}
+
+main() {
+  PARAMS=""
+  VAR_PATH=""
+  PIPELINE_NAME=""
+  while (( "$#" )); do
+    case "$1" in
+      -v|--variables)
+        VAR_PATH=$2
+        shift 2
+        ;;
+      -p|--pipeline)
+        PIPELINE_NAME=$2
+        shift 2
+        ;;
+      --) # end argument parsing
+        shift
+        break
+        ;;
+      -*|--*=) # unsupported flags
+        echo "Error: Unsupported flag $1" >&2
+        exit 1
+        ;;
+      *) # preserve positional arguments
+        PARAMS="$PARAMS $1"
+        shift
+        ;;
+    esac
+  done
+  # set positional arguments in their proper place
+  eval set -- "$PARAMS"
+
+  local pipeline_name
+  if [ "$#" == "0" ]; then
+    print_usage
+    exit 1
+  fi
+  pipeline_name=$(extract_pipeline_name "${1}")
+
+  local pipeline_filename="${ci_dir}/${pipeline_name}.yml"
+  local branch_name="master"
+
+  echo "${pipeline_name}"
+  local current_branch_regex='-current-branch$'
+  if [[ "${pipeline_name}" =~ $current_branch_regex ]]; then
+    branch_name="${2:-$branch_name}"
+    git_username=$(git config user.email | awk -F'@' '{print $1}' | xargs)
+    if [ ! -z "$git_username" ]; then
+      pipeline_name="${pipeline_name}-${git_username}"
+    else
+      echo "Error: couldn't find git config user.email"
+      exit 1
+    fi
+  fi
+
+  if [[ -z $VAR_PATH ]]; then
+    VAR_PATH=configurations/pipeline/variables.yml
+  fi
+
+  if [[ ! -z $PIPELINE_NAME ]]; then
+    pipeline_name=$PIPELINE_NAME
+  fi
+
+  fly --target kubo sync > /dev/null
+  erb "${pipeline_filename}" > /dev/null
+
+  fly --target kubo set-pipeline --pipeline "${pipeline_name}" \
+    --config <(erb "${pipeline_filename}") \
+    --var branch-name="${branch_name}" \
+    --load-vars-from="${VAR_PATH}"
+}
+
+pushd "${ci_dir}" > /dev/null
+  main "$@"
+popd > /dev/null
