@@ -1,7 +1,7 @@
 set -e
 
 KUBERNETES_PACKAGE=kubernetes
-KUBERNETES_VERSION="1.15.5"
+KUBERNETES_VERSION="1.16.4"
 
 main() {
   create_target_dir
@@ -30,7 +30,7 @@ main
 # These license abbreviations are defined by the OSM system
 # See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
 
-KUBERNETES_LICENSE="Apache2.0"
+KUBERNETES_LICENSE="Apache1.16.4"
 KUBERNETES_SOURCE_URL="https://github.com/kubernetes/kubernetes/archive/v${KUBERNETES_VERSION}.tar.gz"
 
 cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
