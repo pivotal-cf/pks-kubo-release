@@ -1,88 +1,91 @@
 #!/usr/bin/env bash
 set -ex
 
+binaries=(
+  "kube-apiserver"
+  "kube-controller-manager"
+  "kube-proxy"
+  "kube-scheduler"
+  "kubectl"
+  "kubelet"
+)
+
 main() {
   local staging_dir kubernetes_version
-  kubernetes_version=$1
 
-  if [ $# -ne 1 ]; then
-    echo "Usage: $(basename "$0") [KUBERNETES VERSION]"
+  if [ $# -lt 1 ]; then
+    echo "Usage: $(basename "$0") <KUBERNETES_VERSION>"
     exit  1
   fi
 
+  kubernetes_version=$1
   staging_dir=$(mktemp -d)
 
   trap '{ rm -rf "$staging_dir"; }' EXIT
 
-  linux_binaries=(
-    "kube-apiserver"
-    "kube-controller-manager"
-    "kube-proxy"
-    "kube-scheduler"
-    "kubectl"
-    "kubelet"
-  )
+  pushd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
-  platforms=(
-    "linux"
-  )
+    existing_k8s_spec=$(bosh blobs --column path | grep "${binaries[0]}" | grep -o -E "kubernetes-([0-9]+\.)+[0-9]+")
+    existing_k8s_version=$(echo "$existing_k8s_spec" | grep -o -E '([0-9]+\.)+[0-9]+')
 
-  pushd "$(dirname "${BASH_SOURCE[0]}")/.."
-    for platform in "${platforms[@]}"; do
-      package_name=$(package_name "${platform}")
-      declare -n binaries="${platform}_binaries"
+    if [ "$existing_k8s_version" == "$kubernetes_version" ]; then
+        echo "Kubernetes version already up-to-date."
+    else
+      pushd "packages/kubernetes" || exit 1
+        # change version number found in string like KUBERNETES_VERSION="1.16.3"
+        sed -E -i -e "s/KUBERNETES_VERSION=\"([0-9]+\.)+[0-9]+\"/KUBERNETES_VERSION=\"${kubernetes_version}\"/" packaging
+        sed -E -i -e "s/${existing_k8s_spec}/kubernetes-${kubernetes_version}/" spec
+      popd || exit 1
 
-      existing_k8s_spec=$(bosh blobs --column path | grep "${binaries[0]}" | grep -o -E "${package_name}-([0-9]+\.)+[0-9]+")
-      existing_k8s_version=$(echo "$existing_k8s_spec" | grep -o -E '([0-9]+\.)+[0-9]+')
+      echo "Downloading from common core"
+      download_tarball_from_common_core "${kubernetes_version}" "${staging_dir}"
 
-      if [ "$existing_k8s_version" == "$kubernetes_version" ]; then
-          echo "Kubernetes version already up-to-date."
-      else
-        pushd "packages/${package_name}"
-          sed -E -i -e "s/([0-9]+\.)+[0-9]+/${kubernetes_version}/" packaging
-          sed -E -i -e "s/${existing_k8s_spec}/${package_name}-${kubernetes_version}/" spec
-        popd
+      for binary in "${binaries[@]}"; do
+        add_blob "${binary}" "${staging_dir}" "${kubernetes_version}"
+      done
+    fi
+  popd || exit 1
+}
 
-        for binary in "${binaries[@]}"; do
-          download "${binary}" "${staging_dir}" "${kubernetes_version}" "${platform}"
-          add_blob "${binary}" "${staging_dir}" "${kubernetes_version}" "${package_name}"
-        done
-      fi
+binary_path() {
+  local staging_dir=$1
+  local kubernetes_version=$2
+  local binary=$3
+  echo -n "${staging_dir}/kubernetes-binary-v${kubernetes_version}+vmware.1/kubernetes-v${kubernetes_version}+vmware.1/bin/linux/amd64/$binary"
+}
+
+download_tarball_from_common_core() {
+  local kubernetes_version=$1
+  local staging_dir=$2
+  local SHA_FILE="common-core.tgz.sha256"
+  local URL_ENCODED_FILENAME="kubernetes-binary-v${kubernetes_version}%2Bvmware.1.tar.gz"
+  pushd "${staging_dir}" || exit 1
+    wget "https://essentialpks-staging.s3-us-west-2.amazonaws.com/vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/${URL_ENCODED_FILENAME}"
+    wget -O "${SHA_FILE}" "https://essentialpks-staging.s3-us-west-2.amazonaws.com/vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/${URL_ENCODED_FILENAME}.sha256"
+    shasum --algorithm 256 --check "${SHA_FILE}"
+
+    tar -xzf kubernetes-binary-*.tar.gz
+    for binary in "${binaries[@]}"; do
+      local path
+      path=$(binary_path "$staging_dir" "$kubernetes_version" "$binary")
+      # workaround a bug in common core's packaging that forgets to chmod ; this may be fixed later, and this can be removed
+      chmod +x "$path"
     done
-
-  popd
-}
-
-package_name() {
-  local platform
-  platform="$1"
-  if [ "$platform" == "windows" ]; then
-    echo -n "kubernetes-windows"
-  else
-    echo -n "kubernetes"
-  fi
-}
-
-download() {
-  local binary_name staging_dir kubernetes_version platform
-  binary_name="$1"
-  staging_dir="$2"
-  kubernetes_version="$3"
-  platform="$4"
-
-  wget -O "${staging_dir}/${binary_name}" "https://storage.googleapis.com/kubernetes-release/release/v${kubernetes_version}/bin/${platform}/amd64/${binary_name}"
+  popd || exit 1
 }
 
 add_blob() {
-  local binary_name blob_name staging_dir kubernetes_version package_name
+  local binary_name blob_name staging_dir kubernetes_version
   binary_name="$1"
   staging_dir="$2"
   kubernetes_version="$3"
-  package_name="$4"
   blob_name=$(bosh blobs --column path | grep "${binary_name}\s$" | xargs)
 
   bosh remove-blob "$blob_name"
-  bosh add-blob "${staging_dir}/${binary_name}" "${package_name}-${kubernetes_version}/$binary_name"
+
+  local path
+  path=$(binary_path "$staging_dir" "$kubernetes_version" "$binary_name")
+  bosh add-blob "${path}" "kubernetes-${kubernetes_version}/$binary_name"
 }
 
 main "$@"
