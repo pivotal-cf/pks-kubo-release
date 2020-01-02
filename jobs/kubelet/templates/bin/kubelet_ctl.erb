@@ -136,6 +136,7 @@ start_kubelet() {
     --hostname-override=$(get_hostname_override) \
     --node-labels=<%= labels %> \
     --config="/var/vcap/jobs/kubelet/config/kubeletconfig.yml" \
+    --tls-cipher-suites=<%= link('kube-apiserver').p('tls-cipher-suites') %> \
   1>> $LOG_DIR/kubelet.stdout.log \
   2>> $LOG_DIR/kubelet.stderr.log
 }
@@ -184,3 +185,21 @@ case $1 in
     ;;
 
 esac
+
+<%
+  ######################################################################################################
+  # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, AND KUBELET #
+  ######################################################################################################
+  def validateK8sArgs()
+    if_p('k8s-args') do
+      if p('k8s-args').key?('tls-cipher-suites')
+        raise "Do not set tls-cipher-suites in k8s-args. 'tls-cipher-suites' is set by default and cannot be changed."
+      end
+    end
+  end
+
+  validateK8sArgs()
+  ############
+  # END SYNC #
+  ############
+%>
