@@ -52,7 +52,7 @@ blobstore:
     secret_access_key: ${SECRET_ACCESS_KEY}
 EOF
     bosh upload-blobs
-    generate_pull_request "kubernetes" "$tag" "${release_name}" "develop"
+    generate_pull_request "kubernetes" "$tag" "${release_name}" "master"
   else
     echo "Kubernetes version is already up-to-date"
   fi
