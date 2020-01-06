@@ -3,44 +3,14 @@ set -exu -o pipefail
 
 source git-pks-kubo-release/ci/scripts/lib/generate-pr.sh
 
-pr_kubo_ci() {
-  version="$1"
-  tag="$2"
-  cp -r git-pks-kubo-release/. git-pks-kubo-release-output
-  pushd git-pks-kubo-release-output
-
-  docker_conformance_file="docker-images/conformance/Dockerfile"
-  existing_conformance_k8s_version="$(grep "ENV KUBE_VERSION" "$docker_conformance_file" | sed 's/.*"v\(.*\).*"/\1/g')"
-
-  if [ "$existing_conformance_k8s_version" != "$version" ]; then
-      sed -i "s/ENV KUBE_VERSION=.*/ENV KUBE_VERSION=\"v${version}\"/g" "$docker_conformance_file"
-  fi
-
-  # TODO: What is the "right" way to store KUBE_VERSION in our system? Read from a BOSH link?
-#  docker_ci_file="docker-images/kubo-ci/Dockerfile"
-#  existing_ci_k8s_version="$(grep "ENV KUBE_VERSION" "$docker_ci_file" | sed 's/.*"v\(.*\).*"/\1/g')"
-#
-#  if [ "$existing_ci_k8s_version" != "$version" ]; then
-#      sed -i "s/ENV KUBE_VERSION=.*/ENV KUBE_VERSION=\"v${version}\"/g" "$docker_ci_file"
-#  fi
-#
-#  if [ "$existing_conformance_k8s_version" == "$version" ] && [ "$existing_ci_k8s_version" == "$version" ]; then
-#      echo "Kubernetes version already up-to-date."
-#  else
-      generate_pull_request "k8s" "$tag" "kubo-ci" "master"
-#  fi
-  popd
-}
-
 pr_release() {
   version="$1"
-  tag="$2"
-  release_name="$3"
+  git_repo="$2"
 
-  git_release_name="git-${release_name}"
+  concourse_base_name="git-${git_repo}"
 
-  cp -r "${git_release_name}/." "${git_release_name}-output"
-  pushd "${git_release_name}-output"
+  cp -r "${concourse_base_name}/." "${concourse_base_name}-output"
+  pushd "${concourse_base_name}-output"
 
   ./scripts/download_k8s_binaries $version
 
@@ -52,7 +22,7 @@ blobstore:
     secret_access_key: ${SECRET_ACCESS_KEY}
 EOF
     bosh upload-blobs
-    generate_pull_request "kubernetes" "$tag" "${release_name}" "master"
+    generate_pull_request "kubernetes" "$version" "${git_repo}" "master"
   else
     echo "Kubernetes version is already up-to-date"
   fi
@@ -60,13 +30,13 @@ EOF
   popd
 }
 
-tag=$(cat "$PWD/k8s-release/tag")
-version=$(cat "$PWD/k8s-release/version")
-
-if [ "${REPO:-}" == "ci" ]; then
-  pr_kubo_ci "$version" "$tag"
-elif [ "${REPO:-}" == "windows" ]; then
-  pr_release "$version" "$tag" "pks-kubo-release-windows"
+if [ "${REPO:-}" == "windows" ]; then
+  binary_directory="gcs-kubernetes-windows"
+  git_repo="pks-kubo-release-windows"
 else
-  pr_release "$version" "$tag" "pks-kubo-release"
+  binary_directory="s3-kubernetes-common-core-linux"
+  git_repo="pks-kubo-release"
 fi
+
+version=$(cat "$PWD/$binary_directory/version")
+pr_release "$version" "$git_repo"
