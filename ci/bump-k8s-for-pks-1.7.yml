@@ -6,28 +6,32 @@ resource_types:
     repository: pcfkubo/github-release-resource
     tag: filter-version
 
-resources:
-- name: k8s-release
-  type: github-release-with-version-filtering
+- name: gcs-resource
+  type: docker-image
   source:
-    owner: kubernetes
-    repository: kubernetes
-    # only patches get updated
-    version_filter: "< 1.17.0"
-    access_token: ((github-token-key))
+    repository: frodenas/gcs-resource
 
-- name: git-kubernetes
-  type: git
+resources:
+- name: s3-kubernetes-common-core-linux
+  type: s3
   source:
-    uri: https://github.com/kubernetes/kubernetes.git
-    branch: master
+    # https://essentialpks-staging.s3-us-west-2.amazonaws.com/vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-v1.16.4%2Bvmware.1.tar.gz
+    bucket: "essentialpks-staging"
+    regexp: "vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-v(1.16.\\d*).*.tar.gz"
+    region_name: "us-west-2"
+
+- name: gcs-kubernetes-windows
+  type: gcs-resource
+  source:
+      bucket: "kubernetes-release"
+      json_key: ((gcs-json-key))
+      regexp: "release/v(1.16.\\d*)/bin/windows/amd64/kube-proxy.exe"
 
 - name: git-pks-kubo-release
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubo-release.git
-    branch: adds-k8s-bumps-pipelines
-#    branch: master
+    branch: master
     private_key: ((git-ssh-key.private_key))
 
 - name: git-pks-kubo-release-windows
@@ -37,50 +41,49 @@ resources:
     branch: master
     private_key: ((git-ssh-key.private_key))
 
-groups:
-- name: bump-k8s
-  jobs:
-  - bump-k8s-in-pks-kubo-release
-
 jobs:
 - name: bump-k8s-in-pks-kubo-release
   plan:
   - in_parallel:
     - get: git-pks-kubo-release
-    - get: git-pks-kubo-release-windows
-    - get: git-kubernetes
-    - get: k8s-release
+    - get: s3-kubernetes-common-core-linux
       trigger: true
-  - in_parallel:
-    - task: bump-k8s
-      config: &config
-        platform: linux
-        image_resource:
-          type: docker-image
-          source:
-            repository: pcfkubo/kubo-ci
-            tag: stable
-        run:
-          path: git-pks-kubo-release/ci/scripts/bump-k8s.sh
-        inputs:
-          - name: git-pks-kubo-release
-          - name: k8s-release
-          - name: git-kubernetes
-        params:
-          ACCESS_KEY_ID: ((gcs-access-key-id))
-          SECRET_ACCESS_KEY: ((gcs-secret-access-key))
-          CFCR_USER_TOKEN: ((cfcr-git-user-token))
-          GIT_SSH_KEY: |
-            ((git-ssh-key.private_key))
+  - task: bump-k8s-in-pks-kubo-release
+    config: &config
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: pcfkubo/kubo-ci
+          tag: stable
+      run:
+        path: git-pks-kubo-release/ci/scripts/bump-k8s.sh
+      inputs:
+        - name: git-pks-kubo-release
+        - name: s3-kubernetes-common-core-linux
+      params:
+        ACCESS_KEY_ID: ((gcs-access-key-id))
+        SECRET_ACCESS_KEY: ((gcs-secret-access-key))
+        CFCR_USER_TOKEN: ((cfcr-git-user-token))
+        GIT_SSH_KEY: |
+          ((git-ssh-key.private_key))
+
+- name: bump-k8s-in-pks-kubo-release-windows
+  plan:
+    - in_parallel:
+        - get: git-pks-kubo-release
+        - get: git-pks-kubo-release-windows
+        - get: gcs-kubernetes-windows
+          trigger: true
     - task: bump-k8s-in-pks-kubo-release-windows
       config:
         <<: *config
         run:
           path: git-pks-kubo-release/ci/scripts/bump-k8s.sh
         inputs:
+          - name: git-pks-kubo-release
           - name: git-pks-kubo-release-windows
-          - name: k8s-release
-          - name: git-kubernetes
+          - name: gcs-kubernetes-windows
         params:
           REPO: windows
           ACCESS_KEY_ID: ((gcs-access-key-id))
@@ -88,4 +91,3 @@ jobs:
           CFCR_USER_TOKEN: ((cfcr-git-user-token))
           GIT_SSH_KEY: |
             ((git-ssh-key.private_key))
-
