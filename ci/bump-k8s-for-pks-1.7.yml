@@ -15,7 +15,6 @@ resources:
 - name: s3-kubernetes-common-core-linux
   type: s3
   source:
-    # https://essentialpks-staging.s3-us-west-2.amazonaws.com/vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-v1.16.4%2Bvmware.1.tar.gz
     bucket: "essentialpks-staging"
     regexp: "vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-v(1.16.\\d*).*.tar.gz"
     region_name: "us-west-2"
@@ -34,11 +33,18 @@ resources:
     branch: master
     private_key: ((git-ssh-key.private_key))
 
+- name: git-pks-kubo-release-ci
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pks-kubo-release.git
+    branch: master
+    private_key: ((git-ssh-key.private_key))
+
 - name: git-pks-kubo-release-windows
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubo-release-windows.git
-    branch: master
+    branch: 1.6.x
     private_key: ((git-ssh-key.private_key))
 
 jobs:
@@ -46,6 +52,7 @@ jobs:
   plan:
   - in_parallel:
     - get: git-pks-kubo-release
+    - get: git-pks-kubo-release-ci
     - get: s3-kubernetes-common-core-linux
       trigger: true
   - task: bump-k8s-in-pks-kubo-release
@@ -57,9 +64,10 @@ jobs:
           repository: pcfkubo/kubo-ci
           tag: stable
       run:
-        path: git-pks-kubo-release/ci/scripts/bump-k8s.sh
+        path: git-pks-kubo-release-ci/ci/scripts/bump-k8s.sh
       inputs:
         - name: git-pks-kubo-release
+        - name: git-pks-kubo-release-ci
         - name: s3-kubernetes-common-core-linux
       params:
         ACCESS_KEY_ID: ((gcs-access-key-id))
@@ -71,7 +79,7 @@ jobs:
 - name: bump-k8s-in-pks-kubo-release-windows
   plan:
     - in_parallel:
-        - get: git-pks-kubo-release
+        - get: git-pks-kubo-release-ci
         - get: git-pks-kubo-release-windows
         - get: gcs-kubernetes-windows
           trigger: true
@@ -79,9 +87,9 @@ jobs:
       config:
         <<: *config
         run:
-          path: git-pks-kubo-release/ci/scripts/bump-k8s.sh
+          path: git-pks-kubo-release-ci/ci/scripts/bump-k8s.sh
         inputs:
-          - name: git-pks-kubo-release
+          - name: git-pks-kubo-release-ci
           - name: git-pks-kubo-release-windows
           - name: gcs-kubernetes-windows
         params:
