@@ -62,7 +62,7 @@ data:
           fallthrough in-addr.arpa ip6.arpa
         }
         prometheus :9153
-        proxy . /etc/resolv.conf {
+        forward . /etc/resolv.conf {
           policy sequential # needed for workloads to be able to use BOSH-DNS
         }
         cache 30
