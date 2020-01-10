@@ -1,0 +1,43 @@
+other:ctop:0.5.1:
+  name: ctop
+  version: 0.5.1
+  repository: Other
+  license: MIT
+  other-distribution: /tmp/osl/ctop-v0.5.1.tar.gz
+  url: https://github.com/bcicen/ctop/archive/v0.5.1.tar.gz
+other:docker-aufs-tools:3.0:
+  name: docker-aufs-tools
+  version: 3.0.0
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/aufs-tools_20110410.orig.tar.gz
+  url: http://old-releases.ubuntu.com/ubuntu/pool/universe/a/aufs-tools/aufs-tools_20110410.orig.tar.gz
+other:docker-autoconf:2.69.0:
+  name: docker-autoconf
+  version: 2.69.0
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/autoconf-2.69.tar.gz
+  url: https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+other:docker-bridge-utils:1.5:
+  name: docker-bridge-utils
+  version: 1.5.0
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/bridge-utils-1.5.tar.gz
+  url: http://deb.debian.org/debian/pool/main/b/bridge-utils/bridge-utils_1.5.orig.tar.gz
+other:docker:18.09.8:
+  name: docker
+  version: 18.09.8
+  repository: Other
+  # license found inside tarball at components/engine/LICENSE
+  license:  Apache2.0
+  other-distribution: /tmp/osl/docker-ce-18.09.8.tar.gz
+  url: https://github.com/docker/docker-ce/archive/v18.09.8.tar.gz
+other:flannel:0.5.5:
+  name: flannel
+  version: 0.5.5
+  repository: Other
+  license: Apache2.0
+  other-distribution: /tmp/osl/flannel-v0.5.5.tar.gz
+  url: https://github.com/coreos/flannel/archive/v0.5.5.tar.gz

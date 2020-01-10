@@ -1,0 +1,162 @@
+other:autoconf:2.69.0:
+  name: autoconf
+  version: 2.69.0
+  repository: other
+  license: GPL2.0
+  other-distribution: /tmp/osl/autoconf-2.69.tar.gz
+  url: http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+other:automake:1.15.0:
+  name: automake
+  version: 1.15.0
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/automake-1.15.tar.gz
+  url: https://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz
+other:cifs-utils:6.7.0:
+  name: cifs-utils
+  version: 6.7.0
+  repository: Other
+  license: GPL3.0
+  other-distribution: /tmp/osl/cifs-utils-6.7.tar.bz2
+  url: https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.7.tar.bz2
+other:cni-plugins-amd64:0.7.1:
+  name: cni-plugins-amd64
+  version: 0.7.1
+  repository: Other
+  license: Apache2.0
+  other-distribution: /tmp/osl/cni-plugins-0.7.1.tar.gz
+  url: https://github.com/containernetworking/cni/archive/v0.7.1.tar.gz
+other:util-linux:2.27.1:
+  name: util-linux
+  version: 2.27.1
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/util-linux_2.27.1.orig.tar.xz
+  url: https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/util-linux/2.27.1-6ubuntu3/util-linux_2.27.1.orig.tar.xz
+other:conntrack:1.4.3:
+  name: conntrack
+  version: 1.4.3
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/conntrack_1.4.3.orig.tar.gz
+  url: https://archive.raspbian.org/raspbian/pool/main/c/conntrack/conntrack_1.4.3.orig.tar.gz
+other:libnetfilter-conntrack3:1.0.5:
+  name: libnetfilter-conntrack3
+  version: 1.0.5
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/libnetfilter-conntrack_1.0.5.orig.tar.bz2
+  url: http://archive.ubuntu.com/ubuntu/pool/main/libn/libnetfilter-conntrack/libnetfilter-conntrack_1.0.5.orig.tar.bz2
+other:flannel:0.11.0:
+  name: flannel
+  version: 0.11.0
+  repository: Other
+  license: Apache2.0
+  other-distribution: /tmp/osl/flannel-v0.11.0.tar.gz
+  url: https://github.com/coreos/flannel/archive/v0.11.0.tar.gz
+other:ipset:6.20.1:
+  name: ipset
+  version: 6.20.1
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/ipset-6.20.1.tar.bz2
+  url: http://ftp.netfilter.org/pub/ipset/ipset-6.20.1.tar.bz2
+  # NOTE the tarball above includes libipset3:6.20.1
+other:jq:1.6.0:
+  name: jq
+  version: 1.6.0
+  repository: Other
+  license: CC3.0
+  other-distribution: /tmp/osl/jq-1.6.tar.gz
+  url: https://github.com/stedolan/jq/archive/jq-1.6.tar.gz
+other:kubernetes:1.14.10:
+  name: kubernetes
+  version: 1.14.10
+  repository: Other
+  license: Apache2.0
+  other-distribution: /tmp/osl/kubernetes-1.14.10.tar.gz
+  url: https://github.com/kubernetes/kubernetes/archive/v1.14.10.tar.gz
+other:libmnl0:1.0.3:
+  name: libmnl0
+  version: 1.0.3
+  repository: Other
+  license: LGPL2.1
+  other-distribution: /tmp/osl/libmnl-1.0.3.tar.bz2
+  url: https://www.netfilter.org/projects/libmnl/files/libmnl-1.0.3.tar.bz2
+other:libtool:2.4.6:
+  name: libtool
+  version: 2.4.6
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/libtool-2.4.6.tar.gz
+  url: https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz
+other:keyutils:1.5.9:
+  name: keyutils
+  version: 1.5.9
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/keyutils_1.5.9.orig.tar.bz2
+  url: http://ftp.debian.org/debian/pool/main/k/keyutils/keyutils_1.5.9.orig.tar.bz2
+other:libevent:2.0.21:
+  name: libevent
+  version: 2.0.21
+  repository: Other
+  license: BSD-3
+  other-distribution: /tmp/osl/libevent-release-2.0.21-stable.tar.gz
+  # The blob libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb comes from tarball below,
+  # see https://packages.ubuntu.com/source/xenial-updates/amd64/libevent
+  url: https://github.com/libevent/libevent/archive/release-2.0.21-stable.tar.gz
+other:libnfsidmap2:0.25.0:
+  name: libnfsidmap2
+  version: 0.25.0
+  repository: Other
+  license: BSD-3
+  other-distribution: /tmp/osl/libnfsidmap_0.25.orig.tar.bz2
+  url: http://cdn-fastly.deb.debian.org/debian/pool/main/libn/libnfsidmap/libnfsidmap_0.25.orig.tar.bz2
+other:nfs-common:1.2.8:
+  name: nfs-common
+  version: 1.2.8
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/nfs-utils_1.2.8.orig.tar.bz2
+  # according to this URL: https://launchpad.net/ubuntu/xenial/amd64/nfs-common/1:1.2.8-9ubuntu12
+  # nfs-common and nfs-util are the same (follow link to source)
+  url: https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/nfs-utils/1:1.2.8-9ubuntu12/nfs-utils_1.2.8.orig.tar.bz2
+other:rpcbind:0.2.3:
+  name: rpcbind
+  version: 0.2.3
+  repository: Other
+  license: BSD-3
+  other-distribution: /tmp/osl/rpcbind_0.2.3.orig.tar.bz2
+  url: http://ftp.debian.org/debian/pool/main/r/rpcbind/rpcbind_0.2.3.orig.tar.bz2
+other:pkg-config:0.29.2:
+  name: pkg-config
+  version: 0.29.2
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/pkg-config-0.29.2.tar.gz
+  url: https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz
+other:socat:1.7.3.2:
+  name: socat
+  version: 1.7.3.2
+  repository: Other
+  license: GPL2.0
+  other-distribution: /tmp/osl/socat_1.7.3.2.orig.tar.bz2
+  url: http://ftp.debian.org/debian/pool/main/s/socat/socat_1.7.3.2.orig.tar.bz2
+other:talloc:2.1.9:
+  name: talloc
+  version: 2.1.9
+  repository: Other
+  license: LGPL3.0
+  other-distribution: /tmp/osl/talloc_2.1.9.orig.tar.gz
+  url: http://ftp.debian.org/debian/pool/main/t/talloc/talloc_2.1.9.orig.tar.gz
+other:etcd:3.0.7:
+  # etcdctl is one of the output binaries (the client binary) from the "etcd" project
+  # This license record is included here, for the "etcdctl" client, because its version is different than the server,
+  # This "etcdctl" *would have been covered* by the (separate) etcd licensing if we used the same version
+  name: etcd
+  version: 3.0.7
+  repository: Other
+  license: Apache2.0
+  other-distribution: /tmp/osl/etcd-3.0.7.tar.gz
+  url: https://github.com/etcd-io/etcd/archive/v3.0.7.tar.gz

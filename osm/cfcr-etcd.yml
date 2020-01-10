@@ -1,0 +1,7 @@
+other:etcd:3.3.10:
+  name: etcd
+  version: 3.3.10
+  repository: Other
+  license: Apache2.0
+  other-distribution: /tmp/osl/etcd-3.3.10.tar.gz
+  url: https://github.com/etcd-io/etcd/archive/v3.3.10.tar.gz
