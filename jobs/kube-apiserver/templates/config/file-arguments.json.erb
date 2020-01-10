@@ -1,0 +1,11 @@
+<%
+  require 'json'
+
+  file_args = {}
+  if_p('file-arguments') do |args|
+    args.each do |flag, content|
+      file_args[flag] = content
+    end
+  end
+%>
+<%= file_args.to_json %>

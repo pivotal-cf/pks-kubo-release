@@ -1,0 +1,7 @@
+---
+name: file-generator
+
+dependencies:
+  - golang-1.12-linux
+files:
+  - file-generator/**/*

@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e -x
+
+source /var/vcap/packages/golang-1.12-linux/bosh/compile.env
+
+mkdir -p ${BOSH_COMPILE_TARGET}/src
+cp -a file-generator ${BOSH_COMPILE_TARGET}/src/
+
+export GOPATH=${BOSH_COMPILE_TARGET}
+
+pushd ${BOSH_COMPILE_TARGET}/src/file-generator
+
+# Run tests for the module
+go test -v ./...
+
+# Create the executable file
+mkdir -p ${BOSH_INSTALL_TARGET}/bin
+go build -o ${BOSH_INSTALL_TARGET}/bin/file_generator ${BOSH_COMPILE_TARGET}/src/file-generator/main.go
