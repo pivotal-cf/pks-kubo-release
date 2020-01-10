@@ -44,6 +44,16 @@ processes:
       end
     end
   %>
+  <%
+    if_p('file-arguments') do |args|
+      args.each do |flag, content|
+        fileName = "/var/vcap/jobs/kube-apiserver/config/"+flag
+  %>
+  - "<%= "--#{flag}=#{fileName}" %>"
+  <%
+      end
+    end
+  %>
   - --apiserver-count=<%= link('kube-apiserver').instances.size %>
   <% if_link('cloud-provider') do |cloud_provider| %>
   - --cloud-provider=<%= cloud_provider.p('cloud-provider.type') %>
@@ -53,6 +63,8 @@ processes:
   - --etcd-servers=<%= etcd_endpoints %>
   <% end %>
   <%= "- --tls-cipher-suites=#{link('kube-apiserver').p('tls-cipher-suites')}" %>
+  hooks:
+    pre_start: /var/vcap/jobs/kube-apiserver/bin/generate-config-files
   env:
     <% if_p('no_proxy') do |no_proxy| %>
     NO_PROXY: <%= no_proxy %>

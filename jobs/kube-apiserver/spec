@@ -1,6 +1,7 @@
 name: kube-apiserver
 templates:
   bin/ensure_apiserver_healthy.erb: bin/ensure_apiserver_healthy
+  bin/generate-config-files: bin/generate-config-files
   bin/post-start.erb: bin/post-start
   config/audit_policy.yml.erb: config/audit_policy.yml
   config/bpm.yml.erb: config/bpm.yml
@@ -8,6 +9,7 @@ templates:
   config/etcd-ca.crt.erb: config/etcd-ca.crt
   config/etcd-client.crt.erb: config/etcd-client.crt
   config/etcd-client.key.erb: config/etcd-client.key
+  config/file-arguments.json.erb: config/file-arguments.json
   config/kubelet-client-cert.pem.erb: config/kubelet-client-cert.pem
   config/kubelet-client-key.pem.erb: config/kubelet-client-key.pem
   config/kubernetes-ca.pem.erb: config/kubernetes-ca.pem
@@ -18,9 +20,9 @@ templates:
   config/service-account-public-key.pem.erb: config/service-account-public-key.pem
   config/service_key.json.erb: config/service_key.json
   config/tokens.csv.erb: config/tokens.csv
-  config/encryption-config.yml.erb: config/encryption-config.yml
 packages:
 - kubernetes
+- file-generator
 properties:
   admin-password:
     description: The password for the admin account
@@ -40,6 +42,11 @@ properties:
       k8s-args:
         anonymous-auth: false
         bind-address: 10.0.0.1
+  file-arguments:
+    description: "Pass-through options for Kubernetes runtime arguments which accept local file paths as inputs. See docs https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/ for reference."
+    example: |
+      file-arguments:
+        encryption-provider-config: base64 encoded ----BEGIN CERTIFICATE------\nblah\n----END CERTIFICATE------
   kube-controller-manager-password:
     description: The password for the system:kube-controller-manager user
   kube-proxy-password:
@@ -69,8 +76,6 @@ properties:
     description: Certificate for the Kubernetes master
   tls.kubernetes.private_key:
     description: Private key for the Kubernetes master
-  encryption-config:
-    description: Encryption Configuration file to encrypt secret data at rest
   oidc.ca:
     description: Certificate for the CA that signed your identity provider’s web certificate
 consumes:
