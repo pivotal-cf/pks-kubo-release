@@ -18,6 +18,30 @@ cni/util-linux_2.27.1-6ubuntu3_amd64.deb:
   size: 847730
   object_id: 27eb3ec3-220f-4a25-6c4f-ec219c37ac8d
   sha: 568f62cb031608ab09ba1e3c2121e9e8b92dcae4
+common-core-kubernetes-1.16.4/kube-apiserver:
+  size: 217689657
+  object_id: 6e944823-bb97-4bf3-48e4-9ba697a8e14f
+  sha: deb150d9ab2a31e252fa14f20419a834f6ed1bd1
+common-core-kubernetes-1.16.4/kube-controller-manager:
+  size: 162735550
+  object_id: 0437fc31-5cb6-4bba-7901-4115cbfe81c5
+  sha: 65c9172bdee1238b96e3d30c28116629765ee1b8
+common-core-kubernetes-1.16.4/kube-proxy:
+  size: 55273427
+  object_id: a293a48a-60c8-4a63-4e4c-01a7d9fb8f3f
+  sha: 910372ce69db267d8487d428424c67cc1b13d93a
+common-core-kubernetes-1.16.4/kube-scheduler:
+  size: 61398896
+  object_id: 67d736b0-0be9-4a4f-59b3-cac379345d6c
+  sha: b3a133cd0173f650169912c004f1c0bc118c8d32
+common-core-kubernetes-1.16.4/kubectl:
+  size: 63057635
+  object_id: 2d15c785-4224-4d40-6979-c4386496fb65
+  sha: eeaecec49d215d783c5969a907496657336757f2
+common-core-kubernetes-1.16.4/kubelet:
+  size: 162583216
+  object_id: 593ddf28-6b18-4edf-4c8e-f8da3f60cbb1
+  sha: 1226c1049a60e231f9e120d6e7c564ed66bceb4f
 conntrack/conntrack_1.4.3-3_amd64.deb:
   size: 27346
   object_id: 0c4aa633-3de8-4a8c-7170-36b3fc9e4a9c
@@ -66,30 +90,6 @@ jq-linux64-1.6:
   size: 3953824
   object_id: efdcc8cd-7155-47d4-65c9-d3d74700633f
   sha: 056ba5d6bbc617c29d37158ce11fd5a443093949
-kubernetes-1.16.4/kube-apiserver:
-  size: 217689657
-  object_id: 9d0a5545-c71e-439e-5c1b-c8202cffa5fb
-  sha: deb150d9ab2a31e252fa14f20419a834f6ed1bd1
-kubernetes-1.16.4/kube-controller-manager:
-  size: 162735550
-  object_id: f0b07a96-315e-493c-6b10-dfb3564f5165
-  sha: 65c9172bdee1238b96e3d30c28116629765ee1b8
-kubernetes-1.16.4/kube-proxy:
-  size: 55273427
-  object_id: 8e236b7c-39b9-418b-7985-d8f980673642
-  sha: 910372ce69db267d8487d428424c67cc1b13d93a
-kubernetes-1.16.4/kube-scheduler:
-  size: 61398896
-  object_id: 97804b6e-f9c6-46f1-5d3d-598b8a91ad31
-  sha: b3a133cd0173f650169912c004f1c0bc118c8d32
-kubernetes-1.16.4/kubectl:
-  size: 63057635
-  object_id: ce094aa8-3e4b-468b-5841-5d08b1dd615e
-  sha: eeaecec49d215d783c5969a907496657336757f2
-kubernetes-1.16.4/kubelet:
-  size: 162583216
-  object_id: e6ab5969-fe64-46ce-511a-5821263bd544
-  sha: 1226c1049a60e231f9e120d6e7c564ed66bceb4f
 libmnl0_1.0.3-5_amd64.deb:
   size: 11970
   object_id: 30b1e2c0-4194-47f2-544f-f55eb76b9101
