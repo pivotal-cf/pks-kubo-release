@@ -1,7 +1,7 @@
 #!/bin/bash
 set -exu -o pipefail
 
-source git-pks-kubo-release/ci/scripts/lib/generate-pr.sh
+source git-pks-kubo-release-ci/ci/scripts/lib/generate-pr.sh
 
 pr_release() {
   version="$1"

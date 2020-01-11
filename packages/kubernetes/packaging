@@ -1,6 +1,6 @@
 set -e
 
-KUBERNETES_PACKAGE=kubernetes
+KUBERNETES_PACKAGE=common-core-kubernetes
 KUBERNETES_VERSION="1.16.4"
 
 main() {

@@ -107,10 +107,10 @@ main() {
     pipeline_name=$PIPELINE_NAME
   fi
 
-  fly --target kubo sync > /dev/null
+  fly --target kubo-pks sync > /dev/null
   erb "${pipeline_filename}" > /dev/null
 
-  fly --target kubo set-pipeline --pipeline "${pipeline_name}" \
+  fly --target kubo-pks set-pipeline --pipeline "${pipeline_name}" \
     --config <(erb "${pipeline_filename}") \
     --var branch-name="${branch_name}" \
     --load-vars-from="${VAR_PATH}"
