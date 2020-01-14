@@ -1,7 +1,7 @@
 set -e
 
 ETCDCTL_PACKAGE=etcdctl
-ETCDCTL_VERSION="3.0.7"
+ETCDCTL_VERSION="3.3.17"
 
 main() {
   copy_binary
