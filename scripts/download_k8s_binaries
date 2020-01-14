@@ -85,7 +85,7 @@ add_blob() {
 
   local path
   path=$(binary_path "$staging_dir" "$kubernetes_version" "$binary_name")
-  bosh add-blob "${path}" "common-core-kubernetes-${kubernetes_version}/$binary_name"
+  bosh add-blob "${path}" "kubernetes-${kubernetes_version}/$binary_name"
 }
 
 main "$@"
