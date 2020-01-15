@@ -55,9 +55,9 @@ processes:
     <% end %>
     <% end %>
 <%
-  ######################################################################################################
-  # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, AND KUBELET #
-  ######################################################################################################
+  ############################################################################################################
+  # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, KUBELET, AND ETCD #
+  ############################################################################################################
   def validateK8sArgs()
     if_p('k8s-args') do
       if p('k8s-args').key?('tls-cipher-suites')
