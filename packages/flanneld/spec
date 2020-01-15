@@ -3,5 +3,9 @@ name: flanneld
 
 dependencies:
 
+# IMPORTANT: when the flannel version below is updated,
+# also touch the line in "flannel_ctl.erb" which
+# specifies the CNI version appropriate for the flannel, i.e. the line like  "cniVersion": "0.2.0",
+
 files:
 - flannel-v0.11.0-linux-amd64.tar.gz
