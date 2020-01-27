@@ -23,9 +23,20 @@ processes:
       end
     end
   %>
+  <%
+    if_p('file-arguments') do |args|
+      args.each do |flag, content|
+        fileName = "/var/vcap/jobs/kube-scheduler/config/"+flag
+  %>
+  - "<%= "--#{flag}=#{fileName}" %>"
+  <%
+      end
+    end
+  %>
   - --config=/var/vcap/jobs/kube-scheduler/config/config.yml
   <%= "- --tls-cipher-suites=#{link('kube-apiserver').p('tls-cipher-suites')}" %>
-
+  hooks:
+    pre_start: /var/vcap/jobs/kube-scheduler/bin/generate-config-files
 <%
   ############################################################################################################
   # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, KUBELET, AND ETCD #
