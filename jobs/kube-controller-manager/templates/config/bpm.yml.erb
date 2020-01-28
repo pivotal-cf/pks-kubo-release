@@ -23,6 +23,16 @@ processes:
       end
     end
   %>
+  <%
+    if_p('file-arguments') do |args|
+      args.each do |flag, content|
+        fileName = "/var/vcap/jobs/kube-controller-manager/config/"+flag
+  %>
+  - "<%= "--#{flag}=#{fileName}" %>"
+  <%
+      end
+    end
+  %>
   <%- if_link('cloud-provider') do |cloud_provider| -%>
   - --cloud-provider=<%= cloud_provider.p('cloud-provider.type') %>
   - --cloud-config=/var/vcap/jobs/kube-controller-manager/config/cloud-provider.ini
