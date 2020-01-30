@@ -6,6 +6,7 @@ templates:
   config/bpm.yml.erb: config/bpm.yml
   config/ca.pem.erb: config/ca.pem
   config/cloud-provider.ini.erb: config/cloud-provider.ini
+  config/file-arguments.json.erb: config/file-arguments.json
   config/kubeconfig.erb: config/kubeconfig
   config/openstack-ca.crt.erb: config/openstack-ca.crt
   config/service-account-private-key.pem.erb: config/service-account-private-key.pem
@@ -17,6 +18,7 @@ templates:
 
 packages:
 - kubernetes
+- file-generator
 
 properties:
   api-token:
@@ -42,6 +44,11 @@ properties:
         bind-address: 0.0.0.0
         cluster-name: kubernetes
         enable-garbage-collector: true
+  file-arguments:
+    description: "Pass-through options for Kubernetes runtime arguments which accept local file paths as inputs. See docs https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/ for reference."
+    example: |
+      file-arguments:
+        azure-container-registry-config: base64 encoded config
 
 consumes:
 - name: cloud-provider

@@ -3,3 +3,11 @@
 if [ -f /sys/class/dmi/id/product_serial ]; then
   chmod a+r /sys/class/dmi/id/product_serial || true
 fi
+
+chmod +x /var/vcap/packages/file-generator/bin/file_generator
+
+config_file_name=/var/vcap/jobs/kube-controller-manager/config/file-arguments.json
+
+if [ -f $config_file_name ]; then
+    /var/vcap/packages/file-generator/bin/file_generator $config_file_name kube-controller-manager
+fi
