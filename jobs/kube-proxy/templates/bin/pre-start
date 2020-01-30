@@ -1,0 +1,9 @@
+#!/bin/bash -exu
+
+chmod +x /var/vcap/packages/file-generator/bin/file_generator
+
+config_file_name=/var/vcap/jobs/kube-proxy/config/file-arguments.json
+
+if [ -f $config_file_name ]; then
+    /var/vcap/packages/file-generator/bin/file_generator $config_file_name kube-proxy
+fi

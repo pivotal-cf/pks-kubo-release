@@ -3,14 +3,17 @@ name: kube-proxy
 
 templates:
   bin/kube_proxy_ctl.erb: bin/kube_proxy_ctl
+  bin/pre-start: bin/pre-start
   config/kubeconfig.erb: config/kubeconfig
   config/config.yml.erb: config/config.yml
   config/ca.pem.erb: config/ca.pem
+  config/file-arguments.json.erb: config/file-arguments.json
 
 packages:
 - pid_utils
 - kubernetes
 - conntrack
+- file-generator
 
 properties:
   api-token:
@@ -38,3 +41,8 @@ properties:
           CPUManager: true
           DryRun: false
         cleanup: false
+  file-arguments:
+    description: "Pass-through options for Kubernetes runtime arguments which accept local file paths as inputs. See docs https://kubernetes.io/docs/reference/command-line-tools-reference/kube-proxy/ for reference."
+    example: |
+      file-arguments:
+        azure-container-registry-config: base64 encoded config
