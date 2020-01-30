@@ -131,6 +131,16 @@ start_kubelet() {
       end
     end
   -%>
+  <%-
+    if_p('file-arguments') do |args|
+      args.each do |flag, content|
+        fileName = "/var/vcap/jobs/kubelet/config/"+flag
+  -%>
+    "<%= "--#{flag}=#{fileName}" %>" \
+  <%-
+      end
+    end
+  -%>
     <% if include_config -%>--cloud-config=${cloud_config}<% end %> \
     <% if !iaas.nil? -%>--cloud-provider=${cloud_provider}<% end %> \
     --hostname-override=$(get_hostname_override) \
