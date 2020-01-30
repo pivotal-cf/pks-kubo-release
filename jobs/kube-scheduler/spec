@@ -2,13 +2,16 @@
 name: kube-scheduler
 
 templates:
+  bin/generate-config-files: bin/generate-config-files
   config/bpm.yml.erb: config/bpm.yml
   config/ca.pem.erb: config/ca.pem
+  config/file-arguments.json.erb: config/file-arguments.json
   config/kubeconfig.erb: config/kubeconfig
   config/config.yml: config/config.yml
 
 packages:
 - kubernetes
+- file-generator
 
 properties:
   api-token:
@@ -25,6 +28,11 @@ properties:
       k8s-args:
         leader-elect: false
         log-flush-frequency: 30s
+  file-arguments:
+    description: "Pass-through options for Kubernetes runtime arguments which accept local file paths as inputs. See docs https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/ for reference."
+    example: |
+      file-arguments:
+        azure-container-registry-config: base64 encoded config
 
 consumes:
 - name: kube-apiserver
