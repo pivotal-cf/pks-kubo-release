@@ -48,11 +48,10 @@ if timeout "$TIMEOUT" /bin/bash <<EOF
 #!/bin/bash
 
 apiserver="https://localhost:8443"
-token="<%= p("admin-password") %>"
 cert=/var/vcap/jobs/kube-apiserver/config/kubernetes-ca.pem
 interval="2"
 
-until $(curl -X GET -k --fail -o /dev/null   ${apiserver}/healthz --header "Authorization: Bearer ${token}" --cacert ${cert}); do
+until $(curl -X GET -k --fail -o /dev/null   ${apiserver}/healthz --cacert ${cert}); do
   sleep $interval
 done
 EOF
