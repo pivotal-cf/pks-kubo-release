@@ -4,9 +4,61 @@ set -euo pipefail
 
 exec 1>&2
 
-/var/vcap/jobs/bpm/bin/bpm start kube-apiserver
-while ! /var/vcap/jobs/bpm/bin/bpm pid kube-apiserver; do
-    echo "Waiting for kube-apiserver to start"
-    sleep 1
+echo "Starting kube-apiserver"
+
+# ask monit to start the process, within 60 seconds
+TIMEOUT=60
+if timeout "$TIMEOUT" /bin/bash <<EOF
+#!/bin/bash
+
+until /var/vcap/bosh/bin/monit start kube-apiserver; do
+  echo "starting kube-apiserver"
+  sleep 5
 done
-/var/vcap/bosh/bin/monit monitor kube-apiserver
+EOF
+then
+  echo "monit has started kube-apiserver"
+else
+  echo "monit was unable to start kube-apiserver after $TIMEOUT seconds"
+  exit 1
+fi
+
+# now see if summary shows server has started
+if timeout "$TIMEOUT" /bin/bash <<EOF
+#!/bin/bash
+
+until /var/vcap/bosh/bin/monit summary | grep kube-apiserver | grep "running"; do
+  echo "waiting for kube-apiserver to start"
+  sleep 5
+done
+EOF
+then
+  echo "kube-apiserver has started"
+else
+  echo "kube-apiserver was unable to start after $TIMEOUT seconds"
+  exit 1
+fi
+
+# wait up to 30 seconds unless there is already a green /healthz endpoint
+# this delay is ESSENTIAL for a corner case where a pod is already in kube-apiserver's cache
+# and a newly restored etcd has contradictory information about that pod
+
+TIMEOUT=30
+if timeout "$TIMEOUT" /bin/bash <<EOF
+#!/bin/bash
+
+apiserver="https://localhost:8443"
+token="<%= p("admin-password") %>"
+cert=/var/vcap/jobs/kube-apiserver/config/kubernetes-ca.pem
+interval="2"
+
+until $(curl -X GET -k --fail -o /dev/null   ${apiserver}/healthz --header "Authorization: Bearer ${token}" --cacert ${cert}); do
+  sleep $interval
+done
+EOF
+then
+  echo "kube-apiserver is healthy"
+else
+  echo "kube-apiserver did not report as healthy within $TIMEOUT seconds; continuing anyway"
+fi
+
