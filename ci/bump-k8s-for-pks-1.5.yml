@@ -61,8 +61,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: pcfkubo/kubo-ci
-          tag: stable
+          repository: odpks/pks-ci
       run:
         path: git-pks-kubo-release-ci/ci/scripts/bump-k8s.sh
       inputs:
