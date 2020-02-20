@@ -48,7 +48,6 @@ jobs:
         type: docker-image
         source:
           repository: odpks/pks-ci
-          tag: stable
       run:
         path: git-pks-kubo-release-ci/ci/scripts/bump-k8s.sh
       inputs:
