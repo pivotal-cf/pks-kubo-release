@@ -70,6 +70,7 @@ jobs:
         - name: git-pks-kubo-release-ci
         - name: s3-kubernetes-common-core-linux
       params:
+        USE_COMMON_CORE: false
         ACCESS_KEY_ID: ((gcs-access-key-id))
         SECRET_ACCESS_KEY: ((gcs-secret-access-key))
         CFCR_USER_TOKEN: ((cfcr-git-user-token))

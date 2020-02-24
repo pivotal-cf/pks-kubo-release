@@ -6,13 +6,14 @@ source git-pks-kubo-release-ci/ci/scripts/lib/generate-pr.sh
 pr_release() {
   version="$1"
   git_repo="$2"
+  script_name="$3"
 
   concourse_base_name="git-${git_repo}"
 
   cp -r "${concourse_base_name}/." "${concourse_base_name}-output"
   pushd "${concourse_base_name}-output"
 
-  ./scripts/download_k8s_binaries $version
+  ./scripts/$script_name $version
 
   if [ -n "$(git status --porcelain)" ]; then
     cat <<EOF > "config/private.yml"
@@ -33,10 +34,16 @@ EOF
 if [ "${REPO:-}" == "windows" ]; then
   binary_directory="gcs-kubernetes-windows"
   git_repo="pks-kubo-release-windows"
+  script_name="download_k8s_binaries"
 else
   binary_directory="s3-kubernetes-common-core-linux"
   git_repo="pks-kubo-release"
+  if [ "false" == "$USE_COMMON_CORE" ]; then
+    script_name="download_k8s_binaries_google"
+  else
+    script_name="download_k8s_binaries_common_core"
+  fi
 fi
 
 version=$(cat "$PWD/$binary_directory/version")
-pr_release "$version" "$git_repo"
+pr_release "$version" "$git_repo" "$script_name"
