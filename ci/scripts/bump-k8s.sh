@@ -13,7 +13,7 @@ pr_release() {
   cp -r "${concourse_base_name}/." "${concourse_base_name}-output"
   pushd "${concourse_base_name}-output"
 
-  ./scripts/$script_name $version
+  ../git-pks-kubo-release-ci/scripts/$script_name $version
 
   if [ -n "$(git status --porcelain)" ]; then
     cat <<EOF > "config/private.yml"
