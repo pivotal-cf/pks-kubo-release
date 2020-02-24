@@ -32,11 +32,9 @@ EOF
 }
 
 if [ "${REPO:-}" == "windows" ]; then
-  binary_directory="gcs-kubernetes-windows"
   git_repo="pks-kubo-release-windows"
   script_name="download_k8s_binaries"
 else
-  binary_directory="s3-kubernetes-common-core-linux"
   git_repo="pks-kubo-release"
   if [ "false" == "$USE_COMMON_CORE" ]; then
     script_name="download_k8s_binaries_google"
@@ -45,5 +43,6 @@ else
   fi
 fi
 
+# binary_directory should be declared in the pipeline via input_mapping
 version=$(cat "$PWD/$binary_directory/version")
 pr_release "$version" "$git_repo" "$script_name"

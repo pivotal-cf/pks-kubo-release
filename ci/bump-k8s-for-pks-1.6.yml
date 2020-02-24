@@ -12,6 +12,15 @@ resource_types:
     repository: frodenas/gcs-resource
 
 resources:
+- name: k8s-release
+  type: github-release-with-version-filtering
+  source:
+    owner: kubernetes
+    repository: kubernetes
+    # only patches get updated
+    version_filter: "< 1.16.0"
+    access_token: ((github-token-key))
+
 - name: s3-kubernetes-common-core-linux
   type: s3
   source:
@@ -37,7 +46,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubo-release.git
-    branch: master
+    branch: feature/download-google-binaries-for-k8s-bump
     private_key: ((git-ssh-key.private_key))
 
 - name: git-pks-kubo-release-windows
@@ -53,7 +62,7 @@ jobs:
   - in_parallel:
     - get: git-pks-kubo-release
     - get: git-pks-kubo-release-ci
-    - get: s3-kubernetes-common-core-linux
+    - get: k8s-release
       trigger: true
   - task: bump-k8s-in-pks-kubo-release
     config: &config
@@ -68,7 +77,9 @@ jobs:
       inputs:
         - name: git-pks-kubo-release
         - name: git-pks-kubo-release-ci
-        - name: s3-kubernetes-common-core-linux
+        - name: k8s-release
+      input_mapping:
+        binary_directory: k8s-release
       params:
         USE_COMMON_CORE: false
         ACCESS_KEY_ID: ((gcs-access-key-id))
