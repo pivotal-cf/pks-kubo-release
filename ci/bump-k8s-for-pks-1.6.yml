@@ -106,6 +106,7 @@ jobs:
           - name: gcs-kubernetes-windows
         params:
           BASE_BRANCH: 1.6.x
+          BINARY_DIRECTORY: gcs-kubernetes-windows
           REPO: windows
           ACCESS_KEY_ID: ((gcs-access-key-id))
           SECRET_ACCESS_KEY: ((gcs-secret-access-key))

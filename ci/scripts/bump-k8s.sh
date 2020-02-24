@@ -36,7 +36,7 @@ main() {
 
   if [ "${REPO:-}" == "windows" ]; then
     git_repo="pks-kubo-release-windows"
-    script_name="download_k8s_binaries"
+    script_name="download_k8s_binaries_windows"
   else
     git_repo="pks-kubo-release"
     if [ "false" == "$USE_COMMON_CORE" ]; then
