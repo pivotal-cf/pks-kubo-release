@@ -38,14 +38,14 @@ container-images/vmware_metrics-server-amd64:v0.3.3.tgz:
   size: 12059532
   object_id: 876a3f5f-40dd-4f03-614d-bc77aa3b3a8b
   sha: sha256:602e6d08842dd51e099839af097b4e7dc865018e0576b9abb91f6b174ec34380
-container-images/vmware_pause:3.1.tgz:
-  size: 314768
-  object_id: 2224d7c6-0395-49ea-7356-0b04d413e8ae
-  sha: sha256:8b7f7da2677ac899f712ea89cb2f0683f8a42c8cd339512c58df0aa4d162e8cb
 container-images/vmware_nginx-bionic:1.0.0.tgz:
   size: 66797183
   object_id: 370b05ca-2ad8-4f1b-6002-22ea8ce709fc
   sha: sha256:27ed75ab7de88b3b58c5117357eee4baa77e53140b3cba7ed3f678a0bfa253ee
+container-images/vmware_pause:3.1.tgz:
+  size: 314768
+  object_id: 2224d7c6-0395-49ea-7356-0b04d413e8ae
+  sha: sha256:8b7f7da2677ac899f712ea89cb2f0683f8a42c8cd339512c58df0aa4d162e8cb
 etcdctl-3.0.7:
   size: 18427584
   object_id: 32221476-5c3d-4ec7-5869-44c989cc3077
@@ -66,30 +66,30 @@ jq-linux64-1.6:
   size: 3953824
   object_id: efdcc8cd-7155-47d4-65c9-d3d74700633f
   sha: 056ba5d6bbc617c29d37158ce11fd5a443093949
-kubernetes-1.15.5/kube-apiserver:
-  size: 164571520
-  object_id: 2e679cc2-005a-4024-541f-a0371f806457
-  sha: f7b470dd6a78bf09a73671e83afbe2ea084b9a12
-kubernetes-1.15.5/kube-controller-manager:
-  size: 116462560
-  object_id: c65d6a16-0306-42c7-483a-86754f8ef6a8
-  sha: a36384acfc89dacd5b43888f9dc41abba1a209dc
-kubernetes-1.15.5/kube-proxy:
-  size: 36991584
-  object_id: 09fd3e67-2e61-49c3-4944-46f2fa2d103e
-  sha: 4c5987ce25debea16cbf2e6343f586b784d9a9c3
-kubernetes-1.15.5/kube-scheduler:
-  size: 38790240
-  object_id: 86e8425d-ed3c-4e47-67f4-ef25b8bebb5f
-  sha: 6c60e3354958e3a2a3724ac0f8fe81e8bf300a52
-kubernetes-1.15.5/kubectl:
-  size: 42993696
-  object_id: a9af62e6-29ba-4fba-7ade-8d3f9fae0ce6
-  sha: ed25c54577b90d5753d6a86a8543d28d1e55e164
-kubernetes-1.15.5/kubelet:
-  size: 119686160
-  object_id: 257f1595-5990-4aba-4b1d-1e7ed75fcf2b
-  sha: bfb8bde9b529dc93679ec1f4548e2833a47a87c3
+kubernetes-1.15.10/kube-apiserver:
+  size: 164587936
+  object_id: 4cd2f632-b8a7-452f-4131-a522d0aae2a1
+  sha: 0164b2fccd6b62341d129232bd04787537ca33c7
+kubernetes-1.15.10/kube-controller-manager:
+  size: 116483104
+  object_id: 16d74295-8f78-4cc9-550e-860ecc48f8fc
+  sha: e990fbd64d7097ee248ccdeb4c964cc0e56212ff
+kubernetes-1.15.10/kube-proxy:
+  size: 36995680
+  object_id: 84b143c2-bb38-4d20-4282-e816c6d4fc55
+  sha: 3550a37bc462b8a2488ab2c2fe40d1d0b3c94429
+kubernetes-1.15.10/kube-scheduler:
+  size: 38794336
+  object_id: 886c6864-9321-4fd3-7c33-6420cba55813
+  sha: b8fbb3e00eb39b865e0074c7e4166794d50dfb17
+kubernetes-1.15.10/kubectl:
+  size: 42997792
+  object_id: dc0cfb74-9731-4ffe-476d-426cdbd80d41
+  sha: 26848fed5d8ba3838ded70531b7250bc668c4fe0
+kubernetes-1.15.10/kubelet:
+  size: 119731248
+  object_id: f85b2e39-32d1-4cb5-79d5-3c6e2fc9574a
+  sha: b78f62a53ca1aa01855b47f1616bcc84941198e9
 libmnl0_1.0.3-5_amd64.deb:
   size: 11970
   object_id: 30b1e2c0-4194-47f2-544f-f55eb76b9101
