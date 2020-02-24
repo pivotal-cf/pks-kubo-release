@@ -4,7 +4,7 @@ set -ex
 main() {
   local staging_dir kubernetes_version release_dir
 
-  if [ $# -ne 1 ]; then
+  if [ $# -ne 2 ]; then
     echo "Usage: $(basename "$0") <KUBERNETES_VERSION> <RELEASE_DIR>"
     exit  1
   fi

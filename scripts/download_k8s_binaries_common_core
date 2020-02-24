@@ -13,7 +13,7 @@ binaries=(
 main() {
   local staging_dir kubernetes_version release_dir
 
-  if [ $# -lt 1 ]; then
+  if [ $# -lt 2 ]; then
     echo "Usage: $(basename "$0") <KUBERNETES_VERSION> <RELEASE_DIR>"
     exit  1
   fi
