@@ -79,11 +79,12 @@ jobs:
         - name: git-pks-kubo-release-ci
         - name: k8s-release
       params:
+        BASE_BRANCH: 1.6.x
         BINARY_DIRECTORY: k8s-release
         USE_COMMON_CORE: false
         ACCESS_KEY_ID: ((gcs-access-key-id))
         SECRET_ACCESS_KEY: ((gcs-secret-access-key))
-        CFCR_USER_TOKEN: ((cfcr-git-user-token))
+        CFCR_USER_TOKEN: ((cfcr-git-write-token))
         GIT_SSH_KEY: |
           ((git-ssh-key.private_key))
 
@@ -104,9 +105,10 @@ jobs:
           - name: git-pks-kubo-release-windows
           - name: gcs-kubernetes-windows
         params:
+          BASE_BRANCH: 1.6.x
           REPO: windows
           ACCESS_KEY_ID: ((gcs-access-key-id))
           SECRET_ACCESS_KEY: ((gcs-secret-access-key))
-          CFCR_USER_TOKEN: ((cfcr-git-user-token))
+          CFCR_USER_TOKEN: ((cfcr-git-write-token))
           GIT_SSH_KEY: |
             ((git-ssh-key.private_key))
