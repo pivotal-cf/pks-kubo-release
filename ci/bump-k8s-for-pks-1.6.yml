@@ -21,12 +21,12 @@ resources:
     version_filter: "< 1.16.0"
     access_token: ((github-token-key))
 
-- name: s3-kubernetes-common-core-linux
-  type: s3
-  source:
-    bucket: "essentialpks-staging"
-    regexp: "vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-v(1.15.\\d*).*.tar.gz"
-    region_name: "us-west-2"
+#- name: s3-kubernetes-common-core-linux
+#  type: s3
+#  source:
+#    bucket: "essentialpks-staging"
+#    regexp: "vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-v(1.15.\\d*).*.tar.gz"
+#    region_name: "us-west-2"
 
 - name: gcs-kubernetes-windows
   type: gcs-resource
@@ -65,6 +65,8 @@ jobs:
     - get: k8s-release
       trigger: true
   - task: bump-k8s-in-pks-kubo-release
+    input_mapping:
+      binary_directory: k8s-release
     config: &config
       platform: linux
       image_resource:
@@ -78,8 +80,6 @@ jobs:
         - name: git-pks-kubo-release
         - name: git-pks-kubo-release-ci
         - name: k8s-release
-      input_mapping:
-        binary_directory: k8s-release
       params:
         USE_COMMON_CORE: false
         ACCESS_KEY_ID: ((gcs-access-key-id))

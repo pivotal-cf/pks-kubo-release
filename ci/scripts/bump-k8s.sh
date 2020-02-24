@@ -43,6 +43,6 @@ else
   fi
 fi
 
-# binary_directory should be declared in the pipeline via input_mapping
-version=$(cat "$PWD/$binary_directory/version")
+# binary_directory should be configured in the pipeline via input_mapping
+version=$(cat "$PWD/binary_directory/version")
 pr_release "$version" "$git_repo" "$script_name"
