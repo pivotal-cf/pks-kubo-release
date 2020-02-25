@@ -11,19 +11,20 @@ binaries=(
 )
 
 main() {
-  local staging_dir kubernetes_version
+  local staging_dir kubernetes_version release_dir
 
-  if [ $# -lt 1 ]; then
-    echo "Usage: $(basename "$0") <KUBERNETES_VERSION>"
+  if [ $# -lt 2 ]; then
+    echo "Usage: $(basename "$0") <KUBERNETES_VERSION> <RELEASE_DIR>"
     exit  1
   fi
 
   kubernetes_version=$1
+  release_dir=$2
   staging_dir=$(mktemp -d)
 
   trap '{ rm -rf "$staging_dir"; }' EXIT
 
-  pushd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
+  pushd "$release_dir" || exit 1
 
     existing_k8s_spec=$(bosh blobs --column path | grep "${binaries[0]}" | grep -o -E "kubernetes-([0-9]+\.)+[0-9]+")
     existing_k8s_version=$(echo "$existing_k8s_spec" | grep -o -E '([0-9]+\.)+[0-9]+')

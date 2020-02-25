@@ -12,12 +12,14 @@ resource_types:
     repository: frodenas/gcs-resource
 
 resources:
-- name: s3-kubernetes-common-core-linux
-  type: s3
+- name: k8s-release
+  type: github-release-with-version-filtering
   source:
-    bucket: "essentialpks-staging"
-    regexp: "vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-v(1.14.\\d*).*.tar.gz"
-    region_name: "us-west-2"
+    owner: kubernetes
+    repository: kubernetes
+    # only patches get updated
+    version_filter: "< 1.15.0"
+    access_token: ((github-token-key))
 
 - name: gcs-kubernetes-windows
   type: gcs-resource
@@ -53,7 +55,7 @@ jobs:
   - in_parallel:
     - get: git-pks-kubo-release
     - get: git-pks-kubo-release-ci
-    - get: s3-kubernetes-common-core-linux
+    - get: k8s-release
       trigger: true
   - task: bump-k8s-in-pks-kubo-release
     config: &config
@@ -67,11 +69,14 @@ jobs:
       inputs:
         - name: git-pks-kubo-release
         - name: git-pks-kubo-release-ci
-        - name: s3-kubernetes-common-core-linux
+        - name: k8s-release
       params:
+        BASE_BRANCH: 1.5.x
+        BINARY_DIRECTORY: k8s-release
+        USE_COMMON_CORE: false
         ACCESS_KEY_ID: ((gcs-access-key-id))
         SECRET_ACCESS_KEY: ((gcs-secret-access-key))
-        CFCR_USER_TOKEN: ((cfcr-git-user-token))
+        CFCR_USER_TOKEN: ((cfcr-git-write-token))
         GIT_SSH_KEY: |
           ((git-ssh-key.private_key))
 
@@ -93,8 +98,10 @@ jobs:
           - name: gcs-kubernetes-windows
         params:
           REPO: windows
+          BASE_BRANCH: 1.5.x
+          BINARY_DIRECTORY: gcs-kubernetes-windows
           ACCESS_KEY_ID: ((gcs-access-key-id))
           SECRET_ACCESS_KEY: ((gcs-secret-access-key))
-          CFCR_USER_TOKEN: ((cfcr-git-user-token))
+          CFCR_USER_TOKEN: ((cfcr-git-write-token))
           GIT_SSH_KEY: |
             ((git-ssh-key.private_key))
