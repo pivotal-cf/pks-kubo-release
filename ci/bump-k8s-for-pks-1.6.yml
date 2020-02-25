@@ -21,13 +21,6 @@ resources:
     version_filter: "< 1.16.0"
     access_token: ((github-token-key))
 
-#- name: s3-kubernetes-common-core-linux
-#  type: s3
-#  source:
-#    bucket: "essentialpks-staging"
-#    regexp: "vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-v(1.15.\\d*).*.tar.gz"
-#    region_name: "us-west-2"
-
 - name: gcs-kubernetes-windows
   type: gcs-resource
   source:

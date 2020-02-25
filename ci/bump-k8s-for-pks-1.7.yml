@@ -37,7 +37,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubo-release.git
-    branch: master
+    branch: feature/download-google-binaries-for-k8s-bump
     private_key: ((git-ssh-key.private_key))
 
 - name: git-pks-kubo-release-windows
@@ -70,10 +70,12 @@ jobs:
         - name: git-pks-kubo-release-ci
         - name: s3-kubernetes-common-core-linux
       params:
+        BASE_BRANCH: master
+        BINARY_DIRECTORY: s3-kubernetes-common-core-linux
         USE_COMMON_CORE: true
         ACCESS_KEY_ID: ((gcs-access-key-id))
         SECRET_ACCESS_KEY: ((gcs-secret-access-key))
-        CFCR_USER_TOKEN: ((cfcr-git-user-token))
+        CFCR_USER_TOKEN: ((cfcr-git-write-token))
         GIT_SSH_KEY: |
           ((git-ssh-key.private_key))
 
@@ -95,8 +97,10 @@ jobs:
           - name: gcs-kubernetes-windows
         params:
           REPO: windows
+          BASE_BRANCH: master
+          BINARY_DIRECTORY: gcs-kubernetes-windows
           ACCESS_KEY_ID: ((gcs-access-key-id))
           SECRET_ACCESS_KEY: ((gcs-secret-access-key))
-          CFCR_USER_TOKEN: ((cfcr-git-user-token))
+          CFCR_USER_TOKEN: ((cfcr-git-write-token))
           GIT_SSH_KEY: |
             ((git-ssh-key.private_key))
