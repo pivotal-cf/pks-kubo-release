@@ -33,7 +33,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubo-release.git
-    branch: feature/download-google-binaries-for-k8s-bump
+    branch: master
     private_key: ((git-ssh-key.private_key))
 
 jobs:
