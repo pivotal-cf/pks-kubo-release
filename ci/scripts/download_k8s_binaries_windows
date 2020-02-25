@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -ex
 
+#!/usr/bin/env bash
+set -ex
+
+binaries=(
+  "kube-proxy.exe"
+  "kubectl.exe"
+  "kubelet.exe"
+)
+
 main() {
   local staging_dir kubernetes_version release_dir
 
@@ -11,54 +20,30 @@ main() {
 
   kubernetes_version=$1
   release_dir=$2
-
   staging_dir=$(mktemp -d)
 
   trap '{ rm -rf "$staging_dir"; }' EXIT
 
-  windows_binaries=(
-    "kube-proxy.exe"
-    "kubectl.exe"
-    "kubelet.exe"
-  )
-  platforms=(
-    "windows"
-  )
+  pushd "${release_dir}" || exit 1
 
-  pushd "${release_dir}"
-    for platform in "${platforms[@]}"; do
-      package_name=$(package_name "${platform}")
-      declare -n binaries="${platform}_binaries"
+  existing_k8s_spec=$(bosh blobs --column path | grep "${binaries[0]}" | grep -o -E "kubernetes-windows-([0-9]+\.)+[0-9]+")
+  existing_k8s_version=$(echo "$existing_k8s_spec" | grep -o -E '([0-9]+\.)+[0-9]+')
 
-      existing_k8s_spec=$(bosh blobs --column path | grep "${binaries[0]}" | grep -o -E "${package_name}-([0-9]+\.)+[0-9]+")
-      existing_k8s_version=$(echo "$existing_k8s_spec" | grep -o -E '([0-9]+\.)+[0-9]+')
-
-      if [ "$existing_k8s_version" == "$kubernetes_version" ]; then
-          echo "Kubernetes version already up-to-date."
-      else
-        pushd "packages/${package_name}"
-          sed -E -i -e "s/([0-9]+\.)+[0-9]+/${kubernetes_version}/" packaging
-          sed -E -i -e "s/${existing_k8s_spec}/${package_name}-${kubernetes_version}/" spec
-        popd
-
-        for binary in "${binaries[@]}"; do
-          download "${binary}" "${staging_dir}" "${kubernetes_version}" "${platform}"
-          add_blob "${binary}" "${staging_dir}" "${kubernetes_version}" "${package_name}"
-        done
-      fi
-    done
-
-  popd
-}
-
-package_name() {
-  local platform
-  platform="$1"
-  if [ "$platform" == "windows" ]; then
-    echo -n "kubernetes-windows"
+  if [ "$existing_k8s_version" == "$kubernetes_version" ]; then
+      echo "Kubernetes version already up-to-date."
   else
-    echo -n "kubernetes"
+    pushd "packages/kubernetes-windows"
+      sed -E -i -e "s/KUBERNETES_VERSION=\"([0-9]+\.)+[0-9]+\"/KUBERNETES_VERSION=\"${kubernetes_version}\"/" packaging
+      sed -E -i -e "s/${existing_k8s_spec}/kubernetes-windows-${kubernetes_version}/" spec
+    popd
+
+    for binary in "${binaries[@]}"; do
+      download "${binary}" "${staging_dir}" "${kubernetes_version}" "windows"
+      add_blob "${binary}" "${staging_dir}" "${kubernetes_version}" "kubernetes-windows"
+    done
   fi
+
+  popd || exit 1
 }
 
 download() {
