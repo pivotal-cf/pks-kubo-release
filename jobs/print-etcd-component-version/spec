@@ -1,0 +1,11 @@
+---
+name: print-etcd-component-version
+
+templates:
+    run.erb: bin/run
+
+packages:
+- etcd
+- golang-1.12-linux
+
+properties: {}
