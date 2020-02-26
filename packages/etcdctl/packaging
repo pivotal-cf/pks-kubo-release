@@ -1,7 +1,6 @@
-set -e
+# TODO: This package should be removed as part of Chore #171473282
 
-ETCDCTL_PACKAGE=etcdctl
-ETCDCTL_VERSION="3.3.17"
+set -e
 
 main() {
   copy_binary
@@ -9,7 +8,7 @@ main() {
 }
 
 copy_binary() {
-  cp -a ${ETCDCTL_PACKAGE}-${ETCDCTL_VERSION} "${BOSH_INSTALL_TARGET:?}/etcdctl"
+  cp -a /var/vcap/packages/etcd/bin/etcdctl "${BOSH_INSTALL_TARGET:?}/etcdctl"
 }
 
 make_executable() {
@@ -18,21 +17,4 @@ make_executable() {
 
 main
 
-
-# Open Source Licensing Information, used by the vmware OSM system
-# These license abbreviations are defined by the OSM system
-# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
-
-ETCDCTL_LICENSE="Apache2.0"
-ETCDCTL_SOURCE_URL="https://github.com/etcd-io/etcd/archive/v${ETCDCTL_VERSION}.tar.gz"
-
-cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
-{ "packages": [
-    {
-    "name": "$ETCDCTL_PACKAGE",
-    "version": "$ETCDCTL_VERSION",
-    "url": "$ETCDCTL_SOURCE_URL",
-    "license": "$ETCDCTL_LICENSE"
-    }
-]}
-EOF
+# There is no OSL from this package because it depends on the etcd package, which outputs OSL already

@@ -23,11 +23,3 @@ bosh delete-release \
   --non-interactive \
   kubo-windows/"${KUBO_WINDOWS_GIT_SHA}" \
   || true
-bosh delete-release \
-  --non-interactive \
-  cfcr-etcd/"${ETCD_GIT_SHA}" \
-  || true
-bosh delete-release \
-  --non-interactive \
-  docker/"${DOCKER_GIT_SHA}" \
-  || true
