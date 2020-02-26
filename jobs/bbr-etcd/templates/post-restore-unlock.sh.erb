@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo "Starting etcd"
+
+TIMEOUT=60
+if timeout "$TIMEOUT" /bin/bash <<EOF
+  #!/bin/bash
+
+  until /var/vcap/bosh/bin/monit start etcd; do
+    echo "starting etcd"
+    sleep 5
+  done
+EOF
+then
+  echo "monit has started etcd"
+else
+  echo "monit was unable to start etcd after $TIMEOUT seconds"
+  exit 1
+fi
+
+if timeout "$TIMEOUT" /bin/bash <<EOF
+  #!/bin/bash
+
+  until /var/vcap/bosh/bin/monit summary | grep etcd | grep "running"; do
+    echo "waiting for etcd daemon to start"
+    sleep 5
+  done
+EOF
+then
+  echo "etcd daemon has started"
+else
+  echo "etcd daemon was unable to start after $TIMEOUT seconds"
+  exit 1
+fi

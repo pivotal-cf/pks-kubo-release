@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+if ! echo $PATH | grep -q 'etcd'; then
+  export PATH=/var/vcap/jobs/etcd/bin:$PATH
+fi

@@ -1,0 +1,7 @@
+---
+processes:
+- name: etcd
+  executable: /var/vcap/jobs/etcd/bin/etcd
+  persistent_disk: true
+  limits:
+    open_files: 100000

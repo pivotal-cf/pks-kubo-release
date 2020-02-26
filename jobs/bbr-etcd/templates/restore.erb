@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source /var/vcap/jobs/etcd/bin/utils.sh
+
+export BBR_ARTIFACT_FILE_PATH="${BBR_ARTIFACT_DIRECTORY}/snapshotdb"
+export ETCDCTL_API=3
+
+echo "Restoring etcd data"
+
+/var/vcap/packages/etcd/bin/etcdctl \
+    snapshot restore ${BBR_ARTIFACT_FILE_PATH} \
+    --name="<%= spec.id %>" \
+    --initial-cluster="${etcd_peers}" \
+    --initial-advertise-peer-urls="${etcd_peer_address}" \
+    --data-dir="/var/vcap/store/etcd"
+
+chown -R vcap:vcap /var/vcap/store/etcd

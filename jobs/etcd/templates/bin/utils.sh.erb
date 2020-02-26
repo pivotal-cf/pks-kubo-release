@@ -1,0 +1,16 @@
+<%-
+  def get_url(server, port)
+    if p('etcd.dns_suffix', false) != false
+      node_name = "#{server.name.gsub('_','-')}-#{server.index}"
+      return "https://#{node_name}.#{p('etcd.dns_suffix')}:#{port}"
+    else
+      return "https://#{server.address}:#{port}"
+    end
+  end
+-%>
+
+etcd_endpoint_address="<%= get_url(spec, 2379) %>"
+etcd_endpoints="<%= link('etcd').instances.map { |server| get_url(server, 2379) }.join(",") %>"
+
+etcd_peer_address="<%= get_url(spec, 2380) %>"
+etcd_peers="<%= link('etcd').instances.map { |server| "#{server.id}=#{get_url(server, 2380)}" }.join(",") %>"

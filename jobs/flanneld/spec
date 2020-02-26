@@ -9,7 +9,7 @@ templates:
 
 packages:
 - pid_utils
-- etcdctl
+- etcd
 - flanneld
 - cni
 

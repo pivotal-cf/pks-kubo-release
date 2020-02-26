@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -eo pipefail
+
+exec 3>&1
+exec 1>> /var/vcap/sys/log/etcd/drain.stdout.log
+exec 2>> /var/vcap/sys/log/etcd/drain.stderr.log
+
+output_for_bosh() {
+  exit_code=$?
+
+  if [ $exit_code -eq 0 ]; then
+    echo "$(date): etcd member removed"
+  else
+    echo "$(date): drain failed"
+  fi
+
+  echo $exit_code >&3
+}
+
+trap output_for_bosh EXIT
+
+export ETCDCTL_API=3
+
+if echo "${BOSH_JOB_NEXT_STATE}" | grep "\"persistent_disk\":0"; then
+  member_id="$(/var/vcap/jobs/etcd/bin/etcdctl member list | grep "<%= spec.id %>" | cut -d',' -f1)"
+  /var/vcap/jobs/etcd/bin/etcdctl member remove "${member_id}"
+fi
