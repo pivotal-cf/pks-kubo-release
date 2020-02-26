@@ -1,0 +1,91 @@
+---
+name: etcd
+
+templates:
+  bin/drain.erb: bin/drain
+  bin/ensure-member-healthy.erb: bin/ensure-member-healthy
+  bin/etcd.erb: bin/etcd
+  bin/etcdctl.erb: bin/etcdctl
+  bin/post-start.erb: bin/post-start
+  bin/pre-start.erb: bin/pre-start
+  bin/setup.erb: bin/setup
+  bin/utils.sh.erb: bin/utils.sh
+  bin/authentication-setup.erb: bin/authentication-setup
+  config/bpm.yml.erb: config/bpm.yml
+  config/etcd-ca.crt.erb: config/etcd-ca.crt
+  config/etcd.crt.erb: config/etcd.crt
+  config/etcd.key.erb: config/etcd.key
+  config/etcdctl-ca.crt.erb: config/etcdctl-ca.crt
+  config/etcdctl.crt.erb: config/etcdctl.crt
+  config/etcdctl.key.erb: config/etcdctl.key
+  config/etcdctl-root.crt.erb: config/etcdctl-root.crt
+  config/etcdctl-root.key.erb: config/etcdctl-root.key
+  config/peer-ca.crt.erb: config/peer-ca.crt
+  config/peer.crt.erb: config/peer.crt
+  config/peer.key.erb: config/peer.key
+
+packages:
+- etcd
+
+provides:
+- name: etcd
+  type: etcd
+  properties:
+  - etcd.dns_suffix
+  - tls.etcdctl.ca
+  - tls.etcdctl.certificate
+  - tls.etcdctl.private_key
+
+consumes:
+- name: etcd
+  type: etcd
+
+properties:
+  etcd.dns_suffix:
+    description: If provided, used as a DNS suffix for all nodes in the etcd cluster
+  etcd.metrics_protocol:
+    description: IF provided with etcd.metrics_port, metrics endpoints listen with the protocol. http or https.
+  etcd.metrics_port:
+    description: IF provided with etcd.metrics_protocol, metrics endpoints listen on the port. 2379 and 2380 can not be used.
+  tls.etcd.ca:
+    description: CA for etcd client and server authentication
+  tls.etcd.certificate:
+    description: Certificate for etcd client and server authentication
+  tls.etcd.private_key:
+    description: Private key for etcd client and server authentication
+  tls.etcdctl.ca:
+    description: CA for etcdctl client authentication
+  tls.etcdctl.certificate:
+    description: Certificate for etcdctl client authentication
+  tls.etcdctl.private_key:
+    description: Private key for etcdctl client authentication
+  tls.etcdctl-root.certificate:
+    description: Certificate for etcdctl client authentication with CN root
+  tls.etcdctl-root.private_key:
+    description: Private key for etcdctl client authentication with CN root
+  tls.peer.ca:
+    description: CA for peer authentication
+  tls.peer.certificate:
+    description: Certificate for peer authentication
+  tls.peer.private_key:
+    description: Private key for peer authentication
+  users:
+    description: List of user's name, permissions, path, and whether the path is a prefix. Etcd will use these info to set up rbac rules for these users
+    example: |
+      - name: root
+        password: ((etcd_user_root_password))
+        versions: [ "v2", "v3" ]
+      - name: flanneld
+        permissions:
+          read:
+          - /coreos.com/network/*
+          write:
+          - /coreos.com/network/*
+        password: ((etcd_user_flanneld_password))
+        versions: [ "v2" ]
+      - name: foo
+        permissions:
+          read:
+          - /bar
+        password: pass
+        versions: [ "v2", "v3" ]

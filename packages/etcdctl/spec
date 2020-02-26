@@ -1,7 +1,0 @@
----
-name: etcdctl
-
-dependencies:
-
-files:
-- etcdctl-3.3.17
