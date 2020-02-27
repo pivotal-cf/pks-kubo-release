@@ -25,9 +25,5 @@ bosh delete-release \
   || true
 bosh delete-release \
   --non-interactive \
-  cfcr-etcd/"${ETCD_GIT_SHA}" \
-  || true
-bosh delete-release \
-  --non-interactive \
   docker/"${DOCKER_GIT_SHA}" \
   || true

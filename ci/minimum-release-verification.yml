@@ -15,13 +15,6 @@ resources:
     branch: master
     private_key: ((pks-bot-ssh-key.private_key))
 
-- name: git-pks-cfcr-etcd-release
-  type: git
-  source:
-    uri: git@github.com:pivotal-cf/pks-cfcr-etcd-release.git
-    branch: master
-    private_key: ((git-ssh-key.private_key))
-
 - name: git-pks-docker-bosh-release
   type: git
   source:
@@ -33,7 +26,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubo-release.git
-    branch: master
+    branch: combined-release
     private_key: ((git-ssh-key.private_key))
     ignore_paths: [ci]
 
@@ -72,7 +65,6 @@ jobs:
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-pks-cfcr-etcd-release
 # add trigger:true back when we get a [slack] notification on failure, and agree to monitor env use as a team
 #      trigger: true
     - get: git-pks-kubo-release
@@ -123,25 +115,6 @@ jobs:
   - task: upload-kubo-release
     privileged: true
     file: git-boshcycle-ci/ci/minimum-release-verification/upload-kubo-release-windows/task.yml
-
-- name: upload-etcd-release
-  plan:
-  - in_parallel:
-    - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
-    - get: pool-pks-locks
-      trigger: true
-      passed: [ 'claim-lock' ]
-    - get: git-pks-cfcr-etcd-release
-      passed: [ 'claim-lock' ]
-  - task: create-bosh-config
-    tags: ['gcp']
-    input_mapping:
-      locks-repo: pool-pks-locks
-    file: git-kubo-odb-ci/tasks/create-bosh-config.yml
-  - task: upload-etcd-release
-    privileged: true
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-etcd-release/task.yml
 
 - name: upload-docker-release
   plan:
@@ -211,13 +184,10 @@ jobs:
       trigger: true
       passed:
         - 'upload-kubo-release'
-        - 'upload-etcd-release'
         - 'upload-docker-release'
         - 'upload-kubo-release-windows'
         - 'upload-linux-stemcell'
         - 'upload-windows-stemcell'
-    - get: git-pks-cfcr-etcd-release
-      passed: [ 'upload-etcd-release' ]
     - get: git-pks-docker-bosh-release
       passed: [ 'upload-docker-release' ]
     - get: git-pks-kubo-release
@@ -241,8 +211,6 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed: [ 'deploy-manifest' ]
-    - get: git-pks-cfcr-etcd-release
-      passed: [ 'deploy-manifest' ]
     - get: git-pks-docker-bosh-release
       passed: [ 'deploy-manifest' ]
     - get: git-pks-kubo-release
@@ -265,8 +233,6 @@ jobs:
     - get: git-boshcycle-ci
     - get: pool-pks-locks
       trigger: true
-      passed: [ 'run-tests' ]
-    - get: git-pks-cfcr-etcd-release
       passed: [ 'run-tests' ]
     - get: git-pks-docker-bosh-release
       passed: [ 'run-tests' ]
