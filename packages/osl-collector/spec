@@ -5,7 +5,7 @@ dependencies:
   - cifs-utils
   - cni
   - conntrack
-  - etcdctl
+  - etcd
   - flanneld
   - golang-1.12-linux
   - ipset
