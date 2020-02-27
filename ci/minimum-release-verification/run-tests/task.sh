@@ -17,6 +17,16 @@ echo ""
 
 bosh run-errand \
   -d "${DEPLOYMENT_NAME}" \
+  print-etcd-component-version \
+  --json \
+  > etcd_versions.txt
+
+echo "etcd version output:"
+cat etcd_versions.txt
+echo ""
+
+bosh run-errand \
+  -d "${DEPLOYMENT_NAME}" \
   print-kubo-windows-component-version \
   --json \
   > windows_versions.txt

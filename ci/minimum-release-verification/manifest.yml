@@ -5,8 +5,6 @@ releases:
     version: ((kubo-version))
   - name: docker
     version: ((docker-version))
-#  - name: cfcr-etcd
-#    version: ((etcd-version))
   - name: kubo-windows
     version: ((kubo-windows-version))
 
@@ -39,8 +37,8 @@ instance_groups:
         release: kubo
       - name: print-docker-component-version
         release: docker
-#      - name: print-etcd-component-version
-#        release: cfcr-etcd
+      - name: print-etcd-component-version
+        release: kubo
     vm_type: micro
     stemcell: linux
     # in megabytes
