@@ -18,5 +18,3 @@ bosh deploy \
   --var=network-name="${NETWORK_NAME}" \
   --var=first-az="${FIRST_AZ}" \
   git-boshcycle-ci/ci/minimum-release-verification/manifest.yml
-
-#   --var=etcd-version="${ETCD_GIT_SHA}" \

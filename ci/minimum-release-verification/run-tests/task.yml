@@ -7,7 +7,6 @@ image_resource:
 inputs:
   - name: pool-pks-locks
   - name: git-kubo-odb-ci
-  - name: git-pks-cfcr-etcd-release
   - name: git-pks-docker-bosh-release
   - name: git-boshcycle-ci
   - name: git-pks-kubo-release
