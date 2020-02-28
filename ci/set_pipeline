@@ -107,10 +107,10 @@ main() {
     pipeline_name=$PIPELINE_NAME
   fi
 
-  fly --target pks-bosh-lifecycle sync > /dev/null
+  fly --target pks-bosh-lifecycle-dev sync > /dev/null
   erb "${pipeline_filename}" > /dev/null
 
-  fly --target pks-bosh-lifecycle set-pipeline --pipeline "${pipeline_name}" \
+  fly --target pks-bosh-lifecycle-dev set-pipeline --pipeline "${pipeline_name}" \
     --config <(erb "${pipeline_filename}") \
     --var branch-name="${branch_name}" \
     --load-vars-from="${VAR_PATH}"
