@@ -1,5 +1,5 @@
 create_pr_payload() {
-  title="$1 upgrade $2"
+  title="bump $1 to $2"
   body="This is an auto generated PR created for $1 upgrade to $2"
   echo '{"title":"'"$title"'","body":"'"$body"'","head":"'"$3"'","base":"'"$4"'"}'
 }
@@ -29,10 +29,10 @@ EOF
   git config --global user.email "cfcr+cibot@pivotal.io"
   git config --global user.name "CFCR CI BOT"
 
-  branch_name="upgrade/${component}${tag}"
+  branch_name="bump-${component}${tag}"
   git checkout -b $branch_name
   git add .
-  git commit -m "Upgrade $component to $tag"
+  git commit -m "Bump $component to $tag"
   git push origin $branch_name
 
   # create a PR here
