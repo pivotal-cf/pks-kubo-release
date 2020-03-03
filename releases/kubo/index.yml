@@ -73,6 +73,8 @@ builds:
     version: 0.24.0
   dd20178a-f3ce-41ac-522a-4ec335faefe7:
     version: 0.38.0
+  dd776364-4d1e-4c5a-6c32-615d8f1e8298:
+    version: 1.7.0-build.77-final-releases
   e8bebc9f-b75c-40c7-5313-2058b9c11c60:
     version: 0.30.0
   ef2b4733-e080-402d-499c-4a2eff28aa4a:
