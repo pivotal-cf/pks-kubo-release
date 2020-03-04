@@ -18,10 +18,12 @@ pr_release() {
 
   if [ -n "$(git status --porcelain)" ]; then
     cat <<EOF > "config/private.yml"
+---
 blobstore:
   options:
-    access_key_id: ${ACCESS_KEY_ID}
-    secret_access_key: ${SECRET_ACCESS_KEY}
+    credentials_source: static
+    json_key: |
+$GCS_JSON_KEY
 EOF
     bosh upload-blobs
     generate_pull_request "kubernetes" "$version" "${git_repo}" "${base_branch}"
