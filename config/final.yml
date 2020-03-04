@@ -1,7 +1,7 @@
 ---
 final_name: kubo
 blobstore:
-  provider: gcp
+  provider: gcs
   options:
     bucket_name: pks-kubo-release-blobs
     region: us-east1
