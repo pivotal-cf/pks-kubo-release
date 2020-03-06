@@ -20,7 +20,8 @@ wait_for() {
 main() {
 
 <%
-  supported_addons = ['coredns', 'metrics-server']
+  #TODO: remove kubernetes-dashboard after fixing kubo-service-adapter
+  supported_addons = ['coredns', 'metrics-server', 'kubernetes-dashboard']
 
   bootstrap_addons = p('addons')
 
