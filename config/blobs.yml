@@ -54,10 +54,6 @@ container-images/vmware_coredns:1.6.2.tgz:
   size: 13962465
   object_id: 6973437f-757e-4a19-7278-0c3403f9d51c
   sha: sha256:8e5e64cf3b93a3e5c40e734deaf53420af2fbbd864dce8618158616686ece78f
-container-images/vmware_kubernetes-dashboard-amd64:v1.10.1.tgz:
-  size: 44276932
-  object_id: 5df59876-85a6-4a82-7ce0-42b02e40468f
-  sha: sha256:4a26bef5de642d089ad93db9707e1df31c0c9069d4abbea25078d1e951a48cf8
 container-images/vmware_metrics-server-amd64:v0.3.6.tgz:
   size: 12062146
   object_id: 301b9879-c1bf-42bb-6d90-f05929118056
