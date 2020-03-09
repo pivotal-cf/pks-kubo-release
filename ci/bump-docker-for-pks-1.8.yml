@@ -7,7 +7,7 @@ resource_types:
 
 
 resources:
-  - name: git-docker-boshrelease
+  - name: git-pks-docker-boshrelease
     type: git
     source:
       uri: git@github.com:pivotal-cf/pks-docker-boshrelease
@@ -33,7 +33,7 @@ jobs:
   - name: bump-docker-in-pks-kubo-release
     plan:
       - in_parallel:
-          - get: git-docker-boshrelease
+          - get: git-pks-docker-boshrelease
           - get: git-pks-kubo-release-ci
           - get: git-docker-ce-release
             trigger: true
@@ -47,7 +47,7 @@ jobs:
           run:
             path: git-pks-kubo-release-ci/ci/scripts/bump-docker.sh
           inputs:
-            - name: git-docker-boshrelease
+            - name: git-pks-docker-boshrelease
             - name: git-pks-kubo-release-ci
             - name: git-docker-ce-release
           params:
