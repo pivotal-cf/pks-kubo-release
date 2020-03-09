@@ -24,9 +24,9 @@ blobstore:
     secret_access_key: ${SECRET_ACCESS_KEY}
 EOF
     bosh upload-blobs
-    generate_pull_request "kubernetes" "$version" "${git_repo}" "${base_branch}"
+    generate_pull_request "docker" "$version" "${git_repo}" "${base_branch}"
   else
-    echo "Kubernetes version is already up-to-date"
+    echo "Docker version is already up-to-date"
   fi
 
   popd
