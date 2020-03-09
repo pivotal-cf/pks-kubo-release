@@ -1,0 +1,61 @@
+resource_types:
+  - name: github-release-with-version-filtering
+    type: docker-image
+    source:
+      repository: pcfkubo/github-release-resource
+      tag: filter-version
+
+
+resources:
+  - name: git-docker-boshrelease
+    type: git
+    source:
+      uri: git@github.com:pivotal-cf/pks-docker-boshrelease
+      branch: master
+      private_key: ((git-ssh-key.private_key))
+
+  - name: git-docker-ce-release
+    type: github-release-with-version-filtering
+    source:
+      owner: docker
+      repository: docker-ce
+      version_filter: "< 19.03.6"
+      access_token: ((github-token-key))
+
+  - name: git-pks-kubo-release-ci
+    type: git
+    source:
+      uri: git@github.com:pivotal-cf/pks-kubo-release.git
+      branch: feature/bump-docker
+      private_key: ((git-ssh-key.private_key))
+
+jobs:
+  - name: bump-docker-in-pks-kubo-release
+    plan:
+      - in_parallel:
+          - get: git-docker-boshrelease
+          - get: git-pks-kubo-release-ci
+          - get: git-docker-ce-release
+            trigger: true
+      - task: bump-docker-in-pks-kubo-release
+        config: &config
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: odpks/pks-ci
+          run:
+            path: git-pks-kubo-release-ci/ci/scripts/bump-docker.sh
+          inputs:
+            - name: git-docker-boshrelease
+            - name: git-pks-kubo-release-ci
+            - name: git-docker-ce-release
+          params:
+            BASE_BRANCH: master
+            BINARY_DIRECTORY: git-docker-ce-release
+            CFCR_USER_TOKEN: ((cfcr-git-write-token))
+            GIT_SSH_KEY: |
+              ((git-ssh-key.private_key))
+
+#  - name: bump-docker-in-pks-kubo-release-windows
+# TODO: handle windows
