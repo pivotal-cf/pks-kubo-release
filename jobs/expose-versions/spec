@@ -10,7 +10,7 @@ properties:
     description: 'The current version of etcd.  TODO: keep in sync with pks-cfcr-etcd-release
       until repos are merged'
   kubernetes-version:
-    default: 1.16.7
+    default: 1.17.3
     description: The current version of kubernetes.  THIS IS AUTOMATICALLY GENERATED,
       DO NOT MANUALLY EDIT
 provides:
