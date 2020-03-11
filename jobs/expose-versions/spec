@@ -7,14 +7,14 @@ packages: []
 
 properties:
   kubernetes-version:
-    description: The current version of kubernetes.  THIS IS AUTOMATICALLY GENERATED, DO NOT MANUALLY EDIT
-    default: 1.16.7
+    description: "The current version of kubernetes.  THIS IS AUTOMATICALLY GENERATED, DO NOT MANUALLY EDIT"
+    default: "1.16.7"
   docker-version:
-    description: The current version of docker.  TODO: keep in sync with pks-docker-boshrelease until repos are merged
-    default: 18.09.9
+    description: "The current version of docker.  TODO: keep in sync with pks-docker-boshrelease until repos are merged"
+    default: "18.09.9"
   etcd-version:
-    description: The current version of etcd.  TODO: keep in sync with pks-cfcr-etcd-release until repos are merged
-    default: 3.3.17
+    description: "The current version of etcd.  TODO: keep in sync with pks-cfcr-etcd-release until repos are merged"
+    default: "3.3.17"
 
 provides:
 - name: expose-versions
@@ -23,4 +23,3 @@ provides:
   - docker-version
   - etcd-version
   type: expose-versions
-  
