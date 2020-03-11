@@ -41,6 +41,8 @@ instance_groups:
         release: docker
 #      - name: print-etcd-component-version
 #        release: cfcr-etcd
+      - name: expose-versions
+        release: kubo
     vm_type: micro
     stemcell: linux
     # in megabytes

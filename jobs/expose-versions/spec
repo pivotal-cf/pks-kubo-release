@@ -20,4 +20,5 @@ provides:
   - docker-version
   - etcd-version
   type: expose-versions
-templates: {}
+templates:
+    run.erb: bin/run

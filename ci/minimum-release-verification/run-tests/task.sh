@@ -42,10 +42,40 @@ LINUX_VERSION="$(cat linux_versions.txt | \
   grep '^other:common-core-kubernetes:' | \
   cut -d':' -f3)"
 
+exit_code=0
+
 if [ "$WINDOWS_VERSION" == "$LINUX_VERSION" ]
 then
   echo "Versions match! $LINUX_VERSION"
+  echo ""
 else
-  echo "Version mismatch!  Linux: $LINUX_VERSION, Windows: $WINDOWS_VERSION"
-  exit 1
+  echo "********************************************"
+  echo "ERROR: Version mismatch!  Linux: $LINUX_VERSION, Windows: $WINDOWS_VERSION"
+  echo "********************************************"
+  echo ""
+  exit_code=1
 fi
+
+bosh run-errand \
+  -d "${DEPLOYMENT_NAME}" \
+  expose-versions \
+  --json \
+  > expose_versions.txt
+
+EXPOSED_KUBERNETES_VERSION="$(cat expose_versions.txt | \
+  jq .Tables[0].Rows[0].stdout --raw-output | \
+  jq .kubernetes_version --raw-output)"
+
+if [ "$LINUX_VERSION" == "$EXPOSED_KUBERNETES_VERSION" ]
+then
+  echo "Exposed version matches shipped Linux version! $LINUX_VERSION"
+  echo ""
+else
+  echo "********************************************"
+  echo "ERROR: Version mismatch!  Linux: $LINUX_VERSION, Exposed: $EXPOSED_KUBERNETES_VERSION"
+  echo "********************************************"
+  echo ""
+  exit_code=1
+fi
+
+exit $exit_code
