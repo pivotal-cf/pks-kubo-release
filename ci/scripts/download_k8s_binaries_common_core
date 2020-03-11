@@ -38,6 +38,19 @@ main() {
         sed -E -i -e "s/${existing_k8s_spec}/kubernetes-${kubernetes_version}/" spec
       popd || exit 1
 
+      pushd "jobs/expose-versions"
+        bosh int -o <(cat <<EOF
+- type: replace
+  path: /properties/kubernetes-version/default
+  value: "${kubernetes_version}"
+EOF) spec > new-spec
+        mv new-spec spec
+      popd
+
+      pushd "packages/expose-versions"
+        sed -E -i -e "s/KUBERNETES_VERSION='([0-9]+\.)+[0-9]+'/KUBERNETES_VERSION='${kubernetes_version}'/" packaging
+      popd
+
       echo "Downloading from common core"
       download_tarball_from_common_core "${kubernetes_version}" "${staging_dir}"
 
