@@ -1,0 +1,17 @@
+set -e
+
+# These values are automatically updated by bump-k8s.sh
+# DO NOT MANUALLY MODIFY THEM
+KUBERNETES_VERSION="1.16.7"
+# TODO: this should be kept in sync with pks-docker-boshrelease until we merge repos
+DOCKER_VERSION="18.09"
+# TODO: this should be kept in sync with pks-cfcr-etcd-release until we merge repos
+ETCD_VERSION="3.3.17"
+
+cat <<EOF > ${BOSH_INSTALL_TARGET}/expose-versions.json
+{
+    "kubernetes-version": "$KUBERNETES_VERSION",
+    "docker-version": "$DOCKER_VERSION",
+    "etcd-version": "$ETCD_VERSION"
+}
+EOF
