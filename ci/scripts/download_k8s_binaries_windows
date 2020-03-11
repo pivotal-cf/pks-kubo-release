@@ -24,7 +24,7 @@ main() {
 
   trap '{ rm -rf "$staging_dir"; }' EXIT
 
-  pushd "${release_dir}" || exit 1
+  pushd "${release_dir}"
 
   existing_k8s_spec=$(bosh blobs --column path | grep "${binaries[0]}" | grep -o -E "kubernetes-windows-([0-9]+\.)+[0-9]+")
   existing_k8s_version=$(echo "$existing_k8s_spec" | grep -o -E '([0-9]+\.)+[0-9]+')
@@ -43,7 +43,7 @@ main() {
     done
   fi
 
-  popd || exit 1
+  popd
 }
 
 download() {
