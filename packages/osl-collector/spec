@@ -2,9 +2,13 @@
 name: osl-collector
 
 dependencies:
+  - bosh-helpers
   - cifs-utils
   - cni
   - conntrack
+  - ctop
+  - docker
+  - docker-registry-certs
   - etcd
   - flanneld
   - golang-1.12-linux
