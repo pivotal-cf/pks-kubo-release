@@ -2,7 +2,7 @@ require 'bosh/template/test'
 require 'open3'
 
 describe 'bbr-etcd job' do
-  let(:release_dir) { File.join(File.dirname(__FILE__), '../..') }
+  let(:release_dir) { File.join(File.dirname(__FILE__), '../') }
   let(:release) { Bosh::Template::Test::ReleaseDir.new(release_dir) }
   let(:job) { release.job('bbr-etcd') }
 
