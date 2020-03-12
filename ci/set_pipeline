@@ -110,7 +110,7 @@ main() {
   fly --target pks-bosh-lifecycle sync > /dev/null
   erb "${pipeline_filename}" > /dev/null
 
-  fly --target pks-bosh-lifecycle set-pipeline --pipeline "${pipeline_name}" \
+  fly --target pks-bosh-lifecycle set-pipeline --pipeline "${pipeline_name}-osl-pipeline" \
     --config <(erb "${pipeline_filename}") \
     --var branch-name="${branch_name}" \
     --load-vars-from="${VAR_PATH}"
