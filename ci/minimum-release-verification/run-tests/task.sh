@@ -64,7 +64,7 @@ bosh run-errand \
 
 EXPOSED_KUBERNETES_VERSION="$(cat expose_versions.txt | \
   jq .Tables[0].Rows[0].stdout --raw-output | \
-  jq .kubernetes_version --raw-output)"
+  jq '.["kubernetes-version"]' --raw-output)"
 
 if [ "$LINUX_VERSION" == "$EXPOSED_KUBERNETES_VERSION" ]
 then
