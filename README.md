@@ -6,6 +6,7 @@ A [BOSH](http://bosh.io/) release for [Kubernetes](http://kubernetes.io).  Forme
 
 # Table of Contents
 <!-- vscode-markdown-toc -->
+* [Tests](#Tests)
 * [Prerequisites](#Prerequisites)
   * [Hardware Requirements](#HardwareRequirements)
 * [Deploying CFCR](#DeployingCFCR)
@@ -25,6 +26,14 @@ A [BOSH](http://bosh.io/) release for [Kubernetes](http://kubernetes.io).  Forme
 	autoSave=true
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
+
+## <a name='Tests'></a>Tests
+To run tests, run these commands:
+```
+bundle install
+gem install rspec
+rspec
+```
 
 ##  <a name='Prerequisites'></a>Prerequisites
 - A BOSH Director configured with UAA, Credhub, and [BOSH DNS runtime config](https://raw.githubusercontent.com/cloudfoundry/bosh-deployment/master/runtime-configs/dns.yml). We recommend using [BOSH Bootloader](https://github.com/cloudfoundry/bosh-bootloader) for this.
