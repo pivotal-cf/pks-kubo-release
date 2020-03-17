@@ -18,8 +18,7 @@ A [BOSH](http://bosh.io/) release for [Kubernetes](http://kubernetes.io).  Forme
 * [DNS](#DNS)
 * [Deprecations](#Deprecations)
   * [Deployment scripts and docs](#Deploymentscriptsanddocs)
-  * [Heapster](#Heapster)
-
+ 
 <!-- vscode-markdown-toc-config
 	numbering=true
 	autoSave=true
@@ -155,9 +154,3 @@ CFCR had a set of scripts, including `deploy_bosh` and `deploy_k8s`, that were t
 
 The BOSH oriented method documented in this README.md is the supported method to deploy Kubernetes clusters with CFCR.
 
-###  <a name='Heapster'></a>Heapster
-K8s 1.11 release kicked off the deprecation timeline for the Heapster component, see [here](https://github.com/kubernetes/heapster/blob/master/docs/deprecation.md) for more info. As a result, we're in the process of replacing Heapster with [Metrics Server](https://github.com/kubernetes-incubator/metrics-server) in the upcoming releases of kubo-release.
-
-Heapster can be removed by running: 
-
-`kubectl delete deployment -n kube-system heapster`
