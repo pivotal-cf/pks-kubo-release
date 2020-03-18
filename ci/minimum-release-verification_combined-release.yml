@@ -15,13 +15,6 @@ resources:
     branch: master
     private_key: ((pks-bot-ssh-key.private_key))
 
-- name: git-pks-docker-bosh-release
-  type: git
-  source:
-    uri: git@github.com:pivotal-cf/pks-docker-boshrelease.git
-    branch: master
-    private_key: ((git-ssh-key.private_key))
-
 - name: git-pks-kubo-release
   type: git
   source:
@@ -71,8 +64,6 @@ jobs:
 #      trigger: true
     - get: git-pks-kubo-release-windows
 #      trigger: true
-    - get: git-pks-docker-bosh-release
-#      trigger: true
     - get: pool-pks-locks
   - put: pool-pks-locks
     params:
@@ -115,25 +106,6 @@ jobs:
   - task: upload-kubo-release
     privileged: true
     file: git-boshcycle-ci/ci/minimum-release-verification/upload-kubo-release-windows/task.yml
-
-- name: upload-docker-release
-  plan:
-  - in_parallel:
-    - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
-    - get: pool-pks-locks
-      trigger: true
-      passed: [ 'claim-lock' ]
-    - get: git-pks-docker-bosh-release
-      passed: [ 'claim-lock' ]
-  - task: create-bosh-config
-    tags: ['gcp']
-    input_mapping:
-      locks-repo: pool-pks-locks
-    file: git-kubo-odb-ci/tasks/create-bosh-config.yml
-  - task: upload-docker-release
-    privileged: true
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-docker-release/task.yml
 
 - name: upload-linux-stemcell
   plan:
@@ -184,12 +156,9 @@ jobs:
       trigger: true
       passed:
         - 'upload-kubo-release'
-        - 'upload-docker-release'
         - 'upload-kubo-release-windows'
         - 'upload-linux-stemcell'
         - 'upload-windows-stemcell'
-    - get: git-pks-docker-bosh-release
-      passed: [ 'upload-docker-release' ]
     - get: git-pks-kubo-release
       passed: [ 'upload-kubo-release' ]
     - get: git-pks-kubo-release-windows
@@ -211,8 +180,6 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed: [ 'deploy-manifest' ]
-    - get: git-pks-docker-bosh-release
-      passed: [ 'deploy-manifest' ]
     - get: git-pks-kubo-release
       passed: [ 'deploy-manifest' ]
     - get: git-pks-kubo-release-windows
@@ -233,8 +200,6 @@ jobs:
     - get: git-boshcycle-ci
     - get: pool-pks-locks
       trigger: true
-      passed: [ 'run-tests' ]
-    - get: git-pks-docker-bosh-release
       passed: [ 'run-tests' ]
     - get: git-pks-kubo-release
       passed: [ 'run-tests' ]
