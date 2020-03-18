@@ -3,8 +3,6 @@ name: ((deployment-name))
 releases:
   - name: kubo
     version: ((kubo-version))
-  - name: docker
-    version: ((docker-version))
   - name: kubo-windows
     version: ((kubo-windows-version))
 
@@ -34,10 +32,6 @@ instance_groups:
     # lifecycle: errand
     jobs:
       - name: print-component-version
-        release: kubo
-      - name: print-docker-component-version
-        release: docker
-      - name: print-etcd-component-version
         release: kubo
     vm_type: micro
     stemcell: linux
