@@ -64,6 +64,7 @@ jobs:
     - get: git-boshcycle-ci
     - get: pool-pks-locks
       trigger: true
+      passed: [ 'claim-lock' ]
     - get: git-pks-kubo-release
     - get: git-pks-kubo-release-windows
   - task: create-bosh-config
@@ -73,7 +74,7 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: deploy-release
     privileged: true
-    file: git-boshcycle-ci/ci/minimum-release-verification/deploy-manifest/task.yml
+    file: git-boshcycle-ci/ci/open-source-management/deploy-manifest.yml
 
 - name: generate-osm
   plan:

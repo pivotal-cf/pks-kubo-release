@@ -3,9 +3,10 @@
 set -euxo pipefail
 
 source git-boshcycle-ci/ci/utils/use-bosh.sh
+source git-boshcycle-ci/ci/open-source-management/deployment-name.sh
 
 bosh run-errand \
-  -d "DEPLOYMENT_OSM" \
+  -d "${DEPLOYMENT_NAME}" \
   print-component-version \
   --json \
   > linux_versions.txt
@@ -15,7 +16,7 @@ cat linux_versions.txt
 echo ""
 
 bosh run-errand \
-  -d "DEPLOYMENT_OSM" \
+  -d "${DEPLOYMENT_NAME}" \
   print-kubo-windows-component-version \
   --json \
   > windows_versions.txt
