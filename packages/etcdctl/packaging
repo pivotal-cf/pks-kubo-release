@@ -1,0 +1,21 @@
+set -e
+
+ETCDCTL_PACKAGE=etcdctl
+ETCDCTL_VERSION="3.3.12"
+
+main() {
+  copy_binary
+  make_executable
+}
+
+copy_binary() {
+  cp -a /var/vcap/packages/etcd/bin/etcdctl "${BOSH_INSTALL_TARGET:?}/etcdctl"
+}
+
+make_executable() {
+  chmod +x "${BOSH_INSTALL_TARGET:?}/etcdctl"
+}
+
+main
+
+# There is no OSL from this package because it depends on the etcd package, which outputs OSL already
