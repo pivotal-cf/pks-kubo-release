@@ -72,7 +72,7 @@ EOL
     if_p('port') { |port| network_conf['Backend']['Port'] = port }
     if_p('vni') { |vni| network_conf['Backend']['VNI'] = vni }
   %>
-  /var/vcap/packages/etcd/bin/etcdctl \
+  /var/vcap/packages/etcdctl/etcdctl \
     --endpoints <%= etcd_endpoints %> \
     --cert-file /var/vcap/jobs/flanneld/config/etcd-client.crt \
     --key-file /var/vcap/jobs/flanneld/config/etcd-client.key \
