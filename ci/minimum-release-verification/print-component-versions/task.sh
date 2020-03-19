@@ -49,10 +49,3 @@ else
   echo "Version mismatch!  Linux: $LINUX_VERSION, Windows: $WINDOWS_VERSION"
   exit 1
 fi
-
-## OSL-PIPELINE
-echo "OSL-PIPELINE SAYS: "
-echo "windows_versions: "
-cat windows_versions.txt
-echo "linux versions: "
-cat linux_versions.txt

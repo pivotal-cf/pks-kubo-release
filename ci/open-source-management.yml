@@ -1,0 +1,146 @@
+---
+resources:
+- name: pool-pks-locks
+  type: pool
+  source:
+    uri: git@github.com:pivotal-cf/pks-locks.git
+    pool: gcp-flannel-om25-terraform
+    branch: master
+    private_key: ((pks-bot-ssh-key.private_key))
+
+- name: git-kubo-odb-ci
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/kubo-odb-ci
+    branch: master
+    private_key: ((pks-bot-ssh-key.private_key))
+
+- name: git-pks-kubo-release
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pks-kubo-release.git
+    branch: master
+    private_key: ((git-ssh-key.private_key))
+    ignore_paths: [ci]
+
+# redeclare the same git resource to isolate the CI as something that can rapidly change
+# without triggering or requiring passed
+- name: git-boshcycle-ci
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pks-kubo-release.git
+    branch: osl-pipeline
+    private_key: ((git-ssh-key.private_key))
+    paths: [ci]
+
+- name: git-pks-kubo-release-windows
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pks-kubo-release-windows.git
+    branch: master
+    private_key: ((git-ssh-key.private_key))
+
+- name: gcp-linux-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-xenial-go_agent
+    version_family: "456.30"
+  type: bosh-io-stemcell
+
+- name: gcp-windows-stemcell
+  source:
+    name: bosh-google-kvm-windows2019-go_agent
+    version_family: "2019.12"
+  type: bosh-io-stemcell
+
+jobs:
+- name: claim-lock
+  max_in_flight: 1
+  plan:
+  - in_parallel:
+    - get: git-kubo-odb-ci
+# add trigger:true back when we get a [slack] notification on failure, and agree to monitor env use as a team
+#      trigger: true
+    - get: git-pks-kubo-release
+#      trigger: true
+    - get: git-pks-kubo-release-windows
+#      trigger: true
+    - get: pool-pks-locks
+  - put: pool-pks-locks
+    params:
+      acquire: true
+
+- name: deploy-manifest
+  plan:
+  - in_parallel:
+    - get: git-kubo-odb-ci
+    - get: git-boshcycle-ci
+    - get: pool-pks-locks
+      trigger: true
+      passed:
+        - 'upload-kubo-release'
+        - 'upload-etcd-release'
+        - 'upload-docker-release'
+        - 'upload-kubo-release-windows'
+        - 'upload-linux-stemcell'
+        - 'upload-windows-stemcell'
+    - get: git-pks-cfcr-etcd-release
+      passed: [ 'upload-etcd-release' ]
+    - get: git-pks-docker-bosh-release
+      passed: [ 'upload-docker-release' ]
+    - get: git-pks-kubo-release
+      passed: [ 'upload-kubo-release' ]
+    - get: git-pks-kubo-release-windows
+      passed: [ 'upload-kubo-release-windows' ]
+  - task: create-bosh-config
+    tags: ['gcp']
+    input_mapping:
+      locks-repo: pool-pks-locks
+    file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+  - task: deploy-release
+    privileged: true
+    file: git-boshcycle-ci/ci/minimum-release-verification/deploy-manifest/task.yml
+
+- name: generate-osm
+  plan:
+  - in_parallel:
+    - get: git-kubo-odb-ci
+    - get: git-boshcycle-ci
+    - get: pool-pks-locks
+      trigger: true
+      passed: [ 'deploy-manifest' ]
+    - get: git-pks-kubo-release
+      passed: [ 'deploy-manifest' ]
+    - get: git-pks-kubo-release-windows
+      passed: [ 'deploy-manifest' ]
+  - task: create-bosh-config
+    tags: ['gcp']
+    input_mapping:
+      locks-repo: pool-pks-locks
+    file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+  - task: run-tests
+    privileged: true
+    file: git-boshcycle-ci/ci/open-source-management/generate-osm.yml
+
+- name: cleanup
+  plan:
+  - in_parallel:
+    - get: git-kubo-odb-ci
+    - get: git-boshcycle-ci
+    - get: pool-pks-locks
+      trigger: true
+      passed: [ 'run-tests' ]
+    - get: git-pks-kubo-release
+      passed: [ 'run-tests' ]
+    - get: git-pks-kubo-release-windows
+      passed: [ 'run-tests' ]
+  - task: create-bosh-config
+    tags: ['gcp']
+    input_mapping:
+      locks-repo: pool-pks-locks
+    file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+  - task: delete-release
+    privileged: true
+    file: git-boshcycle-ci/ci/open-source-management/cleanup.yml
+  - put: pool-pks-locks
+    params:
+      release: pool-pks-locks
