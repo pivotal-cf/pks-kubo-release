@@ -10,21 +10,10 @@ cleanupKubo() {
 
   if [ -d "$1" ]
   then
-    #####################
-    # Delete Deployment #
-    #####################
     bosh delete-deployment \
       --non-interactive \
       --deployment="${deployment}" \
       || true
   fi
-
-  ###################
-  # Delete Release  #
-  ###################
-  bosh delete-release \
-    --non-interactive \
-    kubo/"${KUBO_GIT_SHA}" \
-    || true
 }
 
