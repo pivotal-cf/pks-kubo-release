@@ -40,18 +40,6 @@ resources:
     branch: master
     private_key: ((git-ssh-key.private_key))
 
-- name: gcp-linux-stemcell
-  source:
-    name: bosh-google-kvm-ubuntu-xenial-go_agent
-    version_family: "456.30"
-  type: bosh-io-stemcell
-
-- name: gcp-windows-stemcell
-  source:
-    name: bosh-google-kvm-windows2019-go_agent
-    version_family: "2019.12"
-  type: bosh-io-stemcell
-
 jobs:
 - name: claim-lock
   max_in_flight: 1
@@ -76,21 +64,8 @@ jobs:
     - get: git-boshcycle-ci
     - get: pool-pks-locks
       trigger: true
-      passed:
-        - 'upload-kubo-release'
-        - 'upload-etcd-release'
-        - 'upload-docker-release'
-        - 'upload-kubo-release-windows'
-        - 'upload-linux-stemcell'
-        - 'upload-windows-stemcell'
-    - get: git-pks-cfcr-etcd-release
-      passed: [ 'upload-etcd-release' ]
-    - get: git-pks-docker-bosh-release
-      passed: [ 'upload-docker-release' ]
     - get: git-pks-kubo-release
-      passed: [ 'upload-kubo-release' ]
     - get: git-pks-kubo-release-windows
-      passed: [ 'upload-kubo-release-windows' ]
   - task: create-bosh-config
     tags: ['gcp']
     input_mapping:
@@ -128,11 +103,11 @@ jobs:
     - get: git-boshcycle-ci
     - get: pool-pks-locks
       trigger: true
-      passed: [ 'run-tests' ]
+      passed: [ 'generate-osm' ]
     - get: git-pks-kubo-release
-      passed: [ 'run-tests' ]
+      passed: [ 'generate-osm' ]
     - get: git-pks-kubo-release-windows
-      passed: [ 'run-tests' ]
+      passed: [ 'generate-osm' ]
   - task: create-bosh-config
     tags: ['gcp']
     input_mapping:
