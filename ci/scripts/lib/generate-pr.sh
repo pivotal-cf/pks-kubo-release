@@ -26,8 +26,8 @@ EOF
   trap "kill $SSH_AGENT_PID" 0
   ssh-add ~/.ssh/id_rsa
 
-  git config --global user.email "cfcr+cibot@pivotal.io"
-  git config --global user.name "CFCR CI BOT"
+  git config --global user.email "pks-bosh-lifecycle+cibot@pivotal.io"
+  git config --global user.name "PKS BOSH LIFECYCLE CI BOT"
 
   branch_name="bump-${component}${tag}"
   git checkout -b $branch_name
@@ -37,5 +37,5 @@ EOF
 
   # create a PR here
   payload=$(create_pr_payload "$component" "$tag" "$branch_name" "$base_branch")
-  curl -u "cfcr:${CFCR_USER_TOKEN}" -H "Content-Type: application/json" -X POST -d "$payload" "https://api.github.com/repos/pivotal-cf/${repo}/pulls" --fail
+  curl -u "pks-bosh-lifecycle:${GIT_USER_TOKEN}" -H "Content-Type: application/json" -X POST -d "$payload" "https://api.github.com/repos/pivotal-cf/${repo}/pulls" --fail
 }
