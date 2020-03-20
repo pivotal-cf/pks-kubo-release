@@ -4,3 +4,5 @@ blobstore:
   provider: gcs
   options:
     bucket_name: pks-kubo-release-blobs
+    region: us-east1
+    host: storage.googleapis.com
