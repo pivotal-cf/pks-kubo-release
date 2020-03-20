@@ -19,7 +19,6 @@ resources:
     repository: kubernetes
     # only patches get updated
     version_filter: "< 1.16.0"
-    access_token: ((github-token-key))
 
 - name: gcs-kubernetes-windows
   type: gcs-resource

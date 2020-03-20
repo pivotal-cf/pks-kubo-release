@@ -19,8 +19,6 @@ resources:
     repository: kubernetes
     # only patches get updated
     version_filter: "< 1.14.0"
-    access_token: ((github-token-key))
-
 
 - name: git-pks-kubo-release
   type: git
