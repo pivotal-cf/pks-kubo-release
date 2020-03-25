@@ -13,6 +13,8 @@ main() {
   docker_version=$1
   release_dir=$2
 
+  staging_dir=$(mktemp -d)
+
   trap '{ rm -rf "$staging_dir"; }' EXIT
 
   pushd "$release_dir" || exit 1
@@ -28,10 +30,10 @@ main() {
       zip_url=$(curl https://dockermsft.azureedge.net/dockercontainer/DockerMsftIndex.json \
         | jq ".versions.\"$docker_version\".url" -r)
 
-      wget -O "docker-${hyphenated_docker_version}.zip" "$zip_url"
+      wget -O "${staging_dir}/docker-${hyphenated_docker_version}.zip" "$zip_url"
 
       remove_blob
-      add_blob "docker-${hyphenated_docker_version}.zip"
+      add_blob "${staging_dir}" "docker-${hyphenated_docker_version}.zip"
     fi
   popd || exit 1
 }
@@ -42,10 +44,10 @@ remove_blob() {
 }
 
 add_blob() {
-  local binary_name
+  local staging_dir binary_name
   binary_name="$1"
 
-  bosh add-blob ${binary_name} "docker-windows/$binary_name"
+  bosh add-blob "${staging_dir}/${binary_name}" "docker-windows/$binary_name"
 }
 
 main "$@"

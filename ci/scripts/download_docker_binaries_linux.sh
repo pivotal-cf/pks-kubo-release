@@ -13,6 +13,8 @@ main() {
   docker_version=$1
   release_dir=$2
 
+  staging_dir=$(mktemp -d)
+
   trap '{ rm -rf "$staging_dir"; }' EXIT
 
   pushd "$release_dir" || exit 1
@@ -29,10 +31,10 @@ main() {
         sed -E -i -e "s/${existing_docker_spec}/docker-${docker_version}/" spec
       popd || exit 1
 
-      wget https://download.docker.com/linux/static/stable/x86_64/docker-${docker_version}.tgz -O docker-${docker_version}.tgz
+      wget https://download.docker.com/linux/static/stable/x86_64/docker-${docker_version}.tgz -O ${staging_dir}/docker-${docker_version}.tgz
 
       remove_blob
-      add_blob "docker-${docker_version}.tgz" "${docker_version}"
+      add_blob "$staging_dir" "docker-${docker_version}.tgz"
     fi
   popd || exit 1
 }
@@ -43,11 +45,11 @@ remove_blob() {
 }
 
 add_blob() {
-  local binary_name docker_version
-  binary_name="$1"
-  docker_version="$2"
+  local staging_dir binary_name
+  staging_dor="$1"
+  binary_name="$2"
 
-  bosh add-blob "docker-${docker_version}.tgz" "docker/$binary_name"
+  bosh add-blob "${staging_dir}/${binary_name}" "docker/$binary_name"
 }
 
 main "$@"
