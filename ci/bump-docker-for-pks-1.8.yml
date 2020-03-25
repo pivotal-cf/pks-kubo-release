@@ -35,11 +35,11 @@ resources:
       paths: [ci]
 
   - name: git-pks-kubo-release-windows
-      type: git
-      source:
-        uri: git@github.com:pivotal-cf/pks-kubo-release-windows
-        branch: master
-        private_key: ((pks-bot-ssh-key.private_key))
+    type: git
+    source:
+      uri: git@github.com:pivotal-cf/pks-kubo-release-windows
+      branch: master
+      private_key: ((pks-bot-ssh-key.private_key))
 
 jobs:
   - name: bump-docker-in-pks-kubo-release
