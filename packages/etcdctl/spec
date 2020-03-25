@@ -4,4 +4,4 @@ name: etcdctl
 dependencies:
 
 files:
-- etcdctl-3.3.17
+- etcdctl-3.4.5

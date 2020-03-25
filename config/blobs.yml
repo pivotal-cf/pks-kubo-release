@@ -70,10 +70,10 @@ container-images/vmware_pause:3.1.tgz:
   size: 314768
   object_id: 2224d7c6-0395-49ea-7356-0b04d413e8ae
   sha: sha256:8b7f7da2677ac899f712ea89cb2f0683f8a42c8cd339512c58df0aa4d162e8cb
-etcdctl-3.3.17:
-  size: 17770784
-  object_id: c018cb11-7692-489f-4d73-83be55c33dac
-  sha: sha256:dd0ac971beefb8bc2b655b78851b08a9a5b717ca87ca20540237c4d17fa385d0
+etcdctl-3.4.5:
+  size: 17306787
+  object_id: 223327d9-8ab3-49a5-7aad-be61fdf6bb46
+  sha: sha256:3d65174481aac0f8d1d61f561d4d5d024d2ab77d86bb23f1cb8f0771422c08d8
 flannel-v0.11.0-linux-amd64.tar.gz:
   size: 9565743
   object_id: 83064ebe-b45d-4d41-694a-b1e61a781250
