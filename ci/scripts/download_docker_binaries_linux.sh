@@ -46,7 +46,7 @@ remove_blob() {
 
 add_blob() {
   local staging_dir binary_name
-  staging_dor="$1"
+  staging_dir="$1"
   binary_name="$2"
 
   bosh add-blob "${staging_dir}/${binary_name}" "docker/$binary_name"
