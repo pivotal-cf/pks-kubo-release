@@ -16,26 +16,22 @@ main() {
   trap '{ rm -rf "$staging_dir"; }' EXIT
 
   pushd "$release_dir" || exit 1
+    # the zip file used by windows has hyphens instead of dots in the version, so it looks like docker-19-03-5.zip
+    # this has subtle implications on the regexes and logic used here compared to the linux script
+    existing_docker_spec=$(bosh blobs --column path | grep "docker-windows" | grep -o -E "docker-([0-9]+-)+[0-9]+")
+    existing_docker_version=$(echo "$existing_docker_spec" | grep -o -E '([0-9]+\-)+[0-9]+')
+    hyphenated_docker_version=$(echo "$docker_version" | sed "s/\\./-/g")
 
-    existing_docker_spec=$(bosh blobs --column path | grep "docker-" | grep -o -E "docker-([0-9]+\.)+[0-9]+")
-    existing_docker_version=$(echo "$existing_docker_spec" | grep -o -E '([0-9]+\.)+[0-9]+')
-
-    if [ "$existing_docker_version" == "$docker_version" ]; then
+    if [ "$existing_docker_version" == "$hyphenated_docker_version" ]; then
         echo "Docker version already up-to-date."
     else
-      pushd "packages/docker" || exit 1
-        # change version number found in string like DOCKER_VERSION="1.16.3"
-        sed -E -i -e "s/DOCKER_VERSION=\"([0-9]+\.)+[0-9]+\"/DOCKER_VERSION=\"${docker_version}\"/" packaging
-        sed -E -i -e "s/${existing_docker_spec}/docker-${docker_version}/" spec
-      popd || exit 1
-
       zip_url=$(curl https://dockermsft.azureedge.net/dockercontainer/DockerMsftIndex.json \
         | jq ".versions.\"$docker_version\".url" -r)
 
-      wget -O "docker-${docker_version}.zip" "$zip_url"
+      wget -O "docker-${hyphenated_docker_version}.zip" "$zip_url"
 
       remove_blob
-      add_blob "docker-${docker_version}.zip" "${docker_version}"
+      add_blob "docker-${hyphenated_docker_version}.zip"
     fi
   popd || exit 1
 }
@@ -46,11 +42,10 @@ remove_blob() {
 }
 
 add_blob() {
-  local binary_name docker_version
+  local binary_name
   binary_name="$1"
-  docker_version="$2"
 
-  bosh add-blob "docker-${docker_version}.tgz" "docker/$binary_name"
+  bosh add-blob ${binary-name} "docker-windows/$binary_name"
 }
 
 main "$@"
