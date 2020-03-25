@@ -1,3 +1,7 @@
+# Apply me with this command:
+# 1) be inside CI folder
+# 2) ./set_pipeline bump-docker-for-pks-1.8
+
 resource_types:
   - name: github-release-with-version-filtering
     type: docker-image
@@ -12,7 +16,7 @@ resources:
     source:
       uri: git@github.com:pivotal-cf/pks-docker-boshrelease
       branch: master
-      private_key: ((git-ssh-key.private_key))
+      private_key: ((pks-bot-ssh-key.private_key))
 
   - name: git-docker-ce-release
     type: github-release-with-version-filtering
@@ -20,14 +24,14 @@ resources:
       owner: docker
       repository: docker-ce
       version_filter: "< 19.03.6"
-      access_token: ((github-token-key))
+      access_token: ((git-write-token))
 
   - name: git-pks-kubo-release-ci
     type: git
     source:
       uri: git@github.com:pivotal-cf/pks-kubo-release.git
       branch: feature/bump-docker
-      private_key: ((git-ssh-key.private_key))
+      private_key: ((pks-bot-ssh-key.private_key))
 
 jobs:
   - name: bump-docker-in-pks-kubo-release
@@ -52,10 +56,11 @@ jobs:
             - name: git-docker-ce-release
           params:
             BASE_BRANCH: master
+            BLOBSTORE_GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
             BINARY_DIRECTORY: git-docker-ce-release
-            CFCR_USER_TOKEN: ((cfcr-git-write-token))
+            CFCR_USER_TOKEN: ((git-write-token))
             GIT_SSH_KEY: |
-              ((git-ssh-key.private_key))
+              ((pks-bot-ssh-key.private_key))
 
 #  - name: bump-docker-in-pks-kubo-release-windows
 # TODO: handle windows
