@@ -29,7 +29,7 @@ EOF
   git config --global user.email "pks-bosh-lifecycle+cibot@pivotal.io"
   git config --global user.name "PKS BOSH LIFECYCLE CI BOT"
 
-  branch_name="bump-${component}${tag}"
+  branch_name="bump-${component}-${tag}"
   git checkout -b $branch_name
   git add .
   git commit -m "Bump $component to $tag"

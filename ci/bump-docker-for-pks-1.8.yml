@@ -15,7 +15,7 @@ resources:
     type: git
     source:
       uri: git@github.com:pivotal-cf/pks-docker-boshrelease
-      branch: master
+      branch: bump-prep
       private_key: ((pks-bot-ssh-key.private_key))
 
   - name: git-docker-ce-release

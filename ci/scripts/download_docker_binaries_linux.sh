@@ -31,18 +31,21 @@ main() {
 
       wget https://download.docker.com/linux/static/stable/x86_64/docker-${docker_version}.tgz -O docker-${docker_version}.tgz
 
+      remove_blob
       add_blob "docker-${docker_version}.tgz" "${docker_version}"
     fi
   popd || exit 1
 }
 
+remove_blob() {
+  blob_name=$(bosh blobs --column path | grep "docker/docker-" | xargs)
+  bosh remove-blob "$blob_name"
+}
+
 add_blob() {
-  local binary_name blob_name docker_version
+  local binary_name docker_version
   binary_name="$1"
   docker_version="$2"
-  blob_name=$(bosh blobs --column path | grep "${binary_name}\s$" | xargs)
-
-  bosh remove-blob "$blob_name"
 
   bosh add-blob "docker-${docker_version}.tgz" "docker/$binary_name"
 }
