@@ -45,7 +45,7 @@ add_blob() {
   local binary_name
   binary_name="$1"
 
-  bosh add-blob ${binary-name} "docker-windows/$binary_name"
+  bosh add-blob ${binary_name} "docker-windows/$binary_name"
 }
 
 main "$@"
