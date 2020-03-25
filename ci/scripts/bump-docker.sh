@@ -35,9 +35,7 @@ EOF
 }
 
 main() {
-
   if [ "${REPO:-}" == "windows" ]; then
-    # TODO: ensure these are correct
     git_repo="pks-kubo-release-windows"
     script_name="download_docker_binaries_windows.sh"
   else
