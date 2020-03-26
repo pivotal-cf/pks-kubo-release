@@ -77,7 +77,7 @@ EOL
     --cert-file /var/vcap/jobs/flanneld/config/etcd-client.crt \
     --key-file /var/vcap/jobs/flanneld/config/etcd-client.key \
     --ca-file /var/vcap/jobs/flanneld/config/etcd-ca.crt \
-    set /coreos.com/network/config '<%= JSON.dump(network_conf) %>'
+    put /coreos.com/network/config '<%= JSON.dump(network_conf) %>'
 
   flanneld -etcd-endpoints=<%= etcd_endpoints %> \
     --ip-masq \
