@@ -11,7 +11,6 @@ pr_release() {
 
   concourse_base_name="git-${git_repo}"
 
-  cp -r "${concourse_base_name}/." "${concourse_base_name}-output"
   pushd "${concourse_base_name}-output"
 
   ../git-pks-kubo-release-ci/ci/scripts/$script_name $version $(pwd)
@@ -44,8 +43,12 @@ main() {
   fi
 
   # BINARY_DIRECTORY should be declared in the pipeline via params
-  version=$(cat "$PWD/$BINARY_DIRECTORY/version")
-  pr_release "$version" "$git_repo" "$script_name" "${BASE_BRANCH}"
+  kubernetes_version=$(cat "$PWD/$BINARY_DIRECTORY/version")
+  curl -o k8s-dependencies.yml https://raw.githubusercontent.com/kubernetes/kubernetes/v${kubernetes_version}/build/dependencies.yaml
+  minor_docker_version=$(cat k8s-dependencies.yml | yq '.dependencies[] | select(.name == "docker") | .version')
+  curl -o DockerMsftIndex.json https://dockermsft.azureedge.net/dockercontainer/DockerMsftIndex.json
+  docker_version=$(cat DockerMsftIndex.json | jq ".channels[\"${minor_docker_version}\"].version" -r)
+  pr_release "$docker_version" "$git_repo" "$script_name" "${BASE_BRANCH}"
 }
 
 main $@

@@ -94,6 +94,8 @@ jobs:
           - name: git-pks-kubo-release-ci
           - name: git-pks-kubo-release-windows
           - name: gcs-kubernetes-windows
+        outputs:
+          - name: git-pks-kubo-release-windows-output
         params:
           REPO: windows
           BASE_BRANCH: master
@@ -103,3 +105,32 @@ jobs:
           CFCR_USER_TOKEN: ((cfcr-git-write-token))
           GIT_SSH_KEY: |
             ((git-ssh-key.private_key))
+
+- name: bump-docker-in-pks-kubo-release-windows
+  plan:
+    - in_parallel:
+        - get: git-pks-kubo-release-ci
+          passed: ["bump-k8s-in-pks-kubo-release-windows"]
+        - get: git-pks-kubo-release-windows
+          passed: ["bump-k8s-in-pks-kubo-release-windows"]
+        - get: gcs-kubernetes-windows
+          passed: ["bump-k8s-in-pks-kubo-release-windows"]
+          trigger: true
+    - task: bump-docker-in-pks-kubo-release-windows
+        config:
+          <<: *config
+          run:
+            path: git-pks-kubo-release-ci/ci/scripts/bump-docker.sh
+          inputs:
+            - name: git-pks-kubo-release-ci
+            - name: git-pks-kubo-release-windows
+            - name: git-pks-kubo-release-windows-output
+            - name: gcs-kubernetes-windows
+          params:
+            REPO: windows
+            BASE_BRANCH: master
+            BLOBSTORE_GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
+            BINARY_DIRECTORY: gcs-kubernetes-windows
+            CFCR_USER_TOKEN: ((git-write-token))
+            GIT_SSH_KEY: |
+              ((pks-bot-ssh-key.private_key))
