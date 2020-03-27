@@ -19,8 +19,6 @@ resources:
     repository: kubernetes
     # only patches get updated
     version_filter: "< 1.14.0"
-    access_token: ((github-token-key))
-
 
 - name: git-pks-kubo-release
   type: git
@@ -61,8 +59,7 @@ jobs:
         BASE_BRANCH: 1.4.x
         BINARY_DIRECTORY: k8s-release
         USE_COMMON_CORE: false
-        ACCESS_KEY_ID: ((gcs-access-key-id))
-        SECRET_ACCESS_KEY: ((gcs-secret-access-key))
-        CFCR_USER_TOKEN: ((cfcr-git-write-token))
+        GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
+        GIT_USER_TOKEN: ((git-write-token))
         GIT_SSH_KEY: |
           ((git-ssh-key.private_key))
