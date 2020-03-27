@@ -72,9 +72,8 @@ jobs:
         BASE_BRANCH: master
         BINARY_DIRECTORY: s3-kubernetes-common-core-linux
         USE_COMMON_CORE: true
-        ACCESS_KEY_ID: ((gcs-access-key-id))
-        SECRET_ACCESS_KEY: ((gcs-secret-access-key))
-        CFCR_USER_TOKEN: ((cfcr-git-write-token))
+        GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
+        GIT_USER_TOKEN: ((git-write-token))
         GIT_SSH_KEY: |
           ((git-ssh-key.private_key))
 
@@ -100,9 +99,8 @@ jobs:
           REPO: windows
           BASE_BRANCH: master
           BINARY_DIRECTORY: gcs-kubernetes-windows
-          ACCESS_KEY_ID: ((gcs-access-key-id))
-          SECRET_ACCESS_KEY: ((gcs-secret-access-key))
-          CFCR_USER_TOKEN: ((cfcr-git-write-token))
+          GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
+          GIT_USER_TOKEN: ((git-write-token))
           GIT_SSH_KEY: |
             ((git-ssh-key.private_key))
 
@@ -129,8 +127,8 @@ jobs:
         params:
           REPO: windows
           BASE_BRANCH: master
-          BLOBSTORE_GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
           BINARY_DIRECTORY: gcs-kubernetes-windows
-          CFCR_USER_TOKEN: ((git-write-token))
+          GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
+          GIT_USER_TOKEN: ((git-write-token))
           GIT_SSH_KEY: |
             ((pks-bot-ssh-key.private_key))

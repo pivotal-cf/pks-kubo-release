@@ -22,7 +22,7 @@ blobstore:
   options:
     credentials_source: static
     json_key: |
-  $BLOBSTORE_GCS_JSON_KEY
+$GCS_JSON_KEY
 EOF
     bosh upload-blobs
     generate_pull_request "docker" "$version" "${git_repo}" "${base_branch}"
