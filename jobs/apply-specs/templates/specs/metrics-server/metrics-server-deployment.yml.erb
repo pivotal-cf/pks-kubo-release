@@ -38,7 +38,7 @@ spec:
         command:
         - /metrics-server
         - --kubelet-preferred-address-types=InternalIP
-        - --kubelet-certificate-authority=/var/vcap/jobs/apply-specs/config/ca.pem
+        - --kubelet-certificate-authority=/var/run/kubernetes/kubelet-certificate-authority-ca.pem
         - --client-ca-file=/var/run/kubernetes/client-ca.crt
         - --requestheader-client-ca-file=/var/run/kubernetes/requestheader-client-ca.crt
         - --tls-cert-file=/var/run/kubernetes/client.crt

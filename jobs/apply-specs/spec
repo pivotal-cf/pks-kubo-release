@@ -50,3 +50,5 @@ consumes:
 - name: cloud-provider
   type: cloud-provider
   optional: true
+- name: kubernetes-workers
+  type: kubernetes-workers
