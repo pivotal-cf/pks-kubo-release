@@ -26,18 +26,18 @@ resources:
       json_key: ((gcs-json-key))
       regexp: "release/v(1.17.\\d*)/bin/windows/amd64/kube-proxy.exe"
 
-- name: git-pks-kubo-release
-  type: git
-  source:
-    uri: git@github.com:pivotal-cf/pks-kubo-release.git
-    branch: master
-    private_key: ((git-ssh-key.private_key))
-
 - name: git-pks-kubo-release-ci
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubo-release.git
     branch: feature/bump-docker
+    private_key: ((git-ssh-key.private_key))
+
+- name: git-pks-kubo-release
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pks-kubo-release.git
+    branch: master
     private_key: ((git-ssh-key.private_key))
 
 - name: git-pks-kubo-release-windows
@@ -47,11 +47,19 @@ resources:
     branch: master
     private_key: ((git-ssh-key.private_key))
 
+- name: git-pks-docker-boshrelease
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pks-docker-boshrelease
+    branch: bump-prep
+    private_key: ((pks-bot-ssh-key.private_key))
+
 jobs:
 - name: bump-k8s-in-pks-kubo-release
   plan:
   - in_parallel:
     - get: git-pks-kubo-release
+    - get: git-pks-docker-boshrelease
     - get: git-pks-kubo-release-ci
     - get: s3-kubernetes-common-core-linux
       trigger: true
@@ -72,6 +80,22 @@ jobs:
         BASE_BRANCH: master
         BINARY_DIRECTORY: s3-kubernetes-common-core-linux
         USE_COMMON_CORE: true
+        GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
+        GIT_USER_TOKEN: ((git-write-token))
+        GIT_SSH_KEY: |
+          ((git-ssh-key.private_key))
+  - task: bump-docker-in-pks-kubo-release
+    config:
+      <<: *config
+      run:
+        path: git-pks-kubo-release-ci/ci/scripts/bump-docker.sh
+      inputs:
+        - name: git-pks-kubo-release-ci
+        - name: git-pks-docker-bosh-release
+        - name: gcs-kubernetes-windows
+      params:
+        BASE_BRANCH: master
+        BINARY_DIRECTORY: gcs-kubernetes-windows
         GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
         GIT_USER_TOKEN: ((git-write-token))
         GIT_SSH_KEY: |

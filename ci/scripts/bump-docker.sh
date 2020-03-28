@@ -7,6 +7,7 @@ pr_release() {
   version="$1"
   git_repo="$2"
   script_name="$3"
+  command="$4"
 
   concourse_base_name="git-${git_repo}"
 
@@ -24,7 +25,8 @@ blobstore:
 $GCS_JSON_KEY
 EOF
     bosh upload-blobs
-    push_to_current_branch "docker" "$version"
+    #push_to_current_branch "docker" "$version"
+    eval "$command"
   else
     echo "Docker version is already up-to-date"
   fi
@@ -36,9 +38,11 @@ main() {
   if [ "${REPO:-}" == "windows" ]; then
     git_repo="pks-kubo-release-windows"
     script_name="download_docker_binaries_windows.sh"
+    command='push_to_current_branch "docker" "$version"'
   else
     git_repo="pks-docker-boshrelease"
     script_name="download_docker_binaries_linux.sh"
+    command='generate_pull_request "kubernetes" "$version" "${git_repo}" "${BASE_BRANCH}"'
   fi
 
   # BINARY_DIRECTORY should be declared in the pipeline via params
@@ -47,7 +51,7 @@ main() {
   minor_docker_version=$(cat k8s-dependencies.yml | yq '.dependencies[] | select(.name == "docker") | .version')
   curl -o DockerMsftIndex.json https://dockermsft.azureedge.net/dockercontainer/DockerMsftIndex.json
   docker_version=$(cat DockerMsftIndex.json | jq ".channels[\"${minor_docker_version}\"].version" -r)
-  pr_release "$docker_version" "$git_repo" "$script_name"
+  pr_release "$docker_version" "$git_repo" "$script_name" "${command}"
 }
 
 main $@
