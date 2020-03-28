@@ -25,7 +25,7 @@ blobstore:
 $GCS_JSON_KEY
 EOF
     bosh upload-blobs
-    #push_to_current_branch "docker" "$version"
+    #TODO get rid of this "eval command" idea after repos are squashed, and just use push_to_current_branch
     eval "$command"
   else
     echo "Docker version is already up-to-date"
@@ -42,7 +42,7 @@ main() {
   else
     git_repo="pks-docker-boshrelease"
     script_name="download_docker_binaries_linux.sh"
-    command='generate_pull_request "kubernetes" "$version" "${git_repo}" "${BASE_BRANCH}"'
+    command='generate_pull_request "docker" "$version" "${git_repo}" "${BASE_BRANCH}"'
     concourse_base_name="git-${git_repo}"
     cp -r "${concourse_base_name}/." "${concourse_base_name}-output"
   fi
