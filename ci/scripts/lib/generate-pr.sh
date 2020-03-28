@@ -18,6 +18,18 @@ create_branch() {
   git checkout -b $branch_name
 }
 
+git_current_branch () {
+	local ref
+	ref=$(command git symbolic-ref --quiet HEAD 2> /dev/null)
+	local ret=$?
+	if [[ $ret != 0 ]]
+	then
+		[[ $ret == 128 ]] && return
+		ref=$(command git rev-parse --short HEAD 2> /dev/null)  || return
+	fi
+	echo ${ref#refs/heads/}
+}
+
 commit_and_push() {
   local component tag branch_name
   component=$1
@@ -40,7 +52,7 @@ EOF
 
   git add .
   git commit -m "Bump $component to $tag"
-  git push origin
+  git push origin $(git_current_branch)
 }
 
 push_to_current_branch() {
