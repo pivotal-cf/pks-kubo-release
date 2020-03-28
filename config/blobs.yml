@@ -18,30 +18,30 @@ cni/util-linux_2.27.1-6ubuntu3_amd64.deb:
   size: 847730
   object_id: 27eb3ec3-220f-4a25-6c4f-ec219c37ac8d
   sha: 568f62cb031608ab09ba1e3c2121e9e8b92dcae4
-common-core-kubernetes-1.16.7/kube-apiserver:
-  size: 157936511
-  object_id: 18146b42-8564-47a6-6d1a-9c03e0451457
-  sha: b296e31d2e583330a94fd68034e30197f1df38de
-common-core-kubernetes-1.16.7/kube-controller-manager:
-  size: 149074747
-  object_id: f0ca2e47-325a-449d-7b12-44d3b4b26e4f
-  sha: a3737c4f9609b9bde657117bb28500af0c0015f0
-common-core-kubernetes-1.16.7/kube-proxy:
-  size: 51268768
-  object_id: f432f1cb-da0e-4924-4481-0ae084a2db93
-  sha: 0b9ee944fc38ab11d729c3cc4e028cf9f3ae179a
-common-core-kubernetes-1.16.7/kube-scheduler:
-  size: 56866646
-  object_id: d6a9b1cf-f6f5-4bd5-4fee-c335c2db8422
-  sha: 05f78ff88c6d7e7c4356c9c0f3c94d5804283794
-common-core-kubernetes-1.16.7/kubectl:
-  size: 58484684
-  object_id: bb97e432-292c-4f21-5851-252a589beb57
-  sha: f0ae5964b50666d476f37fa4458aeb19c9eab502
-common-core-kubernetes-1.16.7/kubelet:
-  size: 149957864
-  object_id: 114c493a-5651-46fa-7939-57376e9ffef9
-  sha: cd8db79dcf4e697f87390de67e80cd634b5d17c3
+common-core-kubernetes-1.17.3/kube-apiserver:
+  size: 159836595
+  object_id: d9d640be-5973-4f5a-5ff2-f567bd4af66a
+  sha: 1aa8e0e0e5986cb4e846194cfc8b4c9049bedf61
+common-core-kubernetes-1.17.3/kube-controller-manager:
+  size: 148336013
+  object_id: 426a305e-e2d3-4607-73a3-32dc9d178edf
+  sha: ec5f686a8ee4a9d05d5c3961c75f790fe1c94343
+common-core-kubernetes-1.17.3/kube-proxy:
+  size: 51957485
+  object_id: 2a1337eb-0795-4433-5b94-e4fe79b9c0f4
+  sha: c8584f012930dae0f5f655ed2061af0f25699fe0
+common-core-kubernetes-1.17.3/kube-scheduler:
+  size: 58057786
+  object_id: 201efb70-4498-4556-4d10-418e1f45eae0
+  sha: bc7298140106725f803b7d3a1d789f91847cf6c0
+common-core-kubernetes-1.17.3/kubectl:
+  size: 59360015
+  object_id: 5e44ba7d-791b-439a-6831-c566d6f11094
+  sha: 274f141c636a93b75ba5d3a9dc8da7ec53b1608c
+common-core-kubernetes-1.17.3/kubelet:
+  size: 150522168
+  object_id: c66ca65f-364f-4f63-52d4-39ef29c4cc4b
+  sha: 8fc16c2c8e31892055e539d1cec3069500224932
 conntrack/conntrack_1.4.3-3_amd64.deb:
   size: 27346
   object_id: 0c4aa633-3de8-4a8c-7170-36b3fc9e4a9c
