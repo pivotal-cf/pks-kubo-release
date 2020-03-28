@@ -4,12 +4,24 @@ create_pr_payload() {
   echo '{"title":"'"$title"'","body":"'"$body"'","head":"'"$3"'","base":"'"$4"'"}'
 }
 
-# Needs to be called from the directory where PR needs to be generated
-generate_pull_request() {
-  local component=$1
-  local tag=$2
-  local repo=$3
-  local base_branch=$4
+setup_git_config() {
+  git config --global user.email "pks-bosh-lifecycle+cibot@pivotal.io"
+  git config --global user.name "PKS BOSH LIFECYCLE CI BOT"
+}
+
+get_branch_name() {
+  echo "bump-$1-$2"
+}
+
+create_branch() {
+  local branch_name=$1
+  git checkout -b $branch_name
+}
+
+commit_and_push() {
+  local component tag branch_name
+  component=$1
+  tag=$2
 
   mkdir -p ~/.ssh
   cat > ~/.ssh/config <<EOF
@@ -26,14 +38,30 @@ EOF
   trap "kill $SSH_AGENT_PID" 0
   ssh-add ~/.ssh/id_rsa
 
-  git config --global user.email "pks-bosh-lifecycle+cibot@pivotal.io"
-  git config --global user.name "PKS BOSH LIFECYCLE CI BOT"
-
-  branch_name="bump-${component}-${tag}"
-  git checkout -b $branch_name
   git add .
   git commit -m "Bump $component to $tag"
-  git push origin $branch_name
+  git push origin
+}
+
+push_to_current_branch() {
+  local component=$1
+  local tag=$2
+
+  setup_git_config
+  commit_and_push "$component" "$tag"
+}
+
+# Needs to be called from the directory where PR needs to be generated
+generate_pull_request() {
+  local component=$1
+  local tag=$2
+  local repo=$3
+  local base_branch=$4
+
+  setup_git_config
+  branch_name=$(get_branch_name "$component" "$tag")
+  create_branch $branch_name
+  commit_and_push "$component" "$tag"
 
   # create a PR here
   payload=$(create_pr_payload "$component" "$tag" "$branch_name" "$base_branch")

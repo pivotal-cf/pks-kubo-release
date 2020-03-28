@@ -115,7 +115,6 @@ jobs:
           - name: gcs-kubernetes-windows
         params:
           REPO: windows
-          BASE_BRANCH: master
           BINARY_DIRECTORY: gcs-kubernetes-windows
           GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
           GIT_USER_TOKEN: ((git-write-token))

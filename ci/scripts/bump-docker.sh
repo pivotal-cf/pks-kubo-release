@@ -7,7 +7,6 @@ pr_release() {
   version="$1"
   git_repo="$2"
   script_name="$3"
-  base_branch="$4"
 
   concourse_base_name="git-${git_repo}"
 
@@ -25,7 +24,7 @@ blobstore:
 $GCS_JSON_KEY
 EOF
     bosh upload-blobs
-    generate_pull_request "docker" "$version" "${git_repo}" "${base_branch}"
+    push_to_current_branch "docker" "$version"
   else
     echo "Docker version is already up-to-date"
   fi
@@ -48,7 +47,7 @@ main() {
   minor_docker_version=$(cat k8s-dependencies.yml | yq '.dependencies[] | select(.name == "docker") | .version')
   curl -o DockerMsftIndex.json https://dockermsft.azureedge.net/dockercontainer/DockerMsftIndex.json
   docker_version=$(cat DockerMsftIndex.json | jq ".channels[\"${minor_docker_version}\"].version" -r)
-  pr_release "$docker_version" "$git_repo" "$script_name" "${BASE_BRANCH}"
+  pr_release "$docker_version" "$git_repo" "$script_name"
 }
 
 main $@
