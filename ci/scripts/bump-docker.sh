@@ -43,6 +43,8 @@ main() {
     git_repo="pks-docker-boshrelease"
     script_name="download_docker_binaries_linux.sh"
     command='generate_pull_request "kubernetes" "$version" "${git_repo}" "${BASE_BRANCH}"'
+    concourse_base_name="git-${git_repo}"
+    cp -r "${concourse_base_name}/." "${concourse_base_name}-output"
   fi
 
   # BINARY_DIRECTORY should be declared in the pipeline via params
