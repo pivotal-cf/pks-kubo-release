@@ -94,4 +94,5 @@ provides:
   - tls.kubernetes.ca
   - k8s-args
   - tls-cipher-suites
+  - tls.kubelet-client.ca
   type: kube-apiserver

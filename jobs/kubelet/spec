@@ -90,5 +90,3 @@ consumes:
 provides:
 - name: kubernetes-workers
   type: kubernetes-workers
-  properties:
-  - tls.kubelet-client-ca.certificate
