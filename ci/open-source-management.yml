@@ -20,13 +20,13 @@ resources:
   source:
     bucket: pipeline-store
     json_key: ((gcs-json-key))
-    regexp: 1.7.x/cfcr/kubo-release-(\d+.*).tgz
+    regexp: 1.6.x/cfcr/kubo-release-(\d+.*).tgz
 - name: gcs-pks-kubo-release-windows
   type: gcs
   source:
     bucket: pipeline-store
     json_key: ((gcs-json-key))
-    regexp: 1.7.x/cfcr/kubo-release-windows-(.*).tgz
+    regexp: 1.6.x/cfcr/kubo-release-windows-(.*).tgz
 
 # redeclare the same git resource to isolate the CI as something that can rapidly change
 # without triggering or requiring passed
