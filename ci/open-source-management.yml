@@ -15,13 +15,18 @@ resources:
     branch: master
     private_key: ((pks-bot-ssh-key.private_key))
 
-- name: git-pks-kubo-release
-  type: git
+- name: gcs-pks-kubo-release
+  type: gcs
   source:
-    uri: git@github.com:pivotal-cf/pks-kubo-release.git
-    branch: master
-    private_key: ((git-ssh-key.private_key))
-    ignore_paths: [ci]
+    bucket: pipeline-store
+    json_key: ((gcs-json-key))
+    regexp: 1.7.x/cfcr/kubo-release-(\d+.*).tgz
+- name: gcs-pks-kubo-release-windows
+  type: gcs
+  source:
+    bucket: pipeline-store
+    json_key: ((gcs-json-key))
+    regexp: 1.7.x/cfcr/kubo-release-windows-(.*).tgz
 
 # redeclare the same git resource to isolate the CI as something that can rapidly change
 # without triggering or requiring passed
@@ -33,13 +38,6 @@ resources:
     private_key: ((git-ssh-key.private_key))
     paths: [ci]
 
-- name: git-pks-kubo-release-windows
-  type: git
-  source:
-    uri: git@github.com:pivotal-cf/pks-kubo-release-windows.git
-    branch: master
-    private_key: ((git-ssh-key.private_key))
-
 jobs:
 - name: claim-lock
   max_in_flight: 1
@@ -48,9 +46,9 @@ jobs:
     - get: git-kubo-odb-ci
 # add trigger:true back when we get a [slack] notification on failure, and agree to monitor env use as a team
 #      trigger: true
-    - get: git-pks-kubo-release
+    - get: gcs-pks-kubo-release
 #      trigger: true
-    - get: git-pks-kubo-release-windows
+    - get: gcs-pks-kubo-release-windows
 #      trigger: true
     - get: pool-pks-locks
   - put: pool-pks-locks
@@ -65,8 +63,8 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed: [ 'claim-lock' ]
-    - get: git-pks-kubo-release
-    - get: git-pks-kubo-release-windows
+    - get: gcs-pks-kubo-release
+    - get: gcs-pks-kubo-release-windows
   - task: create-bosh-config
     tags: ['gcp']
     input_mapping:
@@ -84,9 +82,9 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed: [ 'deploy-manifest' ]
-    - get: git-pks-kubo-release
+    - get: gcs-pks-kubo-release
       passed: [ 'deploy-manifest' ]
-    - get: git-pks-kubo-release-windows
+    - get: gcs-pks-kubo-release-windows
       passed: [ 'deploy-manifest' ]
   - task: create-bosh-config
     tags: ['gcp']
@@ -105,9 +103,9 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed: [ 'generate-osm' ]
-    - get: git-pks-kubo-release
+    - get: gcs-pks-kubo-release
       passed: [ 'generate-osm' ]
-    - get: git-pks-kubo-release-windows
+    - get: gcs-pks-kubo-release-windows
       passed: [ 'generate-osm' ]
   - task: create-bosh-config
     tags: ['gcp']
