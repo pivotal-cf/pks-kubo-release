@@ -43,6 +43,7 @@ spec:
         - --requestheader-client-ca-file=/var/run/kubernetes/requestheader-client-ca.crt
         - --tls-cert-file=/var/run/kubernetes/client.crt
         - --tls-private-key-file=/var/run/kubernetes/client.key
+        <%= "- --tls-cipher-suites=#{link('kube-apiserver').p('tls-cipher-suites')}" %>
         ports:
         - containerPort: 443
           name: https
