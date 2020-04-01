@@ -5,6 +5,7 @@ image_resource:
     repository: odpks/pks-ci
 
 inputs:
+  - name: git-kubo-odb-ci
   - name: git-boshcycle-ci
   - name: gcs-pks-kubo-release-windows
 
