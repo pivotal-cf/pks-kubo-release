@@ -72,12 +72,15 @@ EOL
     if_p('port') { |port| network_conf['Backend']['Port'] = port }
     if_p('vni') { |vni| network_conf['Backend']['VNI'] = vni }
   %>
+
+  export ETCDCTL_API=2
+
   /var/vcap/packages/etcdctl/etcdctl \
     --endpoints <%= etcd_endpoints %> \
-    --cert /var/vcap/jobs/flanneld/config/etcd-client.crt \
-    --key /var/vcap/jobs/flanneld/config/etcd-client.key \
-    --cacert /var/vcap/jobs/flanneld/config/etcd-ca.crt \
-    put /coreos.com/network/config '<%= JSON.dump(network_conf) %>'
+    --cert-file /var/vcap/jobs/flanneld/config/etcd-client.crt \
+    --key-file /var/vcap/jobs/flanneld/config/etcd-client.key \
+    --ca-file /var/vcap/jobs/flanneld/config/etcd-ca.crt \
+    set /coreos.com/network/config '<%= JSON.dump(network_conf) %>'
 
   flanneld -etcd-endpoints=<%= etcd_endpoints %> \
     --ip-masq \
