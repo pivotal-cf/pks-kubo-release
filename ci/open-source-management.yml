@@ -67,8 +67,7 @@ jobs:
     - in_parallel:
         - get: git-kubo-odb-ci
         - get: git-boshcycle-ci
-        - get: git-pks-kubo-release
-        #      passed: [ 'claim-lock' ]
+        - get: gcs-pks-kubo-release
         - get: pool-pks-locks
           trigger: true
           passed: [ 'claim-lock' ]
@@ -89,7 +88,7 @@ jobs:
         - get: pool-pks-locks
           trigger: true
           passed: [ 'claim-lock' ]
-        - get: git-pks-kubo-release-windows
+        - get: gcs-pks-kubo-release-windows
           passed: [ 'claim-lock' ]
     - task: create-bosh-config
       tags: ['gcp']
