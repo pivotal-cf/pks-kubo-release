@@ -105,11 +105,14 @@ jobs:
     - get: git-kubo-odb-ci
     - get: git-boshcycle-ci
     - get: pool-pks-locks
-      trigger: true
-      passed: [ 'claim-lock' ]
+      passed:
+        - 'upload-kubo-release'
+        - 'upload-kubo-release-windows'
     - get: gcs-pks-kubo-release
+      trigger: true
       passed: [ 'upload-kubo-release' ]
     - get: gcs-pks-kubo-release-windows
+      trigger: true
       passed: [ 'upload-kubo-release-windows' ]
   - task: create-bosh-config
     tags: ['gcp']
@@ -126,7 +129,6 @@ jobs:
     - get: git-kubo-odb-ci
     - get: git-boshcycle-ci
     - get: pool-pks-locks
-      trigger: true
       passed: [ 'deploy-manifest' ]
     - get: gcs-pks-kubo-release
       passed: [ 'deploy-manifest' ]
