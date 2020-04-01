@@ -62,6 +62,44 @@ jobs:
     params:
       acquire: true
 
+- name: upload-kubo-release
+  plan:
+    - in_parallel:
+        - get: git-kubo-odb-ci
+        - get: git-boshcycle-ci
+        - get: git-pks-kubo-release
+        #      passed: [ 'claim-lock' ]
+        - get: pool-pks-locks
+          trigger: true
+          passed: [ 'claim-lock' ]
+    - task: create-bosh-config
+      tags: ['gcp']
+      input_mapping:
+        locks-repo: pool-pks-locks
+      file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+    - task: upload-kubo-release
+      privileged: true
+      file: git-boshcycle-ci/ci/utils/upload-kubo-release.yml
+
+- name: upload-kubo-release-windows
+  plan:
+    - in_parallel:
+        - get: git-kubo-odb-ci
+        - get: git-boshcycle-ci
+        - get: pool-pks-locks
+          trigger: true
+          passed: [ 'claim-lock' ]
+        - get: git-pks-kubo-release-windows
+          passed: [ 'claim-lock' ]
+    - task: create-bosh-config
+      tags: ['gcp']
+      input_mapping:
+        locks-repo: pool-pks-locks
+      file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+    - task: upload-kubo-release-windows
+      privileged: true
+      file: git-boshcycle-ci/ci/utils/upload-kubo-release-windows.yml
+
 - name: deploy-manifest
   plan:
   - in_parallel:
