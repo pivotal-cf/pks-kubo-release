@@ -8,6 +8,7 @@ inputs:
   - name: git-kubo-odb-ci
   - name: git-boshcycle-ci
   - name: gcs-pks-kubo-release
+  - name: gcs-director-config
 
 run:
   path: git-boshcycle-ci/ci/utils/upload-kubo-release.sh
