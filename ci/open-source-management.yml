@@ -27,13 +27,13 @@ resources:
   source:
     bucket: pipeline-store
     json_key: ((gcs-json-key))
-    regexp: 1.6.x/cfcr/kubo-release-(\d+.*).tgz
+    regexp: 1.7.x/cfcr/kubo-release-(\d+.*).tgz
 - name: gcs-pks-kubo-release-windows
   type: gcs
   source:
     bucket: pipeline-store
     json_key: ((gcs-json-key))
-    regexp: 1.6.x/cfcr/kubo-release-windows-(.*).tgz
+    regexp: 1.7.x/cfcr/kubo-release-windows-(.*).tgz
 
 # redeclare the same git resource to isolate the CI as something that can rapidly change
 # without triggering or requiring passed
@@ -51,12 +51,8 @@ jobs:
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-# add trigger:true back when we get a [slack] notification on failure, and agree to monitor env use as a team
-#      trigger: true
     - get: gcs-pks-kubo-release
-#      trigger: true
     - get: gcs-pks-kubo-release-windows
-#      trigger: true
     - get: pool-pks-locks
   - put: pool-pks-locks
     params:
@@ -131,8 +127,10 @@ jobs:
     - get: pool-pks-locks
       passed: [ 'deploy-manifest' ]
     - get: gcs-pks-kubo-release
+      trigger: true
       passed: [ 'deploy-manifest' ]
     - get: gcs-pks-kubo-release-windows
+      trigger: true
       passed: [ 'deploy-manifest' ]
   - task: create-bosh-config
     tags: ['gcp']
