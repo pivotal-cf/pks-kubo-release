@@ -7,9 +7,9 @@ image_resource:
 inputs:
   - name: pool-pks-locks
   - name: git-kubo-odb-ci
-  - name: git-pks-kubo-release
+  - name: gcs-pks-kubo-release
   - name: git-boshcycle-ci
-  - name: git-pks-kubo-release-windows
+  - name: gcs-pks-kubo-release-windows
   - name: gcs-director-config
 
 run:

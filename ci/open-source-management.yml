@@ -108,7 +108,9 @@ jobs:
       trigger: true
       passed: [ 'claim-lock' ]
     - get: gcs-pks-kubo-release
+      passed: [ 'upload-kubo-release' ]
     - get: gcs-pks-kubo-release-windows
+      passed: [ 'upload-kubo-release-windows' ]
   - task: create-bosh-config
     tags: ['gcp']
     input_mapping:
