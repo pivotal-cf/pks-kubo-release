@@ -6,7 +6,7 @@ image_resource:
 
 inputs:
   - name: git-boshcycle-ci
-  - name: git-pks-kubo-release
+  - name: gcs-pks-kubo-release
 
 run:
   path: git-boshcycle-ci/ci/utils/upload-kubo-release.sh
