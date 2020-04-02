@@ -1,23 +1,39 @@
 #!/bin/bash
 
-set -euxo pipefail
+set -euo pipefail
 
-# TODO: make Concourse team a parameter
-CONCOURSE_TEAM="pks-bosh-lifecycle"
+usage() {
+  echo "$0 <concourse-target-name> [<concourse-target-name2>...]"
+  echo "   alphabetizes pipelines in that target"
+}
 
-raw_pipeline_data=$(fly -t ${CONCOURSE_TEAM} pipelines | sort)
+alphabetize() {
+  concourse_target=$1
 
-#  Split raw_pipeline_data into an array
-pipeline_rows=(); while read -r line; do pipeline_rows+=("$line"); done <<<"$raw_pipeline_data"; declare -p pipeline_rows;
+  raw_pipeline_data=$(fly -t ${concourse_target} pipelines | sort)
 
-order_pipelines_command="fly -t ${CONCOURSE_TEAM} order-pipelines "
-for pipeline_row in "${pipeline_rows[@]}"
-do
-  # Split row into pieces by space and take first element as pipeline name
-  set $pipeline_row
-  pipeline=$1
-  # Append pipeline to ordering command
-  order_pipelines_command="${order_pipelines_command} --pipeline ${pipeline} "
+  #  Split raw_pipeline_data into an array
+  pipeline_rows=(); while read -r line; do pipeline_rows+=("$line"); done <<<"$raw_pipeline_data"; declare -p pipeline_rows;
+
+  order_pipelines_command="fly -t ${concourse_target} order-pipelines "
+  for pipeline_row in "${pipeline_rows[@]}"
+  do
+    # Split row into pieces by space and take first element as pipeline name
+    set $pipeline_row
+    pipeline=$1
+    # Append pipeline to ordering command
+    order_pipelines_command="${order_pipelines_command} --pipeline ${pipeline} "
+  done
+
+  ${order_pipelines_command}
+}
+
+if [ "$#" == "0" ]; then
+  usage
+  exit 1
+fi
+
+while (( "$#" )); do
+  alphabetize $1
+  shift
 done
-
-${order_pipelines_command}
