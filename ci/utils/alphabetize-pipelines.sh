@@ -2,6 +2,7 @@
 
 set -euxo pipefail
 
+# TODO: make team a parameter
 raw_pipeline_data=$(fly -t pks-bosh-lifecycle pipelines)
 
 # TODO: split the raw output into an array of output lines (pipeline rows)
