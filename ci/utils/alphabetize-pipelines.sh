@@ -13,7 +13,7 @@ alphabetize() {
   raw_pipeline_data=$(fly -t ${concourse_target} pipelines | sort)
 
   #  Split raw_pipeline_data into an array
-  pipeline_rows=(); while read -r line; do pipeline_rows+=("$line"); done <<<"$raw_pipeline_data"; declare -p pipeline_rows;
+  pipeline_rows=(); while read -r line; do pipeline_rows+=("$line"); done <<<"$raw_pipeline_data";
 
   order_pipelines_command="fly -t ${concourse_target} order-pipelines "
   for pipeline_row in "${pipeline_rows[@]}"
