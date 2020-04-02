@@ -4,7 +4,7 @@ set -euo pipefail
 
 usage() {
   echo "$0 <concourse-target-name> [<concourse-target-name2>...]"
-  echo "   alphabetizes pipelines in that target"
+  echo "   alphabetizes pipelines in each target"
 }
 
 alphabetize() {
