@@ -29,7 +29,7 @@ properties:
   virtual-center-config:
     description: The generic properties used on a per-cloud basis. The first level is a header, the second level the properties under the header.
     example: |
-      virtual-center:
+      VirtualCenter:
         ip: "xx.xx.xx.xx"
         user: "viadmin@vmare.local"
         password: "my-secure-password"
@@ -42,6 +42,6 @@ properties:
   labels:
     description: The labels to use in cloud config
     example: |
-      labels:
+      Labels:
         region: ""
         zone: ""

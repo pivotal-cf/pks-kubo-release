@@ -1,0 +1,49 @@
+---
+name: vsphere-ccm-cpi
+
+templates:
+  bin/chmod-product-serial: bin/chmod-product-serial
+  config/bpm.yml.erb: config/bpm.yml
+  config/ca.pem.erb: config/ca.pem
+  config/vsphere.conf.erb: config/vsphere.conf
+  config/file-arguments.json.erb: config/file-arguments.json
+  config/kubeconfig.erb: config/kubeconfig
+  config/vsphere-ccm-cpi-cert.pem.erb: config/vsphere-ccm-cpi-cert.pem
+  config/vsphere-ccm-cpi-private-key.pem.erb: config/vsphere-ccm-cpi-private-key.pem
+
+packages:
+- vsphere-ccm-cpi
+- file-generator
+
+properties:
+  api-token:
+    description: "API Token for the system:vsphere-ccm-cpi user"
+  http_proxy:
+    description: http_proxy env var for the kubernetes-controller-manager binary (i.e. for cloud provider interactions)
+  https_proxy:
+    description: https_proxy env var for the kubernetes-controller-manager binary (i.e. for cloud provider interactions)
+  no_proxy:
+    description: no_proxy env var for cloud provider interactions, i.e. for the kubelet
+  tls.kubernetes:
+    description: "Certificate and private key for the Kubernetes master"
+  tls.vsphere-ccm-cpi:
+    description: "Certificate and private key for serving HTTPS from vsphere-ccm-cpi"
+  k8s-args:
+    description: "Pass-through options for Kubernetes runtime arguments"
+    example: |
+      k8s-args:
+        bind-address: 0.0.0.0
+        cluster-name: kubernetes
+        enable-garbage-collector: true
+  file-arguments:
+    description: "Pass-through options for Kubernetes runtime arguments which accept local file paths as inputs."
+    example: |
+      file-arguments:
+        azure-container-registry-config: base64 encoded config
+
+consumes:
+- name: vsphere-ccm-cpi-cloud-config
+  type: vsphere-ccm-cpi-cloud-config
+  optional: true
+- name: kube-apiserver
+  type: kube-apiserver

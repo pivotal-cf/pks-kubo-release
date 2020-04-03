@@ -1,0 +1,5 @@
+check process vsphere-ccm-cpi
+  with pidfile /var/vcap/sys/run/bpm/vsphere-ccm-cpi/vsphere-ccm-cpi.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start vsphere-ccm-cpi"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop vsphere-ccm-cpi"
+  group vcap

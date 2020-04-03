@@ -1,0 +1,42 @@
+<%
+  def escape(value)
+    if value.kind_of? String
+      return value.gsub("\\", "\\\\\\").gsub("\"", "\\\"")
+    else
+      value
+    end
+  end
+
+  cloud_config=""
+
+  if_link('vsphere-ccm-cpi-cloud-config') do |vsphere_ccm_cpi_cloud_config|
+    vsphere_ccm_cpi_cloud_config.p('global-cloud-config', {}).each do |header, properties|
+      cloud_config += "[Global]\n"
+      properties.each do |property, value|
+        raise TypeError, "Invalid value of type #{value.class} for property \"#{property}\"" if value.is_a? Enumerable
+        cloud_config += "#{property} =\"#{escape(value)}\"\n"
+      end
+    end
+    vsphere_ccm_cpi_cloud_config.p('virtual-center-config', {}).each do |header, properties|
+      ip = ""
+      properties.each do |property, val|
+        next unless property == "ip"
+        ip = val
+      end
+      cloud_config += "[VirtualCenter \"#{ip}\"]\n"
+      properties.each do |property, value|
+        next if property == "ip"
+        raise TypeError, "Invalid value of type #{value.class} for property \"#{property}\"" if value.is_a? Enumerable
+        cloud_config += "#{property} = \"#{escape(value)}\"\n"
+      end
+    end
+    vsphere_ccm_cpi_cloud_config.p('labels', {}).each do |header, properties|
+      cloud_config += "[Labels]\n"
+      properties.each do |property, value|
+        raise TypeError, "Invalid value of type #{value.class} for property \"#{property}\"" if value.is_a? Enumerable
+        cloud_config += "#{property} =\"#{escape(value)}\"\n"
+      end
+    end
+  end
+%>
+<%= cloud_config %>
