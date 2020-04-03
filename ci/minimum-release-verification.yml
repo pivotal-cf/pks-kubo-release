@@ -4,7 +4,7 @@ resources:
   type: pool
   source:
     uri: git@github.com:pivotal-cf/pks-locks.git
-    pool: gcp-flannel-om25-terraform
+    pool: gcp-flannel-om28-terraform
     branch: master
     private_key: ((pks-bot-ssh-key.private_key))
 
