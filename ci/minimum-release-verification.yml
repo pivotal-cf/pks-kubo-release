@@ -67,24 +67,39 @@ resources:
   type: bosh-io-stemcell
 
 jobs:
+- name: run-tests
+  plan:
+    - in_parallel:
+        - get: git-boshcycle-ci
+        - get: git-pks-kubo-release
+        - get: git-pks-kubo-release-windows
+    - task: run-tests-kubo-release
+      privileged: true
+      file: git-boshcycle-ci/ci/minimum-release-verification/run-tests-kubo-release/task.yml
+    - task: run-tests-kubo-release-windows
+      privileged: true
+      file: git-boshcycle-ci/ci/minimum-release-verification/run-tests-kubo-release-windows/task.yml
+
 - name: claim-lock
   max_in_flight: 1
   plan:
-  - in_parallel:
-    - get: git-kubo-odb-ci
-    - get: git-pks-cfcr-etcd-release
-# add trigger:true back when we get a [slack] notification on failure, and agree to monitor env use as a team
-#      trigger: true
-    - get: git-pks-kubo-release
-#      trigger: true
-    - get: git-pks-kubo-release-windows
-#      trigger: true
-    - get: git-pks-docker-bosh-release
-#      trigger: true
-    - get: pool-pks-locks
-  - put: pool-pks-locks
-    params:
-      acquire: true
+    - in_parallel:
+        - get: git-kubo-odb-ci
+        - get: git-pks-cfcr-etcd-release
+        # add trigger:true back when we get a [slack] notification on failure, and agree to monitor env use as a team
+        #      trigger: true
+        - get: git-pks-kubo-release
+        #      trigger: true
+        - get: git-pks-kubo-release-windows
+        #      trigger: true
+        - get: git-pks-docker-bosh-release
+        #      trigger: true
+        - get: pool-pks-locks
+          passed: [ 'run-tests' ]
+    - put: pool-pks-locks
+      params:
+        acquire: true
+
 
 - name: upload-kubo-release
   plan:
@@ -233,7 +248,7 @@ jobs:
     privileged: true
     file: git-boshcycle-ci/ci/minimum-release-verification/deploy-manifest/task.yml
 
-- name: run-tests
+- name: print-component-versions
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
@@ -254,9 +269,9 @@ jobs:
     input_mapping:
       locks-repo: pool-pks-locks
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
-  - task: run-tests
+  - task: print-component-versions
     privileged: true
-    file: git-boshcycle-ci/ci/minimum-release-verification/run-tests/task.yml
+    file: git-boshcycle-ci/ci/minimum-release-verification/print-component-versions/task.yml
 
 - name: cleanup
   plan:
@@ -265,15 +280,15 @@ jobs:
     - get: git-boshcycle-ci
     - get: pool-pks-locks
       trigger: true
-      passed: [ 'run-tests' ]
+      passed: [ 'print-component-versions' ]
     - get: git-pks-cfcr-etcd-release
-      passed: [ 'run-tests' ]
+      passed: [ 'print-component-versions' ]
     - get: git-pks-docker-bosh-release
-      passed: [ 'run-tests' ]
+      passed: [ 'print-component-versions' ]
     - get: git-pks-kubo-release
-      passed: [ 'run-tests' ]
+      passed: [ 'print-component-versions' ]
     - get: git-pks-kubo-release-windows
-      passed: [ 'run-tests' ]
+      passed: [ 'print-component-versions' ]
   - task: create-bosh-config
     tags: ['gcp']
     input_mapping:
