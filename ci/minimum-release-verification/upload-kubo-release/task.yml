@@ -13,3 +13,6 @@ inputs:
 
 run:
   path: git-boshcycle-ci/ci/minimum-release-verification/upload-kubo-release/task.sh
+
+params:
+  GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))

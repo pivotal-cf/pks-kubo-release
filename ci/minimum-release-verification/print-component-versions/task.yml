@@ -13,4 +13,4 @@ inputs:
   - name: gcs-director-config
 
 run:
-  path: git-boshcycle-ci/ci/minimum-release-verification/run-tests/task.sh
+  path: git-boshcycle-ci/ci/minimum-release-verification/print-component-versions/task.sh
