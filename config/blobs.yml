@@ -146,3 +146,6 @@ talloc-2.1.9.tar.gz:
   size: 440335
   object_id: f2d8d5e1-1cb6-450c-480f-015534a76b17
   sha: e1e79fec4c0b6bd92be904a9c03b0a168478711a
+vsphere-cloud-controller-manager-1.1.0:
+  size: 54455136
+  sha: a5c9e5c741f1c257637eb74c2ed74d2068a59de4
