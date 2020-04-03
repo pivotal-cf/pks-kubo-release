@@ -1,0 +1,47 @@
+---
+name: vsphere-ccm-cpi-cloud-config
+
+provides:
+- name: vsphere-ccm-cpi-cloud-config
+  type: vsphere-ccm-cpi-cloud-config
+  properties:
+  - global-cloud-config
+  - virtual-center-config
+  - labels
+
+properties:
+  global-cloud-config:
+    description: The properties to be placed into the cloud-config. The first level is a header, the second level the properties under the header
+    example: |
+      Global:
+        datacenters: "SDDC-Datacenter"
+        insecure-flag: "1" # set to 1 if the vCenter uses a self-signed cert
+        user: "viadmin-global@vmware.local"
+        password: "my-secure-global-password"
+        server: "10.0.0.1"
+        port: "443"
+        ca-file: "/etc/kubernetes/vcenter-ca.crt"
+        thumbprint: "<certificate thumbprint>"
+        soap-roundtrip-count: ""
+        secret-name: ""
+        secret-namespace: ""
+        ip-family: "ipv4"
+  virtual-center-config:
+    description: The generic properties used on a per-cloud basis. The first level is a header, the second level the properties under the header.
+    example: |
+      virtual-center:
+        ip: "xx.xx.xx.xx"
+        user: "viadmin@vmare.local"
+        password: "my-secure-password"
+        port: "443"
+        datacenters: "SDDC-Datacenter"
+        soap-roundtrip-count: "1"
+        thumbprint: ""
+        secret-name: ""
+        secret-namespace: ""
+  labels:
+    description: The labels to use in cloud config
+    example: |
+      labels:
+        region: ""
+        zone: ""
