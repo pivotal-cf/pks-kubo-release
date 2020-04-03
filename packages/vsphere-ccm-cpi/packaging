@@ -1,0 +1,44 @@
+set -e
+
+VSPHERE_CCM_CPI_PACKAGE=vsphere-cloud-controller-manager
+VSPHERE_CCM_CPI_VERSION="1.1.0"
+
+main() {
+  create_target_dir
+  copy_depedencies_to_bosh
+  make_binaries_executable
+}
+
+create_target_dir() {
+  mkdir -p "${BOSH_INSTALL_TARGET:?}/bin"
+}
+
+copy_depedencies_to_bosh() {
+  cp -a ${VSPHERE_CCM_CPI_PACKAGE}-${VSPHERE_CCM_CPI_VERSION} "${BOSH_INSTALL_TARGET:?}/bin"
+}
+
+make_binaries_executable() {
+  chmod +x "${BOSH_INSTALL_TARGET:?}/bin/"*
+}
+
+main
+
+
+# Open Source Licensing Information, used by the vmware OSM system
+# These license abbreviations are defined by the OSM system
+# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
+
+#KUBERNETES_LICENSE="Apache2.0"
+#KUBERNETES_SOURCE_URL="https://github.com/kubernetes/kubernetes/archive/v${KUBERNETES_VERSION}.tar.gz"
+#
+#cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
+#{ "packages": [
+#    {
+#    "name": "$KUBERNETES_PACKAGE",
+#    "version": "$KUBERNETES_VERSION",
+#    "url": "$KUBERNETES_SOURCE_URL",
+#    "license": "$KUBERNETES_LICENSE"
+#    }
+#]}
+#EOF
+

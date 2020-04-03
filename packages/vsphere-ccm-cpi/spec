@@ -1,0 +1,5 @@
+---
+name: vsphere-ccm-cpi
+
+files:
+- vsphere-cloud-controller-manager-1.1.0
