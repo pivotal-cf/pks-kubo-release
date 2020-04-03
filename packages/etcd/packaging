@@ -1,0 +1,51 @@
+set -eu
+
+### NOTE: we usually use the same version for both etcd and etcdctl, but due to a defect introduced in
+### etcdctl 3.3.14, we're mixing the new version of the etcd server (3.3.17) with an older version of etcdctl (3.3.12)
+ETCD_PACKAGE=etcd
+ETCD_VERSION="3.3.17"
+ETCD_EXTRACT_DIR="etcd-${ETCD_VERSION}"
+ETCDCTL_VERSION="3.3.12"
+ETCDCTL_EXTRACT_DIR="etcd-${ETCDCTL_VERSION}"
+
+mkdir "${BOSH_INSTALL_TARGET:?}/bin"
+
+mkdir ${ETCD_EXTRACT_DIR}
+pushd ${ETCD_EXTRACT_DIR}
+    tar xvf ../etcd/${ETCD_PACKAGE}-v${ETCD_VERSION}-linux-amd64.tar.gz
+    cp -a etcd-v${ETCD_VERSION}-linux-amd64/etcd "${BOSH_INSTALL_TARGET:?}/bin/etcd"
+    chmod +x "${BOSH_INSTALL_TARGET:?}/bin/etcd"
+popd
+
+mkdir ${ETCDCTL_EXTRACT_DIR}
+pushd ${ETCDCTL_EXTRACT_DIR}
+    tar xvf ../etcd/${ETCD_PACKAGE}-v${ETCDCTL_VERSION}-linux-amd64.tar.gz
+    cp -a etcd-v${ETCDCTL_VERSION}-linux-amd64/etcdctl "${BOSH_INSTALL_TARGET:?}/bin/etcdctl"
+    chmod +x "${BOSH_INSTALL_TARGET:?}/bin/etcdctl"
+popd
+
+# Open Source Licensing Information, used by the vmware OSM system
+# These license abbreviations are defined by the OSM system
+# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
+
+ETCD_LICENSE="Apache2.0"
+ETCD_SOURCE_URL="https://github.com/etcd-io/etcd/archive/v${ETCD_VERSION}.tar.gz"
+ETCDCTL_SOURCE_URL="https://github.com/etcd-io/etcd/archive/v${ETCDCTL_VERSION}.tar.gz"
+
+### NOTE: we usually use the same version for both etcd and etcdctl, so we usually have only one OSL entry
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
+{ "packages": [
+    {
+    "name": "$ETCD_PACKAGE",
+    "version": "$ETCD_VERSION",
+    "url": "$ETCD_SOURCE_URL",
+    "license": "$ETCD_LICENSE"
+    },
+    {
+    "name": "$ETCD_PACKAGE",
+    "version": "$ETCDCTL_VERSION",
+    "url": "$ETCDCTL_SOURCE_URL",
+    "license": "$ETCD_LICENSE"
+    }
+]}
+EOF

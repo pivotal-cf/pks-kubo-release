@@ -14,9 +14,6 @@ bosh deploy \
   --var=deployment-name="${DEPLOYMENT_NAME}" \
   --var=kubo-version="${KUBO_GIT_SHA}" \
   --var=kubo-windows-version="${KUBO_WINDOWS_GIT_SHA}" \
-  --var=docker-version="${DOCKER_GIT_SHA}" \
   --var=network-name="${NETWORK_NAME}" \
   --var=first-az="${FIRST_AZ}" \
   git-boshcycle-ci/ci/minimum-release-verification/manifest.yml
-
-#   --var=etcd-version="${ETCD_GIT_SHA}" \

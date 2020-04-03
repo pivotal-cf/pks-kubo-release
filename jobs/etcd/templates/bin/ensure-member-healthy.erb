@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euo pipefail
+
+export ETCDCTL_API=3
+
+while ! LOCAL=true /var/vcap/jobs/etcd/bin/etcdctl endpoint health; do
+  echo "$(date +%s): waiting for member to be healthy"
+done
+
+echo "$(date +%s): member healthy"

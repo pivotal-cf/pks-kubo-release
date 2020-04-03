@@ -1,0 +1,62 @@
+#!/bin/bash
+
+set -euo pipefail
+source /var/vcap/jobs/etcd/bin/utils.sh
+
+# When `spec.bootstrap` is true and there is no existing etcd member directory,
+# we can assume that we are the first node starting in a new cluster. In this case
+# we will bootstrap a single node cluster with the current node as the only member.
+#
+# When `spec.bootstrap` is true and there is an existing etcd member directory, we
+# can assume that the cluster is already present, and start the etcd node normally.
+#
+# When `spec.bootstrap` is false and there is no existing etcd member directory,
+# we can assume that we are a new node in an existing cluster. In this case we can
+# add the current node as a member, and start the cluster with the `ETCD_INITIAL_CLUSTER`
+# flag that is returned in the output.
+#
+# When `spec.bootstrap` is false and there is an existing etcd member directory,
+# we can assume that we are an existing node in an existing cluster, and start the
+# etcd node normally.
+
+CLUSTER_STATE="existing"
+CLUSTER=$etcd_peers
+
+<% if spec.bootstrap %>
+if [ ! -d /var/vcap/store/etcd/member ]; then
+  CLUSTER_STATE="new"
+  CLUSTER="<%= "#{spec.id}" %>=${etcd_peer_address}"
+fi
+<% else %>
+if [ ! -d /var/vcap/store/etcd/member ]; then
+  MEMBER_ADD_OUTPUT="$(ETCDCTL_API=3 etcdctl member add <%= spec.id %> --peer-urls "${etcd_peer_address}")"
+  CLUSTER="$(echo "${MEMBER_ADD_OUTPUT}" | grep "ETCD_INITIAL_CLUSTER=" | cut -d'=' -f2- | tr -d '"')"
+fi
+<% end -%>
+
+<%
+  ############################################################################################################
+  # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, KUBELET, AND ETCD #
+  ############################################################################################################
+  CIPHER_SUITES='TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
+%>
+
+/var/vcap/packages/etcd/bin/etcd \
+  --name="<%= spec.id %>" \
+  --data-dir="/var/vcap/store/etcd" \
+  --listen-peer-urls="https://0.0.0.0:2380" \
+  --initial-advertise-peer-urls="${etcd_peer_address}" \
+  --listen-client-urls="https://0.0.0.0:2379" \
+  --advertise-client-urls="${etcd_endpoint_address}" \
+  --initial-cluster="${CLUSTER}" \
+  --initial-cluster-state="${CLUSTER_STATE}" \
+  --client-cert-auth \
+  --trusted-ca-file="/var/vcap/jobs/etcd/config/etcd-ca.crt" \
+  --cert-file="/var/vcap/jobs/etcd/config/etcd.crt" \
+  --key-file="/var/vcap/jobs/etcd/config/etcd.key" \
+  --peer-client-cert-auth \
+  --peer-trusted-ca-file="/var/vcap/jobs/etcd/config/peer-ca.crt" \
+  --peer-cert-file="/var/vcap/jobs/etcd/config/peer.crt" \
+  --peer-key-file="/var/vcap/jobs/etcd/config/peer.key" \
+  --cipher-suites=<%= CIPHER_SUITES %> \
+<% if_p("etcd.metrics_protocol", "etcd.metrics_port") do |protocol, port| %>  --listen-metrics-urls=<%= protocol %>://0.0.0.0:<%= port %> \<% end %>

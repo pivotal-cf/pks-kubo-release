@@ -1,0 +1,16 @@
+---
+name: bbr-etcd
+
+templates:
+  backup.erb: bin/bbr/backup
+  restore.erb: bin/bbr/restore
+  metadata.sh.erb: bin/bbr/metadata
+  pre-restore-lock.sh.erb: bin/bbr/pre-restore-lock
+  post-restore-unlock.sh.erb: bin/bbr/post-restore-unlock
+
+packages: []
+
+properties:
+  bbr.backup_one_restore_all:
+    default: false
+    description: This property must be set to true in the manifest in order for bbr to work correctly with this job. BBR reads this property from the BOSH manifest to generate the correct artifact files.

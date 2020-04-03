@@ -2,6 +2,6 @@
 name: etcdctl
 
 dependencies:
+- etcd
 
-files:
-- etcdctl-3.3.17
+files: []

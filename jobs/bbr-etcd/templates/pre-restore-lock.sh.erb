@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo "Stopping etcd"
+/var/vcap/bosh/bin/monit stop etcd
+
+TIMEOUT=60
+
+if timeout "$TIMEOUT" /bin/bash <<EOF
+  #!/bin/bash
+
+  until /var/vcap/bosh/bin/monit summary | grep etcd | grep "not monitored" ; do
+    echo "waiting for etcd to stop..."
+    sleep 5
+  done
+EOF
+then
+  echo "Etcd stopped"
+else
+  echo "Timed out stopping etcd after $TIMEOUT seconds"
+  exit 1
+fi
+
+echo "Deleting old etcd data"
+rm -rf /var/vcap/store/etcd
