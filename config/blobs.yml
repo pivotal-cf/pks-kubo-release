@@ -86,14 +86,14 @@ docker/docker-19.03.5.tgz:
   size: 63252595
   object_id: 427f7190-8cbf-49c5-60a8-41ed40db58d0
   sha: sha256:50cdf38749642ec43d6ac50f4a3f1f7f6ac688e8d8b4e1c5b7be06e1a82f06e9
-etcd/etcd-v3.3.12-linux-amd64.tar.gz:
-  size: 11350736
-  object_id: b46e6432-ea27-4a54-56ba-87692b3b6cb1
-  sha: sha256:dc5d82df095dae0a2970e4d870b6929590689dd707ae3d33e7b86da0f7f211b6
-etcd/etcd-v3.3.17-linux-amd64.tar.gz:
-  size: 14222547
-  object_id: 6655b472-a992-4760-4798-066690cd6804
-  sha: sha256:8c1168a24d17a2d6772f8148ea35d4f3398c51f1e23db90c849d506adb387060
+etcd/etcd-v3.4.3-linux-amd64.tar.gz:
+  size: 17280028
+  object_id: 6919516e-a048-46df-56a8-170cf71d58ff
+  sha: sha256:6c642b723a86941b99753dff6c00b26d3b033209b15ee33325dc8e7f4cd68f07
+etcd/etcd-v3.4.5-linux-amd64.tar.gz:
+  size: 17306787
+  object_id: 0df9baa9-0bdf-4f70-7d75-27c41f27dd57
+  sha: sha256:3d65174481aac0f8d1d61f561d4d5d024d2ab77d86bb23f1cb8f0771422c08d8
 flannel-v0.11.0-linux-amd64.tar.gz:
   size: 9565743
   object_id: 83064ebe-b45d-4d41-694a-b1e61a781250

@@ -1,11 +1,13 @@
 set -eu
 
-### NOTE: we usually use the same version for both etcd and etcdctl, but due to a defect introduced in
-### etcdctl 3.3.14, we're mixing the new version of the etcd server (3.3.17) with an older version of etcdctl (3.3.12)
+### NOTE: we usually use the same version for both etcd and etcdctl
+### Due to a defect introduced in etcdctl 3.3.14 we're mixing versions
+### The fix for this defect is in etcd version 3.4.5, k8s currently only supports etcd server 3.4.3
+
 ETCD_PACKAGE=etcd
-ETCD_VERSION="3.3.17"
+ETCD_VERSION="3.4.3"
 ETCD_EXTRACT_DIR="etcd-${ETCD_VERSION}"
-ETCDCTL_VERSION="3.3.12"
+ETCDCTL_VERSION="3.4.5"
 ETCDCTL_EXTRACT_DIR="etcd-${ETCDCTL_VERSION}"
 
 mkdir "${BOSH_INSTALL_TARGET:?}/bin"
@@ -13,14 +15,14 @@ mkdir "${BOSH_INSTALL_TARGET:?}/bin"
 mkdir ${ETCD_EXTRACT_DIR}
 pushd ${ETCD_EXTRACT_DIR}
     tar xvf ../etcd/${ETCD_PACKAGE}-v${ETCD_VERSION}-linux-amd64.tar.gz
-    cp -a etcd-v${ETCD_VERSION}-linux-amd64/etcd "${BOSH_INSTALL_TARGET:?}/bin/etcd"
+    cp -a ${ETCD_PACKAGE}-v${ETCD_VERSION}-linux-amd64/etcd "${BOSH_INSTALL_TARGET:?}/bin/etcd"
     chmod +x "${BOSH_INSTALL_TARGET:?}/bin/etcd"
 popd
 
 mkdir ${ETCDCTL_EXTRACT_DIR}
 pushd ${ETCDCTL_EXTRACT_DIR}
     tar xvf ../etcd/${ETCD_PACKAGE}-v${ETCDCTL_VERSION}-linux-amd64.tar.gz
-    cp -a etcd-v${ETCDCTL_VERSION}-linux-amd64/etcdctl "${BOSH_INSTALL_TARGET:?}/bin/etcdctl"
+    cp -a ${ETCD_PACKAGE}-v${ETCDCTL_VERSION}-linux-amd64/etcdctl "${BOSH_INSTALL_TARGET:?}/bin/etcdctl"
     chmod +x "${BOSH_INSTALL_TARGET:?}/bin/etcdctl"
 popd
 
