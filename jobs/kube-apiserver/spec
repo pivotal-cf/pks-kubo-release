@@ -57,6 +57,8 @@ properties:
     description: The password for the kubelet drain user
   kubelet-password:
     description: The password for the kubelet user
+  vsphere-ccm-cpi-password:
+    description: The password for the vsphere ccm cpi user
   no_proxy:
     description: no_proxy env var for the kubernetes-api binary (i.e. for cloud provider
       interactions)
