@@ -10,10 +10,10 @@ cifs-utils-6.7.tar.bz2:
   size: 363647
   object_id: c529967d-57fa-4b41-685e-ff0a507ffaad
   sha: 9ba5091d7c2418a90773c861f04a3f4a36854c14
-cni/cni-plugins-amd64-v0.7.1.tgz:
-  size: 17108856
-  object_id: 50dc58eb-107d-483a-4e37-5a243ffed520
-  sha: fb29e20401d3e9598a1d8e8d7992970a36de5e05
+cni/cni-plugins-amd64-v0.7.5.tgz:
+  size: 17109361
+  object_id: 5e7c7dae-3357-49c6-4e61-8e3ceb355ad7
+  sha: sha256:3ca15c0a18ee830520cf3a95408be826cbd255a1535a38e0be9608b25ad8bf64
 cni/util-linux_2.27.1-6ubuntu3_amd64.deb:
   size: 847730
   object_id: 27eb3ec3-220f-4a25-6c4f-ec219c37ac8d
