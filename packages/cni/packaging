@@ -3,7 +3,7 @@ set -exu
 mkdir -p ${BOSH_INSTALL_TARGET}/bin
 
 CNI_PACKAGE="cni-plugins"
-CNI_VERSION="0.7.1"
+CNI_VERSION="0.7.5"
 
 tar -xzf cni/${CNI_PACKAGE}-amd64-v${CNI_VERSION}.tgz -C ${BOSH_INSTALL_TARGET}/bin/
 
