@@ -45,10 +45,12 @@ start_flanneld() {
   echo 1 > /proc/sys/net/ipv4/ip_forward
   mkdir -p /etc/cni/net.d
   rm  /etc/cni/net.d/10-flannel.conf || true
+  # the cniVersion below is a different concept from the version of the cni package included in this BOSH release
+  # and should be maintained separately
   cat  > /etc/cni/net.d/50-flannel.conflist <<EOL
 {
     "name": "flannel-network",
-    "cniVersion": "0.7.5",
+    "cniVersion": "0.3.1",
     "plugins": [
 	    {
 		    "type": "flannel",
