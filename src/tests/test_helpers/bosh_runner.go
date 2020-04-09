@@ -13,6 +13,8 @@ import (
 const EtcdHostname = "master-0.etcd.cfcr.internal"
 
 func RunEtcdCommandFromWorker(deployment, workerID string, args ...string) string {
+	// to test manually, this is the combined base command:
+	// /var/vcap/packages/etcdctl/etcdctl --endpoints https://master-0.etcd.cfcr.internal:2379 --cert /var/vcap/jobs/flanneld/config/etcd-client.crt --key /var/vcap/jobs/flanneld/config/etcd-client.key --cacert /var/vcap/jobs/flanneld/config/etcd-ca.crt
 	remoteArgs := []string{
 		"/var/vcap/packages/etcdctl/etcdctl",
 		fmt.Sprintf("--endpoints https://%s:2379", EtcdHostname),
@@ -28,6 +30,8 @@ func RunEtcdCommandFromWorker(deployment, workerID string, args ...string) strin
 }
 
 func RunEtcdCommandFromMasterWithFullPrivilege(deployment, masterID string, args ...string) string {
+	// to test manually, this is the combined base command:
+	// /var/vcap/packages/etcdctl/etcdctl --endpoints https://master-0.etcd.cfcr.internal:2379 --cert /var/vcap/jobs/etcd/config/etcdctl.crt --key /var/vcap/jobs/etcd/config/etcdctl.key --cacert /var/vcap/jobs/etcd/config/etcdctl-ca.crt
 	remoteArgs := []string{
 		"/var/vcap/packages/etcdctl/etcdctl",
 		fmt.Sprintf("--endpoints https://%s:2379", EtcdHostname),
