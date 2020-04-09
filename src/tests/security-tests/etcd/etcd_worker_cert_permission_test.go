@@ -13,7 +13,7 @@ var _ = Describe("Etcd cert on worker", func() {
 		directory string
 	)
 
-	Context("For directorys under /coreos.com/network/", func() {
+	Context("For directories under /coreos.com/network/", func() {
 		BeforeEach(func() {
 			directory = "/coreos.com/network/"
 		})
@@ -27,7 +27,7 @@ var _ = Describe("Etcd cert on worker", func() {
 		})
 
 		It("should have read access ", func() {
-			args := []string{"get", directory}
+			args := []string{"get", "--prefix", directory}
 			for _, vm := range workers {
 				value := test_helpers.RunEtcdCommandFromWorker(deploymentName, vm.ID, args...)
 				Expect(value).NotTo(ContainSubstring("Insufficient credentials"))
@@ -45,7 +45,7 @@ var _ = Describe("Etcd cert on worker", func() {
 		})
 	})
 
-	Context("For directorys under /", func() {
+	Context("For directories under /", func() {
 		BeforeEach(func() {
 			directory = "/"
 		})
@@ -60,7 +60,7 @@ var _ = Describe("Etcd cert on worker", func() {
 
 		It("should not have read access", func() {
 			for _, vm := range workers {
-				args := []string{"get", directory}
+				args := []string{"get", "--prefix", directory}
 				value := test_helpers.RunEtcdCommandFromWorker(deploymentName, vm.ID, args...)
 				Expect(value).To(ContainSubstring("Insufficient credentials"))
 			}
