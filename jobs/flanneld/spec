@@ -30,13 +30,19 @@ properties:
     description: VXLAN Identifier (VNI) to be used
   port:
     description: UDP port to use for sending encapsulated packets
+  cniVersion:
+    description: value to use for cniVersion in flannel setup
+    default: 0.3.1
 
 consumes:
 - name: etcd
   type: etcd
+- name: flanneld
+  type: flanneld
 
 provides:
 - name: flanneld
   type: flanneld
   properties:
   - pod-network-cidr
+  - cniVersion
