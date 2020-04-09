@@ -50,7 +50,7 @@ start_flanneld() {
   cat  > /etc/cni/net.d/50-flannel.conflist <<EOL
 {
     "name": "flannel-network",
-    "cniVersion": "0.3.1",
+    <%= "\"cniVersion\": \"#{link('flanneld').p('cniVersion')}\"," %>
     "plugins": [
 	    {
 		    "type": "flannel",
