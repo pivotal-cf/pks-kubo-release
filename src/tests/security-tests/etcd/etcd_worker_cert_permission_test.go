@@ -20,14 +20,14 @@ var _ = Describe("Etcd cert on worker", func() {
 
 		AfterEach(func() {
 			for _, vm := range workers {
-				args := []string{"rm", fmt.Sprintf("%s%s", directory, vm.ID)}
+				args := []string{"del", fmt.Sprintf("%s%s", directory, vm.ID)}
 				value := test_helpers.RunEtcdCommandFromMasterWithFullPrivilege(deploymentName, master.ID, args...)
 				Expect(value).NotTo(ContainSubstring("Insufficient credentials"))
 			}
 		})
 
 		It("should have read access ", func() {
-			args := []string{"ls", directory}
+			args := []string{"get", directory}
 			for _, vm := range workers {
 				value := test_helpers.RunEtcdCommandFromWorker(deploymentName, vm.ID, args...)
 				Expect(value).NotTo(ContainSubstring("Insufficient credentials"))
@@ -37,7 +37,7 @@ var _ = Describe("Etcd cert on worker", func() {
 
 		It("should have write access", func() {
 			for _, vm := range workers {
-				args := []string{"set", fmt.Sprintf("%s%s", directory, vm.ID), vm.ID}
+				args := []string{"put", fmt.Sprintf("%s%s", directory, vm.ID), vm.ID}
 				value := test_helpers.RunEtcdCommandFromWorker(deploymentName, vm.ID, args...)
 				Expect(value).NotTo(ContainSubstring("Insufficient credentials"))
 			}
