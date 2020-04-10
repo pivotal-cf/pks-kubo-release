@@ -1,0 +1,223 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source /var/vcap/jobs/etcd/bin/utils.sh
+
+etcdctl_v3() {
+  ETCDCTL_API=3 /var/vcap/packages/etcd/bin/etcdctl \
+    --cacert /var/vcap/jobs/etcd/config/etcdctl-ca.crt \
+    --cert /var/vcap/jobs/etcd/config/etcdctl-root.crt \
+    --key /var/vcap/jobs/etcd/config/etcdctl-root.key \
+    --endpoints "${etcd_endpoints}" \
+    "$@"
+}
+
+etcdctl_v2() {
+  ETCDCTL_API=2 /var/vcap/packages/etcd/bin/etcdctl \
+    --ca-file /var/vcap/jobs/etcd/config/etcdctl-ca.crt \
+    --cert-file /var/vcap/jobs/etcd/config/etcdctl-root.crt \
+    --key-file /var/vcap/jobs/etcd/config/etcdctl-root.key \
+    --endpoints "${etcd_endpoints}" \
+    "$@"
+}
+
+etcdctl_add_user() {
+  version=$1
+  username=$2
+  password=$3
+
+  if [ "$version" == "v3" ]; then
+    if [ -z "$(etcdctl_v3 user get $username)" ]; then
+      etcdctl_v3 user add $username:$password --interactive=false
+    fi
+  else
+    if [ -z "$(etcdctl_v2 user get $username)" ]; then
+      echo "$password" | etcdctl_v2 user add $username
+    fi
+  fi
+}
+
+etcdctl_add_role() {
+  version=$1
+  role=$2
+
+  if [ "$version" == "v3" ]; then
+    if [ -z "$(etcdctl_v3 role get $role)" ]; then
+      etcdctl_v3 role add $role
+    fi
+  else
+    if [ -z "$(etcdctl_v2 role get $role)" ]; then
+      etcdctl_v2 role add $role
+    fi
+  fi
+}
+
+etcdctl_grant_read_permission() {
+  version=$1
+  role=$2
+  path=$3
+
+  if [ "$version" == "v3" ]; then
+    is_prefix="false"
+    prefix_regex=".*\*"
+    if [[ "$path" =~ $prefix_regex ]]; then
+      is_prefix="true"
+      ## remove * from the end
+      path=${path%?}
+    fi
+    etcdctl_v3 role grant-permission $role read "$path" --prefix=$is_prefix
+  else
+    read_regex=".*KV Read:.*\s+$(printf '%q' $path)\s.*KV Write:.*"
+    if ! [[ $(etcdctl_v2 role get $role) =~ $read_regex ]]; then
+      etcdctl_v2 role grant $role --read --path "$path"
+    fi
+  fi
+}
+
+etcdctl_grant_write_permission() {
+  version=$1
+  role=$2
+  path=$3
+
+  if [ "$version" == "v3" ]; then
+    is_prefix="false"
+    prefix_regex=".*\*"
+    if [[ "$path" =~ $prefix_regex ]]; then
+      is_prefix="true"
+      ## remove * from the end
+      path=${path%?}
+    fi
+
+    read_regex=".*KV Read:.*\s+$(printf '%q' $path)\s.*KV Write:.*|.*KV Read:.*\s+\(prefix $(printf '%q' $path)\).*KV Write:.*"
+    if [[ $(etcdctl_v3 role get $role) =~ $read_regex ]]; then
+      etcdctl_v3 role grant-permission $role readwrite "$path" --prefix=$is_prefix
+    else
+      etcdctl_v3 role grant-permission $role write "$path" --prefix=$is_prefix
+    fi
+  else
+    write_regex=".*KV Write:.*\s+$(printf '%q' $path)\s.*|.*KV Write:.*\s+$(printf '%q' $path)$"
+    if ! [[ $(etcdctl_v2 role get $role) =~ $write_regex ]]; then
+      etcdctl_v2 role grant $role --write --path "$path"
+    fi
+  fi
+}
+
+etcdctl_bind_role_to_user() {
+  version=$1
+  username=$2
+  role=$3
+
+  if [ "$version" == "v3" ]; then
+    etcdctl_v3 user grant-role $username $role
+  else
+    role_regex=".*Roles:.*\s+$(printf '%q' $role)\s.*|.*Roles:.*\s+$(printf '%q' $role)$"
+    if ! [[ "$(etcdctl_v2 user get $username)" =~ $role_regex ]]; then
+      etcdctl_v2 user grant $username --roles $role
+    fi
+  fi
+}
+
+etcdctl_show_user_role() {
+  version=$1
+  username=$2
+  role=$3
+
+  if [ "$version" == "v3" ]; then
+    etcdctl_v3 user get $username
+    etcdctl_v3 role get $role
+  else
+    etcdctl_v2 user get $username
+    etcdctl_v2 role get $role
+  fi
+}
+
+setup_users_auth() {
+  <% if_p('users') do |users| %>
+  versions=""
+  <% users.each do |user| %>
+    <% if user["versions"] != nil %>
+    <% user["versions"].each do |version| %>
+      <% if version == "v3" %>
+  versions=${versions}v3
+      <% else %>
+  versions=${versions}v2
+      <% end %>
+  version="<%= version %>"
+  username="<%= user["name"] %>"
+  password="<%= user["password"] %>"
+      <% if user["name"] == "root" %>
+  ## Root user is first parsed
+  echo "Set up user root"
+  ## this password is used for all commands to make the script idempotent
+  export ROOT_PASSWORD="$password"
+  etcdctl_add_user "$version" "root" "$ROOT_PASSWORD"
+      <% else %>
+  ## if it's ordinary user
+  echo "Set up user: $username"
+  role="${username}-role"
+
+  ## add user
+  etcdctl_add_user "$version" "$username" "$password"
+  ## add role
+  etcdctl_add_role "$version" "$role"
+
+  ## grant read permission
+        <% if user["permissions"]["read"] != nil %>
+          <% user["permissions"]["read"].each do |read_path| %>
+  path="<%= read_path %>"
+  etcdctl_grant_read_permission "$version" "$role" "$path"
+          <% end %>
+        <% end %>
+
+  ## grant write permission
+        <% if user["permissions"]["write"] != nil %>
+          <% user["permissions"]["write"].each do |write_path| %>
+  path="<%= write_path %>"
+  etcdctl_grant_write_permission "$version" "$role" "$path"
+          <% end %>
+        <% end %>
+  ## bind role to user
+  etcdctl_bind_role_to_user "$version" "$username" "$role"
+
+  etcdctl_show_user_role "$version" "$username" "$role"
+      <% end %>
+    <% end %>
+    <% end %>
+  <% end %>
+  turn_on_authentication $versions
+  <% end %>
+}
+
+turn_on_authentication() {
+  versions=$1
+
+  ## in case it's already enabled
+  ## enable in the end in case before role is granted user don't have acceess
+
+  v2_regex=".*v2.*"
+  if [[ "$versions" =~ $v2_regex ]]; then
+    set +e
+    result=$(etcdctl_v2 auth enable 2>&1)
+    status=$?
+    set -e
+    if [ "$status" -ne 0 ]; then
+      enable_auth_duplicate_regex="auth: already enabled"
+      if ! [[ "$result" =~ $enable_auth_duplicate_regex ]]; then
+        echo "Error enable auth: $result"
+        exit 1
+      fi
+    fi
+    echo "$result"
+  fi
+
+  v3_regex=".*v3.*"
+  if [[ "$versions" =~ $v3_regex ]]; then
+    etcdctl_v3 auth enable
+  fi
+}
+
+main() {
+  setup_users_auth
+}
+
+main $@
