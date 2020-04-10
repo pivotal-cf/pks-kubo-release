@@ -80,6 +80,7 @@ var _ = Describe("Etcd cert on worker", func() {
 	})
 
 	Context("for v3", func() {
+		// this is different from v2 because the flannel user is not set up in v2 space, so there should not be any access
 		Context("For directories under /coreos.com/network/", func() {
 			BeforeEach(func() {
 				directory = "/coreos.com/network/"
@@ -93,20 +94,20 @@ var _ = Describe("Etcd cert on worker", func() {
 				}
 			})
 
-			It("should have read access ", func() {
+			It("should not have read access ", func() {
 				args := []string{"get", "--prefix", directory, "--limit", "2"}
 				for _, vm := range workers {
 					value := test_helpers.RunEtcdCommandFromWorker(3, deploymentName, vm.ID, args...)
-					Expect(value).NotTo(ContainSubstring(v3PermissionsErrorMessage))
+					Expect(value).To(ContainSubstring(v3PermissionsErrorMessage))
 				}
 
 			})
 
-			It("should have write access", func() {
+			It("should not have write access", func() {
 				for _, vm := range workers {
 					args := []string{"put", fmt.Sprintf("%s%s", directory, vm.ID), vm.ID}
 					value := test_helpers.RunEtcdCommandFromWorker(3, deploymentName, vm.ID, args...)
-					Expect(value).NotTo(ContainSubstring(v3PermissionsErrorMessage))
+					Expect(value).To(ContainSubstring(v3PermissionsErrorMessage))
 				}
 
 			})
