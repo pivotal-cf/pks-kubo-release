@@ -8,5 +8,5 @@ echo "### RSpec Tests"
 rspec --format documentation
 
 echo "### Go Tests"
-go test file-generator/... osl-collector/...
+GOPATH=$(pwd) go test file-generator/... osl-collector/...
 
