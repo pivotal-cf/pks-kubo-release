@@ -41,7 +41,7 @@ fi
   CIPHER_SUITES='TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
 %>
 
-# --enable-v2 is included because flannel uses the v2 API. When fannel no longer has this dependency, the flag can be removed.
+# --enable-v2 is included because flannel uses the v2 API. When flannel no longer has this dependency, the flag can be removed.
 
 /var/vcap/packages/etcd/bin/etcd \
   --name="<%= spec.id %>" \
