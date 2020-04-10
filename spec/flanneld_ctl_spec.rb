@@ -8,12 +8,6 @@ require 'open3'
 describe 'flanneld ctl' do
   let(:link_spec) do
     {
-        'flanneld' => {
-            'instances' => [],
-            'properties' => {
-                'cniVersion' => '0.3.1'
-            }
-        },
         'etcd' => {
             'instances' => []
         }
@@ -23,7 +17,8 @@ describe 'flanneld ctl' do
     {
         'pod-network-cidr' => '0.0.0.0/24',
         'port' => 8443,
-        'vni' => 'vni'
+        'vni' => 'vni',
+        'cniVersion' => '0.3.1'
     }
   end
   it 'has valid json for cniVersion' do
