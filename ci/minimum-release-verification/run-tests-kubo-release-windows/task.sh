@@ -1,9 +1,8 @@
 #!/bin/bash
 
-set -euxo pipefail
+set -euo pipefail
 
 pushd git-pks-kubo-release-windows
-  bundle install
-  rspec --format documentation
+  ./run_tests.sh
 popd
 
