@@ -37,8 +37,8 @@ func RunEtcdCommandFromMasterWithFullPrivilege(etcdVersion int, deployment, mast
 		fmt.Sprintf("ETCDCTL_API=%d", etcdVersion),
 		"/var/vcap/packages/etcdctl/etcdctl",
 		fmt.Sprintf("--endpoints https://%s:2379", EtcdHostname),
-		getCertFlag(etcdVersion), "/var/vcap/jobs/etcd/config/etcdctl.crt",
-		getKeyFlag(etcdVersion), "/var/vcap/jobs/etcd/config/etcdctl.key",
+		getCertFlag(etcdVersion), "/var/vcap/jobs/etcd/config/etcdctl-root.crt",
+		getKeyFlag(etcdVersion), "/var/vcap/jobs/etcd/config/etcdctl-root.key",
 		getCacertFlag(etcdVersion), "/var/vcap/jobs/etcd/config/etcdctl-ca.crt",
 	}
 	remoteArgs = append(remoteArgs, args...)
