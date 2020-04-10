@@ -68,6 +68,12 @@ properties:
       Allowed value is:
         'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
     default: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+  tls.etcd.ca:
+    description: CA certificate for etcd cluster
+  tls.etcd.certificate:
+    description: Certificate for the root user of etcd cluster
+  tls.etcd.private_key:
+    description: Private key for the root user of etcd cluster
   tls.kubelet-client:
     description: kubelet client cert
   tls.kubernetes.ca:
