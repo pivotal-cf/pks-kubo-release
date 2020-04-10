@@ -94,7 +94,7 @@ var _ = Describe("Etcd cert on worker", func() {
 			})
 
 			It("should have read access ", func() {
-				args := []string{"get", "--prefix", directory}
+				args := []string{"get", "--prefix", directory, "--limit", "2"}
 				for _, vm := range workers {
 					value := test_helpers.RunEtcdCommandFromWorker(3, deploymentName, vm.ID, args...)
 					Expect(value).NotTo(ContainSubstring(v3PermissionsErrorMessage))
@@ -127,7 +127,7 @@ var _ = Describe("Etcd cert on worker", func() {
 
 			It("should not have read access", func() {
 				for _, vm := range workers {
-					args := []string{"get", "--prefix", directory}
+					args := []string{"get", "--prefix", directory, "--limit", "2"}
 					value := test_helpers.RunEtcdCommandFromWorker(3, deploymentName, vm.ID, args...)
 					Expect(value).To(ContainSubstring(v3PermissionsErrorMessage))
 				}
