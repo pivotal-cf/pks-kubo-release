@@ -9,8 +9,8 @@ fi
 if [[ "${ETCDCTL_API}" == "3" ]]; then
   /var/vcap/packages/etcd/bin/etcdctl \
     --cacert /var/vcap/jobs/etcd/config/etcdctl-ca.crt \
-    --cert /var/vcap/jobs/etcd/config/etcdctl.crt \
-    --key /var/vcap/jobs/etcd/config/etcdctl.key \
+    --cert /var/vcap/jobs/etcd/config/etcdctl-root.crt \
+    --key /var/vcap/jobs/etcd/config/etcdctl-root.key \
     --endpoints "${etcd_endpoints}" \
     "$@"
 else
