@@ -141,8 +141,7 @@ start_kubelet() {
       end
     end
   -%>
-    <% if include_config -%>--cloud-config=${cloud_config}<% end %> \
-    <% if !iaas.nil? -%>--cloud-provider=${cloud_provider}<% end %> \
+    --cloud-provider=external \
     --hostname-override=$(get_hostname_override) \
     --node-labels=<%= labels %> \
     --config="/var/vcap/jobs/kubelet/config/kubeletconfig.yml" \
