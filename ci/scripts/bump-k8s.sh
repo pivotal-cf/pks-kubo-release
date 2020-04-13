@@ -26,8 +26,6 @@ EOF
   else
     echo "Component version is already up-to-date"
   fi
-
-  popd
 }
 
 determine_docker_version() {
