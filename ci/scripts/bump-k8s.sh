@@ -72,9 +72,13 @@ main() {
       download_and_add_blob_and_commit "$docker_version" "$docker_script_name" "docker"
     fi
 
-    setup_ssh
-    push_current_branch
-    create_pr_through_curl "kubernetes" "$k8s_version" "${BASE_BRANCH}" "${git_repo}"
+    if [ -n "$(git status --porcelain)" ]; then
+      setup_ssh
+      push_current_branch
+      create_pr_through_curl "kubernetes" "$k8s_version" "${BASE_BRANCH}" "${git_repo}"
+    else
+      echo "All components already up-to-date"
+    fi
 
   popd
 }
