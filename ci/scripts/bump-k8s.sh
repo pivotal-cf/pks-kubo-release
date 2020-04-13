@@ -4,11 +4,10 @@ set -exu -o pipefail
 source git-pks-kubo-release-ci/ci/scripts/lib/generate-pr.sh
 
 download_and_add_blob_and_commit() {
-  local version script_name base_branch component
+  local version script_name component
   version="$1"
   script_name="$2"
-  base_branch="$3"
-  component="$4"
+  component="$3"
 
   ../git-pks-kubo-release-ci/ci/scripts/$script_name $version "$(pwd)"
 
@@ -68,14 +67,14 @@ main() {
     create_branch "kubernetes" "$k8s_version"
     setup_git_config
 
-    download_and_add_blob_and_commit "$k8s_version" "$k8s_script_name" "${BASE_BRANCH}" "kubernetes"
+    download_and_add_blob_and_commit "$k8s_version" "$k8s_script_name"  "kubernetes"
     if [[ "$BUMP_DOCKER" == "true" ]]; then
-      download_and_add_blob_and_commit "$docker_version" "$docker_script_name" "${BASE_BRANCH}" "docker"
+      download_and_add_blob_and_commit "$docker_version" "$docker_script_name" "docker"
     fi
 
     setup_ssh
     push_current_branch
-    create_pr_through_curl "kubernetes" "$k8s_version" "${base_branch}" "${git_repo}"
+    create_pr_through_curl "kubernetes" "$k8s_version" "${BASE_BRANCH}" "${git_repo}"
 
   popd
 }
