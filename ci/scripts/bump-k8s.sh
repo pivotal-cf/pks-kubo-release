@@ -4,17 +4,11 @@ set -exu -o pipefail
 source git-pks-kubo-release-ci/ci/scripts/lib/generate-pr.sh
 
 download_and_add_blob_and_commit() {
-  local version git_repo script_name base_branch component
+  local version script_name base_branch component
   version="$1"
-  git_repo="$2"
-  script_name="$3"
-  base_branch="$4"
-  component="$5"
-
-  # this is tightly coupled with the name of the resources declared in the pipeline yml
-  concourse_base_name="git-${git_repo}"
-
-  pushd "${concourse_base_name}"
+  script_name="$2"
+  base_branch="$3"
+  component="$4"
 
   ../git-pks-kubo-release-ci/ci/scripts/$script_name $version "$(pwd)"
 
@@ -69,17 +63,23 @@ main() {
   k8s_version=$(cat "$PWD/$BINARY_DIRECTORY/version")
   docker_version=$(determine_docker_version "$k8s_version")
 
-  create_branch "kubernetes" "$k8s_version"
-  setup_git_config
+  # this is tightly coupled with the name of the resources declared in the pipeline yml
+  concourse_base_name="git-${git_repo}"
+  pushd "${concourse_base_name}"
 
-  download_and_add_blob_and_commit "$k8s_version" "$git_repo" "$k8s_script_name" "${BASE_BRANCH}" "kubernetes"
-  if [[ "$BUMP_DOCKER" == "true" ]]; then
-    download_and_add_blob_and_commit "$docker_version" "$git_repo" "$docker_script_name" "${BASE_BRANCH}" "docker"
-  fi
+    create_branch "kubernetes" "$k8s_version"
+    setup_git_config
 
-  setup_ssh
-  push_current_branch
-  create_pr_through_curl "kubernetes" "$k8s_version" "${base_branch}" "${git_repo}"
+    download_and_add_blob_and_commit "$k8s_version" "$k8s_script_name" "${BASE_BRANCH}" "kubernetes"
+    if [[ "$BUMP_DOCKER" == "true" ]]; then
+      download_and_add_blob_and_commit "$docker_version" "$docker_script_name" "${BASE_BRANCH}" "docker"
+    fi
+
+    setup_ssh
+    push_current_branch
+    create_pr_through_curl "kubernetes" "$k8s_version" "${base_branch}" "${git_repo}"
+
+  popd
 }
 
 main $@

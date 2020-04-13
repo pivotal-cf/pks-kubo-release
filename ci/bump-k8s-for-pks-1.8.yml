@@ -47,19 +47,11 @@ resources:
     branch: master
     private_key: ((git-ssh-key.private_key))
 
-- name: git-pks-docker-boshrelease
-  type: git
-  source:
-    uri: git@github.com:pivotal-cf/pks-docker-boshrelease
-    branch: bump-prep
-    private_key: ((pks-bot-ssh-key.private_key))
-
 jobs:
 - name: bump-dependencies-in-pks-kubo-release
   plan:
   - in_parallel:
     - get: git-pks-kubo-release
-    - get: git-pks-docker-boshrelease
     - get: git-pks-kubo-release-ci
     - get: s3-kubernetes-common-core-linux
       trigger: true
