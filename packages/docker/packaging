@@ -21,11 +21,6 @@ if [[ $? != 0 ]] ; then
   exit 1
 fi
 
-AUFS_TOOLS_PACKAGE="aufs-tools"
-AUFS_TOOLS_VERSION="20120411"
-echo "Copying aufs-tools ${AUFS_TOOLS_VERSION}..."
-cp -a ${BOSH_COMPILE_TARGET}/docker/${AUFS_TOOLS_PACKAGE}_${AUFS_TOOLS_VERSION}-3_amd64.deb ${BOSH_INSTALL_TARGET}/
-
 # Build Autoconf package
 echo "Building Autoconf ${AUTOCONF_VERSION}..."
 cd ${BOSH_COMPILE_TARGET}/${AUTOCONF_PACKAGE}-${AUTOCONF_VERSION}
@@ -65,8 +60,6 @@ AUTOCONF_LICENSE=GPL2.0
 AUTOCONF_SOURCE_URL="http://ftp.gnu.org/gnu/autoconf/$AUTOCONF_PACKAGE-$AUTOCONF_VERSION.tar.gz"
 BRIDGE_UTILS_SOURCE_URL="https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/bridge-utils/1.5-15ubuntu1/bridge-utils_1.5.orig.tar.gz"
 BRIDGE_UTILS_LICENSE="GPL2.0"
-AUFS_TOOLS_SOURCE_URL="https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/aufs-tools/1:3.0+20120411-3/aufs-tools_3.0+20120411.orig.tar.xz"
-AUFS_TOOLS_LICENSE="GPL2.0"
 
 # source: https://github.com/docker/docker-ce/blob/v18.09.8/components/engine/LICENSE
 DOCKER_LICENSE="Apache2.0"
@@ -85,12 +78,6 @@ cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
     "version": "$BRIDGE_UTILS_VERSION",
     "url": "$BRIDGE_UTILS_SOURCE_URL",
     "license": "$BRIDGE_UTILS_LICENSE"
-    },
-    {
-    "name": "$AUFS_TOOLS_PACKAGE",
-    "version": "$AUFS_TOOLS_VERSION",
-    "url": "$AUFS_TOOLS_SOURCE_URL",
-    "license": "$AUFS_TOOLS_LICENSE"
     },
     {
     "name": "$DOCKER_PACKAGE",
