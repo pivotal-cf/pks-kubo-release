@@ -17,8 +17,8 @@ echo "Taking etcd snapshot"
 
 /var/vcap/packages/etcd/bin/etcdctl \
   --cacert /var/vcap/jobs/etcd/config/etcdctl-ca.crt \
-  --cert /var/vcap/jobs/etcd/config/etcdctl.crt \
-  --key /var/vcap/jobs/etcd/config/etcdctl.key \
+  --cert /var/vcap/jobs/etcd/config/etcdctl-root.crt \
+  --key /var/vcap/jobs/etcd/config/etcdctl-root.key \
   --endpoints "${etcd_endpoint_address}" \
   snapshot save "${BBR_ARTIFACT_FILE_PATH}"
 <% end %>
