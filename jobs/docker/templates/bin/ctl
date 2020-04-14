@@ -98,11 +98,11 @@ case $1 in
     echo "Stopping docker containers..."
     containers="$(/var/vcap/packages/docker/bin/docker --host unix://${DOCKER_PID_DIR}/docker.sock ps -q)"
     if [[ ! -z $containers ]]; then
-      for container in $containers
-      do
-        echo "Stopping docker container ${container}"
-        /var/vcap/packages/docker/bin/docker --host unix://${DOCKER_PID_DIR}/docker.sock stop ${container}
-      done
+      echo "Stopping all docker containers: ${containers}"
+      # default timeout is 10 seconds, this may take longer than that depending on the number of docker
+      # processes running and the time taken to initiate communication with all of them at once
+      /var/vcap/packages/docker/bin/docker --host unix://${DOCKER_PID_DIR}/docker.sock stop ${containers}
+      echo "Number of remaining containers: $(/var/vcap/packages/docker/bin/docker --host unix://${DOCKER_PID_DIR}/docker.sock ps -q | wc -l)"
     fi
 
     # Stop Docker daemon
