@@ -59,7 +59,7 @@ download_tarball_from_common_core() {
   local kubernetes_version=$1
   local staging_dir=$2
   local SHA_FILE="common-core.tgz.sha256"
-  local URL_ENCODED_FILENAME="kubernetes-binary-v${kubernetes_version}.tar.gz"
+  local URL_ENCODED_FILENAME="kubernetes-binary-v$(echo $kubernetes_version | sed 's/+/%2B/g').tar.gz"
   pushd "${staging_dir}" || exit 1
     wget "https://essentialpks-staging.s3-us-west-2.amazonaws.com/vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/${URL_ENCODED_FILENAME}"
     wget -O "${SHA_FILE}" "https://essentialpks-staging.s3-us-west-2.amazonaws.com/vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/${URL_ENCODED_FILENAME}.sha256"
