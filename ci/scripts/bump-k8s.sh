@@ -40,7 +40,11 @@ determine_docker_version() {
 }
 
 main() {
-  local git_repo k8s_script_name docker_script_name k8s_version docker_version
+  local git_repo k8s_script_name docker_script_name matched_k8s_version google_k8s_version docker_version
+
+  # BINARY_DIRECTORY should be declared in the pipeline via params
+  matched_k8s_version=$(cat "$PWD/$BINARY_DIRECTORY/version")
+  google_k8s_version="$matched_k8s_version"
 
   if [ "${REPO:-}" == "windows" ]; then
     git_repo="pks-kubo-release-windows"
@@ -53,21 +57,20 @@ main() {
       k8s_script_name="download_k8s_binaries_google"
     else
       k8s_script_name="download_k8s_binaries_common_core"
+      google_k8s_version = $(echo $matched_k8s_version | cut -d"+" -f1)
     fi
   fi
 
-  # BINARY_DIRECTORY should be declared in the pipeline via params
-  k8s_version=$(cat "$PWD/$BINARY_DIRECTORY/version")
-  docker_version=$(determine_docker_version "$k8s_version")
+  docker_version=$(determine_docker_version "$google_k8s_version")
 
   # this is tightly coupled with the name of the resources declared in the pipeline yml
   concourse_base_name="git-${git_repo}"
   pushd "${concourse_base_name}"
 
-    create_branch "kubernetes" "$k8s_version"
+    create_branch "kubernetes" "$matched_k8s_version"
     setup_git_config
 
-    download_and_add_blob_and_commit "$k8s_version" "$k8s_script_name"  "kubernetes"
+    download_and_add_blob_and_commit "$matched_k8s_version" "$k8s_script_name"  "kubernetes"
     if [[ "$BUMP_DOCKER" == "true" ]]; then
       download_and_add_blob_and_commit "$docker_version" "$docker_script_name" "docker"
     fi
@@ -75,7 +78,7 @@ main() {
     if [ -n "$(git status --porcelain)" ]; then
       setup_ssh
       push_current_branch
-      create_pr_through_curl "kubernetes" "$k8s_version" "${BASE_BRANCH}" "${git_repo}"
+      create_pr_through_curl "kubernetes" "$matched_k8s_version" "${BASE_BRANCH}" "${git_repo}"
     else
       echo "All components already up-to-date"
     fi
