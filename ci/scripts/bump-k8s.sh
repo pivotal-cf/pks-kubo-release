@@ -57,7 +57,7 @@ main() {
       k8s_script_name="download_k8s_binaries_google"
     else
       k8s_script_name="download_k8s_binaries_common_core"
-      google_k8s_version = $(echo $matched_k8s_version | cut -d"+" -f1)
+      google_k8s_version=$(echo $matched_k8s_version | cut -d"+" -f1)
     fi
   fi
 
