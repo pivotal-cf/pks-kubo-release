@@ -75,7 +75,8 @@ main() {
       download_and_add_blob_and_commit "$docker_version" "$docker_script_name" "docker"
     fi
 
-    if [ -n "$(git status --porcelain)" ]; then
+    # if either of the previous calls to download_and_add_blob_and_commit caused commits, push them
+    if ! git diff-index --quiet "${BASE_BRANCH}" --; then
       setup_ssh
       push_current_branch
       create_pr_through_curl "kubernetes" "$matched_k8s_version" "${BASE_BRANCH}" "${git_repo}"
