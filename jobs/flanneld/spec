@@ -30,6 +30,11 @@ properties:
     description: VXLAN Identifier (VNI) to be used
   port:
     description: UDP port to use for sending encapsulated packets
+  # the cniVersion below is a different concept from the version of the cni package included in this BOSH release
+  # and should be maintained separately
+  cniVersion:
+    description: value to use for cniVersion in flannel setup
+    default: 0.3.1
 
 consumes:
 - name: etcd
@@ -40,3 +45,4 @@ provides:
   type: flanneld
   properties:
   - pod-network-cidr
+  - cniVersion

@@ -45,10 +45,12 @@ start_flanneld() {
   echo 1 > /proc/sys/net/ipv4/ip_forward
   mkdir -p /etc/cni/net.d
   rm  /etc/cni/net.d/10-flannel.conf || true
+  # this is consuming cniVersion directly from a property (instead of through a link as windows does)
+  # is due to the worker-flanneld alias causing confusion during the BOSH deployment
   cat  > /etc/cni/net.d/50-flannel.conflist <<EOL
 {
     "name": "flannel-network",
-    "cniVersion": "0.3.1",
+    <%= "\"cniVersion\": \"#{p('cniVersion')}\"," %>
     "plugins": [
 	    {
 		    "type": "flannel",
@@ -72,6 +74,9 @@ EOL
     if_p('port') { |port| network_conf['Backend']['Port'] = port }
     if_p('vni') { |vni| network_conf['Backend']['VNI'] = vni }
   %>
+
+  export ETCDCTL_API=2
+
   /var/vcap/packages/etcdctl/etcdctl \
     --endpoints <%= etcd_endpoints %> \
     --cert-file /var/vcap/jobs/flanneld/config/etcd-client.crt \

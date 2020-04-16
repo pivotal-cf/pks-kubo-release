@@ -6,18 +6,18 @@ if [[ "${LOCAL}" == "true" ]]; then
   etcd_endpoints="${etcd_endpoint_address}"
 fi
 
-if [[ "${ETCDCTL_API}" == "3" ]]; then
-  /var/vcap/packages/etcd/bin/etcdctl \
-    --cacert /var/vcap/jobs/etcd/config/etcdctl-ca.crt \
-    --cert /var/vcap/jobs/etcd/config/etcdctl.crt \
-    --key /var/vcap/jobs/etcd/config/etcdctl.key \
-    --endpoints "${etcd_endpoints}" \
-    "$@"
-else
+if [[ "${ETCDCTL_API}" == "2" ]]; then
   /var/vcap/packages/etcd/bin/etcdctl \
     --ca-file /var/vcap/jobs/etcd/config/etcdctl-ca.crt \
     --cert-file /var/vcap/jobs/etcd/config/etcdctl.crt \
     --key-file /var/vcap/jobs/etcd/config/etcdctl.key \
+    --endpoints "${etcd_endpoints}" \
+    "$@"
+else
+  /var/vcap/packages/etcd/bin/etcdctl \
+    --cacert /var/vcap/jobs/etcd/config/etcdctl-ca.crt \
+    --cert /var/vcap/jobs/etcd/config/etcdctl-root.crt \
+    --key /var/vcap/jobs/etcd/config/etcdctl-root.key \
     --endpoints "${etcd_endpoints}" \
     "$@"
 fi

@@ -41,6 +41,8 @@ fi
   CIPHER_SUITES='TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
 %>
 
+# --enable-v2 is included because flannel uses the v2 API. When flannel no longer has this dependency, the flag can be removed.
+
 /var/vcap/packages/etcd/bin/etcd \
   --name="<%= spec.id %>" \
   --data-dir="/var/vcap/store/etcd" \
@@ -59,4 +61,5 @@ fi
   --peer-cert-file="/var/vcap/jobs/etcd/config/peer.crt" \
   --peer-key-file="/var/vcap/jobs/etcd/config/peer.key" \
   --cipher-suites=<%= CIPHER_SUITES %> \
+  --enable-v2=true \
 <% if_p("etcd.metrics_protocol", "etcd.metrics_port") do |protocol, port| %>  --listen-metrics-urls=<%= protocol %>://0.0.0.0:<%= port %> \<% end %>
