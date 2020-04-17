@@ -16,7 +16,7 @@ resources:
   type: s3
   source:
     bucket: "essentialpks-staging"
-    regexp: "vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-v(1.16.\\d*).*.tar.gz"
+    regexp: "vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-v(1.16.\\d*.vmware.*).tar.gz"
     region_name: "us-west-2"
 
 - name: gcs-kubernetes-windows
