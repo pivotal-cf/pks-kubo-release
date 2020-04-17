@@ -31,7 +31,7 @@ main
 # See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
 
 KUBERNETES_LICENSE="Apache2.0"
-KUBERNETES_SOURCE_URL="https://github.com/kubernetes/kubernetes/archive/v${KUBERNETES_VERSION}.tar.gz"
+KUBERNETES_SOURCE_URL="https://essentialpks-staging.s3-us-west-2.amazonaws.com/vmware-tanzu-kubernetes-grid/523a448aa3e9a0ef93ff892dceefee0a/kubernetes-binary-${KUBERNETES_VERSION}.tar.gz"
 
 cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
 { "packages": [
