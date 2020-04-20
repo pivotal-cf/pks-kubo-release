@@ -29,21 +29,21 @@ resources:
 - name: git-pks-kubo-release
   type: git
   source:
-    uri: git@github.com:pivotal-cf/pks-kubo-release.git
+    uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
     branch: master
     private_key: ((git-ssh-key.private_key))
 
 - name: git-pks-kubo-release-ci
   type: git
   source:
-    uri: git@github.com:pivotal-cf/pks-kubo-release.git
+    uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
     branch: master
     private_key: ((git-ssh-key.private_key))
 
 - name: git-pks-kubo-release-windows
   type: git
   source:
-    uri: git@github.com:pivotal-cf/pks-kubo-release-windows.git
+    uri: git@github.com:pivotal-cf/pks-kubernetes-windows-release.git
     branch: master
     private_key: ((git-ssh-key.private_key))
 
