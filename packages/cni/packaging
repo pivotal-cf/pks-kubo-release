@@ -20,7 +20,7 @@ chmod +x ${BOSH_INSTALL_TARGET}/bin/*
 # See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
 
 CNI_LICENSE="Apache2.0"
-CNI_SOURCE_URL="https://github.com/containernetworking/cni/archive/v${CNI_VERSION}.tar.gz"
+CNI_SOURCE_URL="https://github.com/containernetworking/plugins/archive/v${CNI_VERSION}.tar.gz"
 
 cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
 { "packages": [
