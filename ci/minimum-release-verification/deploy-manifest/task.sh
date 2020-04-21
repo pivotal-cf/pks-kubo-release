@@ -2,7 +2,7 @@
 
 set -euxo pipefail
 
-source git-boshcycle-ci/ci/minimum-release-verification/utils/all-env.sh
+source git-kubo-odb-ci/scripts/lib/ci-helpers.sh
 setup_bosh_env
 
 export NETWORK_NAME=`bosh int <(bosh cloud-config) --path /networks | yq -r '.[] | select(.name|test(".*pks-services-subnet.*")) | .name'`

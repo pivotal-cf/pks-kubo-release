@@ -86,7 +86,7 @@ jobs:
     params:
       acquire: true
 
-- name: upload-kubo-release
+- name: upload-pks-kubernetes-release
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
@@ -101,7 +101,7 @@ jobs:
     input_mapping:
       locks-repo: pool-pks-locks
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
-  - task: upload-kubo-release
+  - task: upload-pks-kubernetes-release
     privileged: true
     input_mapping:
       bosh-release: git-pks-kubernetes-release
@@ -109,7 +109,7 @@ jobs:
       DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
     file: git-boshcycle-ci/ci/tasks/upload-release/task.yml
 
-- name: upload-kubo-release-windows
+- name: upload-pks-kubernetes-windows-release
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
@@ -124,7 +124,7 @@ jobs:
     input_mapping:
       locks-repo: pool-pks-locks
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
-  - task: upload-kubo-release
+  - task: upload-pks-kubernetes-release
     privileged: true
     input_mapping:
       bosh-release: git-pks-kubernetes-windows-release
@@ -180,14 +180,14 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed:
-        - 'upload-kubo-release'
-        - 'upload-kubo-release-windows'
+        - 'upload-pks-kubernetes-release'
+        - 'upload-pks-kubernetes-windows-release'
         - 'upload-linux-stemcell'
         - 'upload-windows-stemcell'
     - get: git-pks-kubernetes-release
-      passed: [ 'upload-kubo-release' ]
+      passed: [ 'upload-pks-kubernetes-release' ]
     - get: git-pks-kubernetes-windows-release
-      passed: [ 'upload-kubo-release-windows' ]
+      passed: [ 'upload-pks-kubernetes-windows-release' ]
   - task: create-bosh-config
     tags: ['gcp']
     input_mapping:

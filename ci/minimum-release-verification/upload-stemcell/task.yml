@@ -11,5 +11,8 @@ inputs:
   - name: stemcell
   - name: gcs-director-config
 
+params:
+  DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
+
 run:
   path: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.sh
