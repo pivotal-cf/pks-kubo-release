@@ -2,8 +2,8 @@
 
 set -euxo pipefail
 
-source git-boshcycle-ci/ci/minimum-release-verification/utils/all-env.sh
-source git-boshcycle-ci/ci/minimum-release-verification/utils/git-head-sha.sh
+source git-kubo-odb-ci/scripts/lib/ci-helpers.sh
+source git-boshcycle-ci/ci/scripts/lib/git-head-sha.sh
 
 GIT_SHA="$(gitHeadSha "bosh-release")"
 

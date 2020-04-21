@@ -16,3 +16,4 @@ run:
 
 params:
   GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
+  DEPLOYMENT_NAME: "SOME_DEFAULT_DEPLOYMENT"

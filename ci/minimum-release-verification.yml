@@ -105,6 +105,8 @@ jobs:
     privileged: true
     input_mapping:
       bosh-release: git-pks-kubernetes-release
+    params:
+      DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
     file: git-boshcycle-ci/ci/minimum-release-verification/upload-kubo-release/task.yml
 
 - name: upload-kubo-release-windows
@@ -126,6 +128,8 @@ jobs:
     privileged: true
     input_mapping:
       bosh-release: git-pks-kubernetes-windows-release
+    params:
+      DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
     file: git-boshcycle-ci/ci/minimum-release-verification/upload-kubo-release-windows/task.yml
 
 - name: upload-linux-stemcell
