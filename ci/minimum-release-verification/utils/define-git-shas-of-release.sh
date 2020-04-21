@@ -17,7 +17,7 @@ gitHeadSha() {
   echo $result
 }
 
-KUBO_GIT_SHA="$(gitHeadSha "git-pks-kubo-release")"
-KUBO_WINDOWS_GIT_SHA="$(gitHeadSha "git-pks-kubo-release-windows")"
+KUBO_GIT_SHA="$(gitHeadSha "git-pks-kubernetes-release")"
+KUBO_WINDOWS_GIT_SHA="$(gitHeadSha "git-pks-kubernetes-windows-release")"
 
 export KUBO_GIT_SHA KUBO_WINDOWS_GIT_SHA

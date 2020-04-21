@@ -1,7 +1,7 @@
 #!/bin/bash
 set -exu -o pipefail
 
-source git-pks-kubo-release-ci/ci/scripts/lib/generate-pr.sh
+source git-pks-kubernetes-release-ci/ci/scripts/lib/generate-pr.sh
 
 download_and_add_blob_and_commit() {
   local version script_name component
@@ -9,7 +9,7 @@ download_and_add_blob_and_commit() {
   script_name="$2"
   component="$3"
 
-  ../git-pks-kubo-release-ci/ci/scripts/$script_name $version "$(pwd)"
+  ../git-pks-kubernetes-release-ci/ci/scripts/$script_name $version "$(pwd)"
 
   if [ -n "$(git status --porcelain)" ]; then
     cat <<EOF > "config/private.yml"

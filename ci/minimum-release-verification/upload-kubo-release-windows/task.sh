@@ -6,7 +6,7 @@ set -euxo pipefail
 source git-boshcycle-ci/ci/minimum-release-verification/utils/all-env.sh
 setup_bosh_env
 
-pushd git-pks-kubo-release-windows
+pushd git-pks-kubernetes-windows-release
   cat <<EOF > "config/private.yml"
 ---
 blobstore:

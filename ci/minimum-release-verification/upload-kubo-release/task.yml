@@ -8,7 +8,7 @@ inputs:
   - name: pool-pks-locks
   - name: git-kubo-odb-ci
   - name: git-boshcycle-ci
-  - name: git-pks-kubo-release
+  - name: git-pks-kubernetes-release
   - name: gcs-director-config
 
 run:

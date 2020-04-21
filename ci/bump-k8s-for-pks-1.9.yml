@@ -26,21 +26,21 @@ resources:
       json_key: ((gcs-json-key))
       regexp: "release/v(1.18.\\d*)/bin/windows/amd64/kube-proxy.exe"
 
-- name: git-pks-kubo-release-ci
+- name: git-pks-kubernetes-release-ci
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
     branch: master
     private_key: ((git-ssh-key.private_key))
 
-- name: git-pks-kubo-release
+- name: git-pks-kubernetes-release
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
     branch: master
     private_key: ((git-ssh-key.private_key))
 
-- name: git-pks-kubo-release-windows
+- name: git-pks-kubernetes-windows-release
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-windows-release.git
@@ -51,8 +51,8 @@ jobs:
 - name: bump-dependencies-in-pks-kubo-release
   plan:
   - in_parallel:
-    - get: git-pks-kubo-release
-    - get: git-pks-kubo-release-ci
+    - get: git-pks-kubernetes-release
+    - get: git-pks-kubernetes-release-ci
     - get: s3-kubernetes-common-core-linux
       trigger: true
   - task: bump-dependencies-in-pks-kubo-release
@@ -63,10 +63,10 @@ jobs:
         source:
           repository: odpks/pks-ci
       run:
-        path: git-pks-kubo-release-ci/ci/scripts/bump-k8s.sh
+        path: git-pks-kubernetes-release-ci/ci/scripts/bump-k8s.sh
       inputs:
-        - name: git-pks-kubo-release
-        - name: git-pks-kubo-release-ci
+        - name: git-pks-kubernetes-release
+        - name: git-pks-kubernetes-release-ci
         - name: s3-kubernetes-common-core-linux
       params:
         BASE_BRANCH: master
@@ -81,21 +81,21 @@ jobs:
 - name: bump-dependencies-in-pks-kubo-release-windows
   plan:
     - in_parallel:
-        - get: git-pks-kubo-release-ci
-        - get: git-pks-kubo-release-windows
+        - get: git-pks-kubernetes-release-ci
+        - get: git-pks-kubernetes-windows-release
         - get: gcs-kubernetes-windows
           trigger: true
     - task: bump-dependencies-in-pks-kubo-release-windows
       config:
         <<: *config
         run:
-          path: git-pks-kubo-release-ci/ci/scripts/bump-k8s.sh
+          path: git-pks-kubernetes-release-ci/ci/scripts/bump-k8s.sh
         inputs:
-          - name: git-pks-kubo-release-ci
-          - name: git-pks-kubo-release-windows
+          - name: git-pks-kubernetes-release-ci
+          - name: git-pks-kubernetes-windows-release
           - name: gcs-kubernetes-windows
         outputs:
-          - name: git-pks-kubo-release-windows-output
+          - name: git-pks-kubernetes-windows-release-output
         params:
           REPO: windows
           BASE_BRANCH: master

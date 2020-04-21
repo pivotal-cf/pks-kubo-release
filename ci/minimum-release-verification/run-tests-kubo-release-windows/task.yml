@@ -6,7 +6,7 @@ image_resource:
 
 inputs:
   - name: git-boshcycle-ci
-  - name: git-pks-kubo-release-windows
+  - name: git-pks-kubernetes-windows-release
 
 run:
   path: git-boshcycle-ci/ci/minimum-release-verification/run-tests-kubo-release-windows/task.sh

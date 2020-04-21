@@ -15,7 +15,7 @@ resources:
     branch: master
     private_key: ((pks-bot-ssh-key.private_key))
 
-- name: git-pks-kubo-release
+- name: git-pks-kubernetes-release
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
@@ -33,7 +33,7 @@ resources:
     private_key: ((git-ssh-key.private_key))
     paths: [ci]
 
-- name: git-pks-kubo-release-windows
+- name: git-pks-kubernetes-windows-release
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-windows-release.git
@@ -57,8 +57,8 @@ jobs:
   plan:
     - in_parallel:
         - get: git-boshcycle-ci
-        - get: git-pks-kubo-release
-        - get: git-pks-kubo-release-windows
+        - get: git-pks-kubernetes-release
+        - get: git-pks-kubernetes-windows-release
     - task: run-tests-kubo-release
       privileged: true
       file: git-boshcycle-ci/ci/minimum-release-verification/run-tests-kubo-release/task.yml
@@ -71,10 +71,10 @@ jobs:
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-pks-kubo-release
+    - get: git-pks-kubernetes-release
       passed: [ 'run-unit-tests' ]
       trigger: true
-    - get: git-pks-kubo-release-windows
+    - get: git-pks-kubernetes-windows-release
       passed: [ 'run-unit-tests' ]
       trigger: true
     - get: pool-pks-locks
@@ -87,7 +87,7 @@ jobs:
   - in_parallel:
     - get: git-kubo-odb-ci
     - get: git-boshcycle-ci
-    - get: git-pks-kubo-release
+    - get: git-pks-kubernetes-release
 #      passed: [ 'claim-lock' ]
     - get: pool-pks-locks
       trigger: true
@@ -109,7 +109,7 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed: [ 'claim-lock' ]
-    - get: git-pks-kubo-release-windows
+    - get: git-pks-kubernetes-windows-release
       passed: [ 'claim-lock' ]
   - task: create-bosh-config
     tags: ['gcp']
@@ -172,9 +172,9 @@ jobs:
         - 'upload-kubo-release-windows'
         - 'upload-linux-stemcell'
         - 'upload-windows-stemcell'
-    - get: git-pks-kubo-release
+    - get: git-pks-kubernetes-release
       passed: [ 'upload-kubo-release' ]
-    - get: git-pks-kubo-release-windows
+    - get: git-pks-kubernetes-windows-release
       passed: [ 'upload-kubo-release-windows' ]
   - task: create-bosh-config
     tags: ['gcp']
@@ -193,9 +193,9 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed: [ 'deploy-manifest' ]
-    - get: git-pks-kubo-release
+    - get: git-pks-kubernetes-release
       passed: [ 'deploy-manifest' ]
-    - get: git-pks-kubo-release-windows
+    - get: git-pks-kubernetes-windows-release
       passed: [ 'deploy-manifest' ]
   - task: create-bosh-config
     tags: ['gcp']
@@ -214,9 +214,9 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed: [ 'print-component-versions' ]
-    - get: git-pks-kubo-release
+    - get: git-pks-kubernetes-release
       passed: [ 'print-component-versions' ]
-    - get: git-pks-kubo-release-windows
+    - get: git-pks-kubernetes-windows-release
       passed: [ 'print-component-versions' ]
   - task: create-bosh-config
     tags: ['gcp']

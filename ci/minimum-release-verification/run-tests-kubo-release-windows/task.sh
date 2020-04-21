@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-pushd git-pks-kubo-release-windows
+pushd git-pks-kubernetes-windows-release
   ./run_tests.sh
 popd
 
