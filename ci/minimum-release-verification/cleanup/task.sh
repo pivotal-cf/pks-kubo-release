@@ -17,9 +17,9 @@ bosh delete-deployment \
 ###################
 bosh delete-release \
   --non-interactive \
-  kubo/"${KUBO_GIT_SHA}" \
+  kubo/"${LINUX_GIT_SHA}" \
   || true
 bosh delete-release \
   --non-interactive \
-  kubo-windows/"${KUBO_WINDOWS_GIT_SHA}" \
+  kubo-windows/"${WINDOWS_GIT_SHA}" \
   || true

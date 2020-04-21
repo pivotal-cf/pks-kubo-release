@@ -12,13 +12,13 @@ export NETWORK_NAME=default
 export FIRST_AZ=z1
 
 export DEPLOYMENT_NAME=kubo
-export KUBO_GIT_SHA=latest # kubo/1.7.0-build.76+dev.1
+export LINUX_GIT_SHA=latest # kubo/1.7.0-build.76+dev.1
 
 bosh -e vbox deploy \
   --non-interactive \
   --deployment="${DEPLOYMENT_NAME}" \
   --var=deployment-name="${DEPLOYMENT_NAME}" \
-  --var=kubo-version="${KUBO_GIT_SHA}" \
+  --var=kubo-version="${LINUX_GIT_SHA}" \
   --var=network-name="${NETWORK_NAME}" \
   --var=first-az="${FIRST_AZ}" \
   manifest.yml

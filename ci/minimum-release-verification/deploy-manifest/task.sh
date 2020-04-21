@@ -12,8 +12,8 @@ bosh deploy \
   --non-interactive \
   --deployment="${DEPLOYMENT_NAME}" \
   --var=deployment-name="${DEPLOYMENT_NAME}" \
-  --var=kubo-version="${KUBO_GIT_SHA}" \
-  --var=kubo-windows-version="${KUBO_WINDOWS_GIT_SHA}" \
+  --var=kubo-version="${LINUX_GIT_SHA}" \
+  --var=kubo-windows-version="${WINDOWS_GIT_SHA}" \
   --var=network-name="${NETWORK_NAME}" \
   --var=first-az="${FIRST_AZ}" \
   git-boshcycle-ci/ci/minimum-release-verification/manifest.yml
