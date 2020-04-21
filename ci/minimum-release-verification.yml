@@ -61,10 +61,14 @@ jobs:
         - get: git-pks-kubernetes-windows-release
     - task: run-tests-kubo-release
       privileged: true
-      file: git-boshcycle-ci/ci/minimum-release-verification/run-tests-kubo-release/task.yml
+      input_mapping:
+        bosh-release: git-pks-kubernetes-release
+      file: git-boshcycle-ci/ci/minimum-release-verification/run-tests/task.yml
     - task: run-tests-kubo-release-windows
       privileged: true
-      file: git-boshcycle-ci/ci/minimum-release-verification/run-tests-kubo-release-windows/task.yml
+      input_mapping:
+        bosh-release: git-pks-kubernetes-windows-release
+      file: git-boshcycle-ci/ci/minimum-release-verification/run-tests/task.yml
 
 - name: claim-lock
   max_in_flight: 1

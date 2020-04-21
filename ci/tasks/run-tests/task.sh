@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-pushd git-pks-kubernetes-windows-release
+pushd bosh-release
   ./run_tests.sh
 popd
-
