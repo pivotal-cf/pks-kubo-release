@@ -8,9 +8,9 @@ set -u
 
 ci_dir="$(cd "$(dirname "$0")"; pwd)"
 
-echo "======================================="
-echo "| Setting kubo Concourse pipeline     |"
-echo "======================================="
+echo "============================================="
+echo "| Setting bosh-lifecycle concourse pipeline |"
+echo "============================================="
 echo ""
 
 print_usage() {

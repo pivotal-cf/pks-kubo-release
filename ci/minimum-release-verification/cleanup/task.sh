@@ -2,8 +2,11 @@
 
 set -euxo pipefail
 
-source git-boshcycle-ci/ci/minimum-release-verification/utils/all-env.sh
+source git-kubo-odb-ci/scripts/lib/ci-helpers.sh
 setup_bosh_env
+
+export LINUX_GIT_SHA=`cat git-pks-kubernetes-release/.git/ref`
+export WINDOWS_GIT_SHA=`cat git-pks-kubernetes-windows-release/.git/ref`
 
 #####################
 # Delete Deployment #

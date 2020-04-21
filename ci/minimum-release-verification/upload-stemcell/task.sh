@@ -2,8 +2,7 @@
 
 set -euxo pipefail
 
-# set relevant BOSH env vars
-source git-boshcycle-ci/ci/minimum-release-verification/utils/all-env.sh
+source git-kubo-odb-ci/scripts/lib/ci-helpers.sh
 setup_bosh_env
 
 pushd stemcell
