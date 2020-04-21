@@ -103,6 +103,8 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: upload-kubo-release
     privileged: true
+    input_mapping:
+      bosh-release: git-pks-kubernetes-release
     file: git-boshcycle-ci/ci/minimum-release-verification/upload-kubo-release/task.yml
 
 - name: upload-kubo-release-windows
@@ -122,6 +124,8 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: upload-kubo-release
     privileged: true
+    input_mapping:
+      bosh-release: git-pks-kubernetes-windows-release
     file: git-boshcycle-ci/ci/minimum-release-verification/upload-kubo-release-windows/task.yml
 
 - name: upload-linux-stemcell

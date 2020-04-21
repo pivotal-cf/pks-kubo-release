@@ -16,8 +16,3 @@ gitHeadSha() {
 
   echo $result
 }
-
-LINUX_GIT_SHA="$(gitHeadSha "git-pks-kubernetes-release")"
-WINDOWS_GIT_SHA="$(gitHeadSha "git-pks-kubernetes-windows-release")"
-
-export LINUX_GIT_SHA WINDOWS_GIT_SHA

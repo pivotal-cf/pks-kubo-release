@@ -2,11 +2,14 @@
 
 set -euxo pipefail
 
-# define WINDOWS_GIT_SHA as latest commit
 source git-boshcycle-ci/ci/minimum-release-verification/utils/all-env.sh
+source git-boshcycle-ci/ci/minimum-release-verification/utils/git-head-sha.sh
+
+GIT_SHA="$(gitHeadSha "bosh-release")"
+
 setup_bosh_env
 
-pushd git-pks-kubernetes-windows-release
+pushd bosh-release
   cat <<EOF > "config/private.yml"
 ---
 blobstore:
@@ -16,6 +19,6 @@ blobstore:
 $GCS_JSON_KEY
 EOF
 
-  bosh create-release --version="${WINDOWS_GIT_SHA}" --tarball pipeline.tgz
+  bosh create-release --version="${GIT_SHA}" --tarball pipeline.tgz
   bosh upload-release pipeline.tgz
 popd
