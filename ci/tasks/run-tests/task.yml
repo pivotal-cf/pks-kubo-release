@@ -9,4 +9,4 @@ inputs:
   - name: bosh-release
 
 run:
-  path: git-boshcycle-ci/ci/minimum-release-verification/tasks/run-tests/task.sh
+  path: git-boshcycle-ci/ci/tasks/run-tests/task.sh
