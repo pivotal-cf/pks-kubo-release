@@ -3,9 +3,8 @@
 set -euxo pipefail
 
 source git-kubo-odb-ci/scripts/lib/ci-helpers.sh
-source git-boshcycle-ci/ci/scripts/lib/git-head-sha.sh
 
-GIT_SHA="$(gitHeadSha "bosh-release")"
+export GIT_SHA=`cat bosh-release/.git/ref`
 
 setup_bosh_env
 
