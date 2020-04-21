@@ -107,7 +107,7 @@ jobs:
       bosh-release: git-pks-kubernetes-release
     params:
       DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-kubo-release/task.yml
+    file: git-boshcycle-ci/ci/tasks/upload-release/task.yml
 
 - name: upload-kubo-release-windows
   plan:
@@ -130,7 +130,7 @@ jobs:
       bosh-release: git-pks-kubernetes-windows-release
     params:
       DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-kubo-release-windows/task.yml
+    file: git-boshcycle-ci/ci/tasks/upload-release/task.yml
 
 - name: upload-linux-stemcell
   plan:
