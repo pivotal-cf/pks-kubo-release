@@ -30,7 +30,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
-    branch: master
+    branch: &base-branch 1.7.x
     private_key: ((git-ssh-key.private_key))
 
 - name: git-pks-kubernetes-release-ci
@@ -44,7 +44,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-windows-release.git
-    branch: master
+    branch: *base-branch
     private_key: ((git-ssh-key.private_key))
 
 jobs:
@@ -69,7 +69,7 @@ jobs:
         - name: git-pks-kubernetes-release-ci
         - name: s3-kubernetes-common-core-linux
       params:
-        BASE_BRANCH: master
+        BASE_BRANCH: *base-branch
         BINARY_DIRECTORY: s3-kubernetes-common-core-linux
         USE_COMMON_CORE: true
         GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
@@ -95,7 +95,7 @@ jobs:
           - name: gcs-kubernetes-windows
         params:
           REPO: windows
-          BASE_BRANCH: master
+          BASE_BRANCH: *base-branch
           BINARY_DIRECTORY: gcs-kubernetes-windows
           GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
           GIT_USER_TOKEN: ((git-write-token))
