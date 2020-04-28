@@ -31,10 +31,14 @@ builds:
     version: 0.40.0
   44b992f5-5eb6-402b-61d8-528577992ebe:
     version: 0.28.0
+  4971acc4-f5b3-42ca-7d80-a59305ad8945:
+    version: 1.9.0-build.11-replace-nginx
   588ab971-a83e-446e-4dd7-58afaa42913e:
     version: 0.29.0
   5d9d225b-c595-4cf0-54d4-fd1c6d796aa4:
     version: 0.0.5
+  61ee0a75-f9ae-4351-7f13-9862bd537c7f:
+    version: 1.9.0-build.15-replace-nginx
   665d71a9-8522-4c64-692a-7899458abae6:
     version: 0.8.0
   744fe93d-7c3e-4f35-4932-e2f39b471420:
@@ -71,6 +75,8 @@ builds:
     version: 0.11.0
   bc2eb970-2115-4588-6da6-a032610a9e9c:
     version: 1.7.0-build.75
+  c3a1a4b9-8cdd-40e3-5f40-4f4ab42bad8c:
+    version: 1.9.0-build.14-replace-nginx
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
     version: 0.27.0
   c9984ee5-d029-48d0-5c49-6ec099bf12b3:
@@ -85,6 +91,8 @@ builds:
     version: 0.38.0
   e8bebc9f-b75c-40c7-5313-2058b9c11c60:
     version: 0.30.0
+  edc15472-60fc-4fa6-731b-da803340d474:
+    version: 1.9.0-build.12-replace-nginx
   ef2b4733-e080-402d-499c-4a2eff28aa4a:
     version: 0.16.0
   f7c19373-2d57-421a-73ba-39816fce001f:
