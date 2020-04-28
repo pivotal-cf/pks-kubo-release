@@ -170,7 +170,9 @@ jobs:
     privileged: true
     input_mapping:
       stemcell: gcp-windows-stemcell
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+    params:
+      DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
+    file: git-boshcycle-ci/ci/tasks/upload-stemcell/task.yml
 
 - name: deploy-manifest
   plan:
@@ -195,6 +197,8 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: deploy-release
     privileged: true
+    params:
+      DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
     file: git-boshcycle-ci/ci/minimum-release-verification/deploy-manifest/task.yml
 
 - name: print-component-versions
@@ -216,7 +220,7 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: print-component-versions
     privileged: true
-    file: git-boshcycle-ci/ci/minimum-release-verification/print-component-versions/task.yml
+    file: git-boshcycle-ci/ci/tasks/print-component-versions/task.yml
 
 - name: cleanup
   plan:
@@ -237,7 +241,9 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: delete-release
     privileged: true
-    file: git-boshcycle-ci/ci/minimum-release-verification/cleanup/task.yml
+    params:
+      DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
+    file: git-boshcycle-ci/ci/tasks/cleanup/task.yml
   - put: pool-pks-locks
     params:
       release: pool-pks-locks

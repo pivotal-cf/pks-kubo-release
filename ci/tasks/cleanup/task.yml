@@ -13,7 +13,7 @@ inputs:
   - name: gcs-director-config
 
 params:
-  DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
+  DEPLOYMENT_NAME: "SOME_DEFAULT_DEPLOYMENT"
 
 run:
-  path: git-boshcycle-ci/ci/minimum-release-verification/print-component-versions/task.sh
+  path: git-boshcycle-ci/ci/tasks/cleanup/task.sh
