@@ -47,7 +47,7 @@ var _ = Describe("CFCR Smoke Tests", func() {
 
 		BeforeEach(func() {
 			deploymentName = randSeq(10)
-			args := []string{"run", deploymentName, "--image=vmware/nginx-bionic:1.0.0", "--image-pull-policy=Never", "-l", "app=" + deploymentName, "--serviceaccount=default"}
+			args := []string{"run", deploymentName, "--image=simple-server:latest", "--image-pull-policy=Never", "-l", "app=" + deploymentName, "--serviceaccount=default"}
 			session := k8sRunner.RunKubectlCommand(args...)
 			Eventually(session, "60s").Should(gexec.Exit(0))
 
@@ -71,18 +71,6 @@ var _ = Describe("CFCR Smoke Tests", func() {
 			Expect(session.Out).To(gbytes.Say("Running"))
 		})
 
-		It("allows commands to be executed on a container", func() {
-			args := []string{"get", "pods", "-l", "app=" + deploymentName, "-o", "jsonpath={.items[0].metadata.name}"}
-			session := k8sRunner.RunKubectlCommand(args...)
-			Eventually(session, "15s").Should(gexec.Exit(0))
-			podName := string(session.Out.Contents())
-
-			execArgs := []string{"exec", podName, "--", "which", "nginx"}
-			execSession := k8sRunner.RunKubectlCommand(execArgs...)
-			Eventually(execSession, "60s").Should(gexec.Exit(0))
-			Expect(execSession.Out).To(gbytes.Say("/usr/sbin/nginx"))
-		})
-
 		It("allows access to pod logs", func() {
 			args := []string{"get", "pods", "-l", "app=" + deploymentName, "-o", "jsonpath={.items[0].metadata.name}"}
 			session := k8sRunner.RunKubectlCommand(args...)
@@ -98,7 +86,7 @@ var _ = Describe("CFCR Smoke Tests", func() {
 			port := session.Out.Contents()
 
 			endpoint := fmt.Sprintf("http://%s:%s", nodeIP, port)
-			Eventually(curlLater(endpoint), "5s").Should(ContainSubstring("Server: nginx"))
+			Eventually(curlLater(endpoint), "5s").Should(ContainSubstring("Server: simple-server"))
 
 			getLogs := k8sRunner.RunKubectlCommand("logs", podName)
 			Eventually(getLogs, "15s").Should(gexec.Exit(0))
@@ -125,8 +113,8 @@ var _ = Describe("CFCR Smoke Tests", func() {
 				cmd.Terminate().Wait("15s")
 			})
 
-			It("successfully curls the nginx service", func() {
-				Eventually(curlLater("http://localhost:"+port), "15s").Should(ContainSubstring("Server: nginx"))
+			It("successfully curls the simple-server service", func() {
+				Eventually(curlLater("http://localhost:"+port), "15s").Should(ContainSubstring("Server: simple-server"))
 			})
 		})
 	})
