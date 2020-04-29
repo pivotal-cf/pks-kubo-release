@@ -18,7 +18,7 @@ func main() {
 
 	// if we're running as a local executable to echo, just echo
 	if len(argsWithoutProgramName) > 0 {
-		log.Printf("Received '%s'\n", strings.Join(argsWithoutProgramName, " "))
+		fmt.Printf("Received '%s'\n", strings.Join(argsWithoutProgramName, " "))
 		return
 	}
 

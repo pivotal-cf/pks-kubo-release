@@ -22,9 +22,9 @@ func randSeq(n int) string {
 	return string(b)
 }
 
-func curlLater(endpoint string) func() (string, error) {
+func curlCaller(endpoint string) func() (string, error) {
 	return func() (string, error) {
-		cmd := exec.Command("curl", "--head", endpoint)
+		cmd := exec.Command("curl", endpoint)
 		out, err := cmd.CombinedOutput()
 		return string(out), err
 	}
@@ -77,10 +77,10 @@ var _ = Describe("CFCR Smoke Tests", func() {
 			Eventually(session, "15s").Should(gexec.Exit(0))
 			podName := string(session.Out.Contents())
 
-			execArgs := []string{"exec", podName, "--", "/simple-server", "hello world test string"}
+			execArgs := []string{"exec", podName, "--", "/simple-server", "hello", "world", "test", "string"}
 			execSession := k8sRunner.RunKubectlCommand(execArgs...)
 			Eventually(execSession, "60s").Should(gexec.Exit(0))
-			Expect(execSession.Out).To(ContainSubstring("hello world test string"))
+			Expect(string(execSession.Out.Contents())).To(ContainSubstring("hello world test string"))
 		})
 
 		It("allows access to pod logs", func() {
@@ -98,7 +98,7 @@ var _ = Describe("CFCR Smoke Tests", func() {
 			port := session.Out.Contents()
 
 			endpoint := fmt.Sprintf("http://%s:%s", nodeIP, port)
-			Eventually(curlLater(endpoint), "5s").Should(ContainSubstring("Server: simple-server"))
+			Eventually(curlCaller(endpoint), "5s").Should(ContainSubstring("Server: simple-server"))
 
 			getLogs := k8sRunner.RunKubectlCommand("logs", podName)
 			Eventually(getLogs, "15s").Should(gexec.Exit(0))
@@ -117,7 +117,7 @@ var _ = Describe("CFCR Smoke Tests", func() {
 				Eventually(session, "15s").Should(gexec.Exit(0))
 				podName := string(session.Out.Contents())
 
-				args = []string{"port-forward", podName, port + ":80"}
+				args = []string{"port-forward", podName, port + ":8080"}
 				cmd = k8sRunner.RunKubectlCommand(args...)
 			})
 
@@ -126,7 +126,7 @@ var _ = Describe("CFCR Smoke Tests", func() {
 			})
 
 			It("successfully curls the simple-server service", func() {
-				Eventually(curlLater("http://localhost:"+port), "15s").Should(ContainSubstring("Server: simple-server"))
+				Eventually(curlCaller("http://localhost:"+port), "15s").Should(ContainSubstring("Server: simple-server"))
 			})
 		})
 	})
