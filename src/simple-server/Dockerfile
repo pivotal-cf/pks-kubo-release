@@ -9,6 +9,9 @@ RUN env GOOS=linux GOARCH=amd64 go build -o /go/bin/simple-server /go/src/app/si
 RUN chmod +x /go/bin/simple-server
 
 FROM cloudfoundry/run:tiny
+
+USER nonroot
+
 COPY --from=build-env /go/bin/simple-server /
-EXPOSE 80/tcp
+EXPOSE 8080/tcp
 CMD ["/simple-server"]§
