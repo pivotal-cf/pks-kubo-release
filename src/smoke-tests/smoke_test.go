@@ -51,7 +51,7 @@ var _ = Describe("CFCR Smoke Tests", func() {
 			session := k8sRunner.RunKubectlCommand(args...)
 			Eventually(session, "60s").Should(gexec.Exit(0))
 
-			exposeArgs := []string{"expose", "deployment", deploymentName, "--port=80", "--type=NodePort"}
+			exposeArgs := []string{"expose", "deployment", deploymentName, "--port=8080", "--type=NodePort"}
 			session = k8sRunner.RunKubectlCommand(exposeArgs...)
 			Eventually(session, "120s").Should(gexec.Exit(0))
 
@@ -69,6 +69,18 @@ var _ = Describe("CFCR Smoke Tests", func() {
 			session := k8sRunner.RunKubectlCommand(args...)
 			Eventually(session, "60s").Should(gexec.Exit(0))
 			Expect(session.Out).To(gbytes.Say("Running"))
+		})
+
+		It("allows commands to be executed on a container", func() {
+			args := []string{"get", "pods", "-l", "app=" + deploymentName, "-o", "jsonpath={.items[0].metadata.name}"}
+			session := k8sRunner.RunKubectlCommand(args...)
+			Eventually(session, "15s").Should(gexec.Exit(0))
+			podName := string(session.Out.Contents())
+
+			execArgs := []string{"exec", podName, "--", "/simple-server", "hello world test string"}
+			execSession := k8sRunner.RunKubectlCommand(execArgs...)
+			Eventually(execSession, "60s").Should(gexec.Exit(0))
+			Expect(execSession.Out).To(ContainSubstring("hello world test string"))
 		})
 
 		It("allows access to pod logs", func() {
