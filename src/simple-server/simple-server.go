@@ -1,4 +1,4 @@
-package smoke_tests
+package main
 
 import (
 	"fmt"
