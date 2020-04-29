@@ -47,7 +47,7 @@ var _ = Describe("CFCR Smoke Tests", func() {
 
 		BeforeEach(func() {
 			deploymentName = randSeq(10)
-			args := []string{"run", deploymentName, "--image=vmware/nginx-bionic:1.0.0", "--image-pull-policy=Never", "-l", "app=" + deploymentName, "--serviceaccount=default"}
+			args := []string{"run", deploymentName, "--image=cnabu-docker-local.artifactory.eng.vmware.com/pks/nginx-bionic:nginx-bionic-2020-04-29-18-50-dev", "--image-pull-policy=Never", "-l", "app=" + deploymentName, "--serviceaccount=default"}
 			session := k8sRunner.RunKubectlCommand(args...)
 			Eventually(session, "60s").Should(gexec.Exit(0))
 
