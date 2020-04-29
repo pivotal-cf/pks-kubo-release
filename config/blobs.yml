@@ -52,8 +52,8 @@ conntrack/libnetfilter-conntrack3_1.0.5-1_amd64.deb:
   sha: sha256:18609b2b131bc0dedf4a2c3fbf61b30d16c3d3a96cd43d604e8fc53ebc1e30eb
 container-images/simple-server.tgz:
   size: 26959872
-  object_id: 6953d012-3286-45fc-65f3-9513b8ad272e
-  sha: sha256:57025d369a95475c2a9dcef9a84234bc5714394d94ecd0153983166aa6c39f47
+  object_id: 128f7bc6-b2c6-41d1-751f-e3213d765087
+  sha: sha256:d60272e09a9dca6b8ebb477e28bc809fc7ea5d2a99f59a5e66e0b6c03bf10f9f
 container-images/vmware_coredns:1.6.2.tgz:
   size: 13962465
   object_id: 6973437f-757e-4a19-7278-0c3403f9d51c

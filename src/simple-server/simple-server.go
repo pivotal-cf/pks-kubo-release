@@ -7,6 +7,7 @@ import (
 )
 
 func hello(w http.ResponseWriter, req *http.Request) {
+	log.Printf("Received request from %s\n", req.UserAgent())
 	fmt.Fprintf(w, "Server: simple-server\n")
 }
 
