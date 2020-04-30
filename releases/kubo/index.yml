@@ -77,6 +77,8 @@ builds:
     version: 0.11.0
   bc2eb970-2115-4588-6da6-a032610a9e9c:
     version: 1.7.0-build.75
+  bfbf7aaf-c524-471f-6282-467f1f25fb62:
+    version: 1.9.0-build.16-no-mainline-suffixes
   c3a1a4b9-8cdd-40e3-5f40-4f4ab42bad8c:
     version: 1.9.0-build.14-replace-nginx
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
