@@ -25,6 +25,8 @@ builds:
     version: 0.20.0
   3a6fe5ab-d5b6-4d09-5836-3ce87c2a4a86:
     version: 0.26.0
+  3b24b157-4ecd-4019-59c2-6707405fe1eb:
+    version: 1.9.0-build.19-no-mainline-suffixes
   3d10b0b5-9169-4c1a-4fe8-3252cf688457:
     version: 0.40.0
   4069751a-be33-4ab5-7d94-177379805c96:
