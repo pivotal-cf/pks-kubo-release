@@ -47,11 +47,11 @@ main() {
   google_k8s_version="$matched_k8s_version"
 
   if [ "${REPO:-}" == "windows" ]; then
-    git_repo="pks-kubo-release-windows"
+    git_repo="pks-kubernetes-release-windows"
     k8s_script_name="download_k8s_binaries_windows"
     docker_script_name="download_docker_binaries_windows.sh"
   else
-    git_repo="pks-kubo-release"
+    git_repo="pks-kubernetes-release"
     docker_script_name="download_docker_binaries_linux.sh"
     if [ "false" == "$USE_COMMON_CORE" ]; then
       k8s_script_name="download_k8s_binaries_google"
