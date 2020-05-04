@@ -72,6 +72,7 @@ jobs:
       params:
         BASE_BRANCH: 1.5.x
         BINARY_DIRECTORY: k8s-release
+        BUMP_DOCKER: false
         USE_COMMON_CORE: false
         GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
         GIT_USER_TOKEN: ((git-write-token))
@@ -97,6 +98,7 @@ jobs:
         params:
           REPO: windows
           BASE_BRANCH: 1.5.x
+          BUMP_DOCKER: false
           BINARY_DIRECTORY: gcs-kubernetes-windows
           GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
           GIT_USER_TOKEN: ((git-write-token))

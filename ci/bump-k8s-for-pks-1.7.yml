@@ -71,6 +71,7 @@ jobs:
       params:
         BASE_BRANCH: *base-branch
         BINARY_DIRECTORY: s3-kubernetes-common-core-linux
+        BUMP_DOCKER: false
         USE_COMMON_CORE: true
         GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
         GIT_USER_TOKEN: ((git-write-token))
@@ -96,6 +97,7 @@ jobs:
         params:
           REPO: windows
           BASE_BRANCH: *base-branch
+          BUMP_DOCKER: false
           BINARY_DIRECTORY: gcs-kubernetes-windows
           GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
           GIT_USER_TOKEN: ((git-write-token))
