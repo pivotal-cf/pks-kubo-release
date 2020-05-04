@@ -42,7 +42,7 @@ jobs:
     - get: git-pks-kubernetes-release-ci
     - get: k8s-release
       trigger: true
-  - task: bump-k8s-in-pks-kubo-release
+  - task: bump-k8s-in-pks-kubernetes-release
     config: &config
       platform: linux
       image_resource:

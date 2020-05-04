@@ -63,7 +63,7 @@ jobs:
     - get: git-pks-kubernetes-release-ci
     - get: s3-kubernetes-common-core-linux
       trigger: true
-  - task: bump-dependencies-in-pks-kubo-release
+  - task: bump-dependencies-in-pks-kubernetes-release
     config: &config
       platform: linux
       image_resource:
@@ -93,7 +93,7 @@ jobs:
         - get: git-pks-kubernetes-release-ci
         - get: k8s-release
           trigger: true
-    - task: bump-k8s-in-pks-kubo-release
+    - task: bump-k8s-in-pks-kubernetes-release
       config: &config
         platform: linux
         image_resource:
@@ -123,7 +123,7 @@ jobs:
         - get: git-pks-kubernetes-windows-release
         - get: gcs-kubernetes-windows
           trigger: true
-    - task: bump-dependencies-in-pks-kubo-release-windows
+    - task: bump-dependencies-in-pks-kubernetes-release-windows
       config:
         <<: *config
         run:
