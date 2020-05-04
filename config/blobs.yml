@@ -18,29 +18,29 @@ cni/util-linux_2.27.1-6ubuntu3_amd64.deb:
   size: 847730
   object_id: 27eb3ec3-220f-4a25-6c4f-ec219c37ac8d
   sha: 568f62cb031608ab09ba1e3c2121e9e8b92dcae4
-common-core-kubernetes-1.16.7/kube-apiserver:
+common-core-kubernetes-1.16.7+vmware.1/kube-apiserver:
   size: 157936511
-  object_id: 18146b42-8564-47a6-6d1a-9c03e0451457
+  object_id: b4cb6e35-1b39-4118-5e25-0442f75bcdf0
   sha: b296e31d2e583330a94fd68034e30197f1df38de
-common-core-kubernetes-1.16.7/kube-controller-manager:
+common-core-kubernetes-1.16.7+vmware.1/kube-controller-manager:
   size: 149074747
-  object_id: f0ca2e47-325a-449d-7b12-44d3b4b26e4f
+  object_id: 802c26a8-bdcd-4ffe-59f5-c74c698e54a3
   sha: a3737c4f9609b9bde657117bb28500af0c0015f0
-common-core-kubernetes-1.16.7/kube-proxy:
+common-core-kubernetes-1.16.7+vmware.1/kube-proxy:
   size: 51268768
-  object_id: f432f1cb-da0e-4924-4481-0ae084a2db93
+  object_id: 1614e301-044f-40bd-7a04-65a3e007d362
   sha: 0b9ee944fc38ab11d729c3cc4e028cf9f3ae179a
-common-core-kubernetes-1.16.7/kube-scheduler:
+common-core-kubernetes-1.16.7+vmware.1/kube-scheduler:
   size: 56866646
-  object_id: d6a9b1cf-f6f5-4bd5-4fee-c335c2db8422
+  object_id: 08e313ab-46f7-4dd8-7093-c6eabdc74aab
   sha: 05f78ff88c6d7e7c4356c9c0f3c94d5804283794
-common-core-kubernetes-1.16.7/kubectl:
+common-core-kubernetes-1.16.7+vmware.1/kubectl:
   size: 58484684
-  object_id: bb97e432-292c-4f21-5851-252a589beb57
+  object_id: 827940b5-7a0e-4ef3-6567-8cea87230932
   sha: f0ae5964b50666d476f37fa4458aeb19c9eab502
-common-core-kubernetes-1.16.7/kubelet:
+common-core-kubernetes-1.16.7+vmware.1/kubelet:
   size: 149957864
-  object_id: 114c493a-5651-46fa-7939-57376e9ffef9
+  object_id: aef56275-18bb-4466-74e0-a54b5fde414b
   sha: cd8db79dcf4e697f87390de67e80cd634b5d17c3
 conntrack/conntrack_1.4.3-3_amd64.deb:
   size: 27346
