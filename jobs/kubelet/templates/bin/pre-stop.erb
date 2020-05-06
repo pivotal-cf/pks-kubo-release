@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+# vi: ft=sh
+
+[ -z "$DEBUG" ] || set -x
+
+set -eu
+
+export PATH=/var/vcap/packages/kubernetes/bin:$PATH
+
+LOG_DIR=/var/vcap/sys/log/kubelet
+PIDFILE=/var/vcap/sys/run/kubernetes/kubelet.pid
+
+trap ensure_safe_exit EXIT
+
+JQ_PATH=/var/vcap/packages/jq/bin/jq
+CUSTOM_LABEL_PATH=/var/vcap/store/custom-label-taint/labels
+CUSTOM_TAINT_PATH=/var/vcap/store/custom-label-taint/taints
+LABEL_TAINT_PREFIX="pks-custom"
+
+main() {
+  send_process_stdout_to_logfile
+  send_process_stderr_to_logfile
+  check_if_pidfile_exists
+  check_if_pid_is_running
+
+  retry store_custom_labels_taints
+}
+
+retry() {
+  local attempts_remaining=1
+  local max_attempts=10
+  local func=$1
+
+  while [[ ${attempts_remaining} -le $max_attempts ]]; do
+    if ${func}; then
+      echo "Successfully ${func}"
+      return 0
+    fi
+    attempts_remaining=$((attempts_remaining + 1))
+    printf "[%s] Unsuccessful ${func}, retrying attempt %d out of %d" "$(date +%s)" "$attempts_remaining" "$max_attempts" >&2
+    sleep 1
+  done
+
+  echo "Failed all retry attempts for ${func}"
+  exit 1
+}
+
+ensure_safe_exit() {
+  exit_code=$?
+  if [[ $exit_code -ne 0 ]]; then
+    echo "Kubelet pre-stop failed"
+    exit $exit_code
+  fi
+  echo 0 >&3
+}
+
+save_stdout_to_fd3() {
+  exec 3>&1
+}
+
+send_process_stdout_to_logfile() {
+  save_stdout_to_fd3
+  exec 1>> "$LOG_DIR/pre-stop.stdout.log"
+}
+
+send_process_stderr_to_logfile() {
+  exec 2>> "$LOG_DIR/pre-stop.stderr.log"
+}
+
+check_if_pid_is_running() {
+  local pid
+  pid=$(head -1 "$PIDFILE")
+  if ! pid_is_running? "${pid}"; then
+    echo "$(date) -- Process from pidfile not running, so not attempting to pre-stop."
+    exit
+  fi
+}
+
+pid_is_running?() {
+  declare pid="$1"
+  ps -p "${pid}" >/dev/null 2>&1
+}
+
+check_if_pidfile_exists() {
+  if [ ! -e $PIDFILE ]; then
+    echo "$(date) -- Pidfile not found, so not attempting to pre-stop."
+    exit
+  fi
+}
+
+store_custom_labels_taints() {
+  node_info=$(kubectl --kubeconfig /var/vcap/jobs/kubelet/config/kubeconfig-drain get no -l "bosh.id=<%= spec.id %>" -o json)
+
+  LABELS=$(echo "$node_info" | "$JQ_PATH" -r ".items[].metadata| select(.labels != null) | .labels | to_entries | map(select(.\"key\" | contains(\"$LABEL_TAINT_PREFIX\"))) | .[] | join(\"=\")")
+  printf "[%s] -- Custom Labels:\n" "$(date -u)"
+  printf "%s\n" "$LABELS"
+
+  TAINTS=$(echo "$node_info" | "$JQ_PATH" -r ".items[].spec | select(.taints != null) | .taints | map(select(.\"key\" | contains(\"$LABEL_TAINT_PREFIX\"))) | .[] | .key + \"=\" + .value + \":\" + .effect")
+  printf "[%s] -- Custom Taints:\n" "$(date -u)"
+  printf "%s\n" "$TAINTS"
+
+  echo "$LABELS" > "$CUSTOM_LABEL_PATH"
+  echo "$TAINTS" > "$CUSTOM_TAINT_PATH"
+}
+
+main

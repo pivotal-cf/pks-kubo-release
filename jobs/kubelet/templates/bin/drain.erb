@@ -23,7 +23,6 @@ main() {
   check_if_pid_is_running
 
   retry cordon_node
-  retry store_custom_labels_taints
 
   k8s_disks=$(get_k8s_disks)
   echo "Mounted volumes: $k8s_disks"
