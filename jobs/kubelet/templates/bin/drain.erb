@@ -12,6 +12,10 @@ PIDFILE=/var/vcap/sys/run/kubernetes/kubelet.pid
 
 trap ensure_safe_exit EXIT
 
+CUSTOM_LABEL_PATH=/var/vcap/store/custom-label-taint/labels
+CUSTOM_TAINT_PATH=/var/vcap/store/custom-label-taint/taints
+LABEL_TAINT_PREFIX="pks-custom/"
+
 main() {
   send_process_stdout_to_logfile
   send_process_stderr_to_logfile
@@ -19,6 +23,8 @@ main() {
   check_if_pid_is_running
 
   retry cordon_node
+  retry store_custom_labels_taints
+
   k8s_disks=$(get_k8s_disks)
   echo "Mounted volumes: $k8s_disks"
   if ! drain_node ; then
@@ -178,6 +184,17 @@ check_if_pidfile_exists() {
 kill_node() {
   kill -9 "$(head -1 "$PIDFILE")"
   rm -f $PIDFILE
+}
+
+store_custom_labels_taints() {
+  node_info=$(kubectl get no -l spec.ip=<%= spec.ip %> -o json)
+
+  LABELS=$(echo "$node_info" | /var/vcap/packages/jq/bin/jq -r ".items[].metadata.labels | to_entries | map(select(.\"key\" | contains(\"$LABEL_TAINT_PREFIX\"))) | .[] | join(\"=\")")
+
+  TAINTS=$(echo "$node_info" | /var/vcap/packages/jq/bin/jq -r ".items[].spec.taints? | to_entries | map(select(.\"key\" | contains(\"LABEL_TAINT_PREFIX\")))" | .[] | .key + \"=\" + .value + \":\" + .effect")
+
+  echo "$LABELS" > "$CUSTOM_LABEL_PATH"
+  echo "$TAINTS" > "$CUSTOM_TAINT_PATH"
 }
 
 main
