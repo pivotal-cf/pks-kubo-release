@@ -8,6 +8,8 @@ RUN_DIR=/var/vcap/sys/run/kubernetes
 PIDFILE=$RUN_DIR/kubelet.pid
 LOG_DIR=/var/vcap/sys/log/kubelet
 DATA_DIR=/var/vcap/store/kubernetes
+CUSTOM_LABEL_PATH=/var/vcap/store/custom-label-taint/labels
+CUSTOM_TAINT_PATH=/var/vcap/store/custom-label-taint/taints
 
 kubectl="/var/vcap/packages/kubernetes/bin/kubectl --kubeconfig=/var/vcap/jobs/kubelet/config/kubeconfig"
 
@@ -49,6 +51,33 @@ kubectl="/var/vcap/packages/kubernetes/bin/kubectl --kubeconfig=/var/vcap/jobs/k
 
   labels = labels.join(",")
 %>
+
+construct_labels() {
+  labels=<%= labels %>
+  ## read labels from file, join multiple lines with comma
+  pks_labels=$(cat "$CUSTOM_LABEL_PATH" | sed 'N;s/\n/,/g')
+  ## join these two with comma
+  labels=$(echo $labels $pks_labels | sed "s/ /,/g")
+  echo "$labels"
+}
+
+<%
+  taints = []
+  if_p('k8s-args') do |args|
+    custom_taints = args.fetch('register-with-taints', "").split(",")
+    taints = custom_taints + taints
+    args.delete('register-with-taints')
+  end
+%>
+
+construct_taints() {
+  taints=<%= taints %>
+  ## read taints from file, join multiple lines with comma
+  pks_taints=$(cat "$CUSTOM_TAINT_PATH" | sed 'N;s/\n/,/g')
+  ## join these two with comma
+  taints=$(echo $taints $pks_taints | sed "s/ /,/g")
+  echo "$taints"
+}
 
 # shellcheck disable=SC1091
 . /var/vcap/packages/pid_utils/pid_utils.sh
@@ -146,7 +175,8 @@ start_kubelet() {
     <% if include_config -%>--cloud-config=${cloud_config}<% end %> \
     <% if !iaas.nil? -%>--cloud-provider=${cloud_provider}<% end %> \
     --hostname-override=$(get_hostname_override) \
-    --node-labels=<%= labels %> \
+    --node-labels="$(construct_labels)" \
+    --register-with-taints="$(construct_taints)" \
     --config="/var/vcap/jobs/kubelet/config/kubeletconfig.yml" \
     --tls-cipher-suites=<%= link('kube-apiserver').p('tls-cipher-suites') %> \
   1>> $LOG_DIR/kubelet.stdout.log \

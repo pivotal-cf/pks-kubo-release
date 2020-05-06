@@ -7,3 +7,18 @@ config_file_name=/var/vcap/jobs/kubelet/config/file-arguments.json
 if [ -f $config_file_name ]; then
     /var/vcap/packages/file-generator/bin/file_generator $config_file_name kubelet
 fi
+
+CUSTOM_LABEL_TAINT_PATH=/var/vcap/store/custom-label-taint/
+if ! [ -d "$CUSTOM_LABEL_TAINT_PATH" ]; then
+  mkdir -p "$CUSTOM_LABEL_TAINT_PATH"
+fi
+
+CUSTOM_LABEL_PATH=/var/vcap/store/custom-label-taint/labels
+if ! [ -f "$CUSTOM_LABEL_PATH" ]; then
+  touch "$CUSTOM_LABEL_PATH"
+fi
+
+CUSTOM_TAINT_PATH=/var/vcap/store/custom-label-taint/taints
+if ! [ -f "$CUSTOM_TAINT_PATH" ]; then
+  touch "$CUSTOM_TAINT_PATH"
+fi
