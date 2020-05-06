@@ -85,7 +85,7 @@ jobs:
         - get: git-pks-kubernetes-windows-release
         - get: gcs-kubernetes-windows
           trigger: true
-    - task: bump-dependencies-in-pks-kubernetes-release-windows
+    - task: bump-dependencies-in-pks-kubernetes-windows-release
       config:
         <<: *config
         run:

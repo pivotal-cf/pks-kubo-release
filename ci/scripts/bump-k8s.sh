@@ -47,7 +47,7 @@ main() {
   google_k8s_version="$matched_k8s_version"
 
   if [ "${REPO:-}" == "windows" ]; then
-    git_repo="pks-kubernetes-release-windows"
+    git_repo="pks-kubernetes-windows-release"
     k8s_script_name="download_k8s_binaries_windows"
     docker_script_name="download_docker_binaries_windows.sh"
   else

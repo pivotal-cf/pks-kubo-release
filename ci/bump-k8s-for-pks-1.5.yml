@@ -86,7 +86,7 @@ jobs:
         - get: git-pks-kubernetes-windows-release
         - get: gcs-kubernetes-windows
           trigger: true
-    - task: bump-k8s-in-pks-kubernetes-release-windows
+    - task: bump-k8s-in-pks-kubernetes-windows-release
       config:
         <<: *config
         run:
