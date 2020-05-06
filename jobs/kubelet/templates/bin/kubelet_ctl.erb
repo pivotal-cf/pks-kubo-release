@@ -11,8 +11,6 @@ DATA_DIR=/var/vcap/store/kubernetes
 CUSTOM_LABEL_PATH=/var/vcap/store/custom-label-taint/labels
 CUSTOM_TAINT_PATH=/var/vcap/store/custom-label-taint/taints
 
-kubectl="/var/vcap/packages/kubernetes/bin/kubectl --kubeconfig=/var/vcap/jobs/kubelet/config/kubeconfig"
-
 <% iaas = nil %>
 <% if_p('cloud-provider') do |cloud_provider| %>
   <% iaas = cloud_provider %>
