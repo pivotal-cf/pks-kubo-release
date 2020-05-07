@@ -1,4 +1,6 @@
 builds:
+  02cf466f-6816-417d-6502-1f627ef5d8e8:
+    version: 1.6.3-build.1-bump-kubernetes-1.15.12
   06781654-e47d-4e51-567b-2f35860cfeca:
     version: 0.41.0
   07c7a55d-b2c6-4a63-46a7-a8fbf6c0f7b1:
