@@ -17,7 +17,7 @@ main() {
   send_process_stderr_to_logfile
   check_if_pidfile_exists
   check_if_pid_is_running
-
+  exit 0
   retry cordon_node
   k8s_disks=$(get_k8s_disks)
   echo "Mounted volumes: $k8s_disks"
