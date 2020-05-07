@@ -9,6 +9,8 @@ builds:
     version: 1.7.0-build.73
   18cd3d40-ddf1-42d9-6988-6107be84f252:
     version: 0.0.3
+  20394c62-928a-48dc-7f98-c0f26afce107:
+    version: 1.7.0-build.100-replace-nginx-1.7.x
   255a7505-ecd5-4141-470f-9338b25cb944:
     version: 0.31.0
   2605f42c-2cf5-44af-773f-4fed45caa1c7:
