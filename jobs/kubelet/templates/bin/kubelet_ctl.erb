@@ -226,7 +226,10 @@ remove_network_unavailable_taint() {
     fi
   done
 
-  if [ "$ready_node_name" != "$node_name" ]
+  if [[ "$node_name" == "" ]]
+  then
+    echo "Was not able to find node with id <%= spec.id %>"
+  elif [[ "$ready_node_name" != "$node_name" ]]
   then
     echo "Could not find $node_name listed as Ready, not attempting to remove NetworkUnavailable taint"
   else
