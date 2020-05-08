@@ -3,6 +3,8 @@
 # First to confluence https://confluence.eng.vmware.com/display/TKG/TKG+Core+v1.17.x
 # Second go to build web, then deliverables and download the tar ball e.g.vmware-kubernetes-v1.17.5+vmware.1.tar.gz
 
+require 'fileutils'
+
 def execute_system_call(command)
   puts command
   result = `#{command}`
@@ -34,6 +36,9 @@ def extract_binaries_from_container_images(filename, destination_dir)
 end
 
 staging_dir = execute_system_call("mktemp -d")
+output_dir = staging_dir + "/kubernetes-v1.17.5+vmware.1/"
+binary_dir = output_dir + "bin/linux/amd64/"
+FileUtils.mkdir_p binary_dir
 
 container_images = [
     "kube-proxy-v1.17.5_vmware.1.tar.gz",
@@ -48,10 +53,22 @@ binaries = [
 ]
 
 container_images.each do |file|
-  extract_binaries_from_container_images(file, staging_dir)
+  extract_binaries_from_container_images(file, binary_dir)
 end
 
 binaries.each do |file|
-  execute_system_call"cp #{file} #{staging_dir}"
-  execute_system_call"gunzip #{staging_dir}/#{file}"
+  execute_system_call"cp #{file} #{binary_dir}"
+  execute_system_call"gunzip #{binary_dir}/#{file}"
 end
+
+def create_shasum_file(filename, shasumfile)
+  result = execute_system_call"shasum #{filename}"
+  shasum = result.split(" ")[0]
+  File.write(shasumfile, shasum)
+end
+
+new_tarfile = "#{staging_dir}/kubernetes-binary-v1.17.5+vmware.1.tar.gz"
+new_shasum_file = "#{staging_dir}/kubernetes-binary-v1.17.5+vmware.1.tar.gz.sha256"
+
+execute_system_call"tar -czvf #{new_tarfile} -C #{staging_dir} kubernetes-v1.17.5+vmware.1"
+create_shasum_file(new_tarfile, new_shasum_file)
