@@ -38,10 +38,10 @@ container-images/vmware_metrics-server-amd64:v0.3.6.tgz:
   size: 12062146
   object_id: 301b9879-c1bf-42bb-6d90-f05929118056
   sha: sha256:cc477697ea176696030955ed413dc3be064c91a32735458f6450602eddd8f11d
-container-images/vmware_pause:3.1.tgz:
-  size: 314768
-  object_id: 2224d7c6-0395-49ea-7356-0b04d413e8ae
-  sha: sha256:8b7f7da2677ac899f712ea89cb2f0683f8a42c8cd339512c58df0aa4d162e8cb
+container-images/vmware_pause:3.2.tar.gz:
+  size: 286604
+  object_id: 27038a71-2c6d-4ada-4e4d-705925c8b315
+  sha: sha256:a35cc98a91d6c6b9cecccfae0a11ffb2b7c553b77bdf49d4223b762f11d4e7cb
 ctop/ctop-0.5.1-linux-amd64:
   size: 5667856
   object_id: df4344f1-26d6-453c-52da-e728cb94332a
