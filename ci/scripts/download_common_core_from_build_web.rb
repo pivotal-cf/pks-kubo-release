@@ -10,27 +10,40 @@
 require 'fileutils'
 
 module PksKubernetesRelease
+  class DownloadFromBuildWeb
+    def self.run(kubernetes_version, bora_number, container_images, binaries, staging_dir)
+      flatten = kubernetes_version.sub("+", "_")
+
+      container_images.each do |image|
+        url = "http://build-squid.eng.vmware.com/build/mts/release/bora-#{bora_number}/publish/lin64/kscom_release/vmware-kubernetes-v#{kubernetes_version}/kubernetes-v#{kubernetes_version}/images/#{image}-v#{flatten}.tar.gz"
+        execute_system_call ("wget #{url} --directory-prefix #{staging_dir}")
+      end
+
+      binaries.each do |binary|
+        url = "http://build-squid.eng.vmware.com/build/mts/release/bora-#{bora_number}/publish/lin64/kscom_release/vmware-kubernetes-v#{kubernetes_version}/kubernetes-v#{kubernetes_version}/executables/#{binary}-linux-v#{kubernetes_version}.gz"
+        execute_system_call ("wget #{url} --directory-prefix #{staging_dir}")
+      end
+    end
+  end
+
   class ExtractBinariesFromDockerImage
-    def self.run(filename, destination_dir)
+    def self.run(kubernetes_version, container_image, staging_dir, destination_dir)
       puts
-      puts "Processing #{filename}"
+      puts "Processing #{container_image}"
 
-      remove_extension = filename.split(".tar.gz")[0] # filename = "kube-proxy-v1.17.5_vmware.1.tar.gz"
+      version_tag = "v" + kubernetes_version.sub("+", "_")
+      filename = container_image + "-" + version_tag + ".tar.gz"  # "kube-proxy-v1.17.5_vmware.1.tar.gz",
 
-      parts = remove_extension.split("-v") # filename = "kube-proxy-v1.17.5_vmware.1"
-      component = parts[0] # "kube-proxy"
-      version_tag = "v" + parts[1] # "v1.17.5_vmware.1"
-
-      command = "docker load -i #{filename}"
+      command = "docker load -i #{staging_dir}/#{filename}"
       execute_system_call command
 
-      command = "docker image ls --filter 'reference=registry.tkg.vmware.run/#{component}:#{version_tag}' --format '{{.ID}}'"
+      command = "docker image ls --filter 'reference=registry.tkg.vmware.run/#{container_image}:#{version_tag}' --format '{{.ID}}'"
       image_id = execute_system_call command
 
       command = "docker create #{image_id}"
       container_id = execute_system_call command
 
-      command = "docker cp #{container_id}:/usr/local/bin/#{component} #{destination_dir}/#{component}"
+      command = "docker cp #{container_id}:/usr/local/bin/#{container_image} #{destination_dir}/#{container_image}"
       execute_system_call command
     end
   end
@@ -43,48 +56,28 @@ def execute_system_call(command)
   result.strip
 end
 
-
-
-# def create_shasum_file(filename, shasumfile)
-#   result = execute_system_call "shasum #{filename}"
-#   shasum = result.split(" ")[0]
-#   File.write(shasumfile, shasum)
-# end
-#
-# def create_tarball(staging_dir)
-#   new_tarfile = "#{staging_dir}/kubernetes-binary-v1.17.5+vmware.1.tar.gz"
-#   new_shasum_file = "#{staging_dir}/kubernetes-binary-v1.17.5+vmware.1.tar.gz.sha256"
-#
-#   execute_system_call "tar -czvf #{new_tarfile} -C #{staging_dir} kubernetes-v1.17.5+vmware.1"
-#   create_shasum_file(new_tarfile, new_shasum_file)
-# end
-
 def add_blob(binary_name, release_dir, binary_dir, kubernetes_version)
   blob_name = execute_system_call("cd #{release_dir}; bosh blobs --column path | grep '#{binary_name}\\s$' | xargs")
   execute_system_call("cd #{release_dir}; bosh remove-blob '#{blob_name}'")
   execute_system_call("cd #{release_dir}; bosh add-blob '#{binary_dir}/#{binary_name}' 'common-core-kubernetes-#{kubernetes_version}/#{binary_name}'")
 end
 
+# bora_number = "16143127"
+# kubernetes_version = "1.16.9+vmware.1"
 
-kubernetes_version = "1.17.5+vmware.1"
+bora_number = "16162671"
+kubernetes_version = "1.18.1+vmware.1"
+
+
 release_dir = "/Users/pivotal/workspace/pks-kubernetes-release"
 
-# staging_dir = execute_system_call("mktemp -d")
-staging_dir = "/tmp/common-core-1.17.5"
+staging_dir = execute_system_call("mktemp -d")
 
-
-output_dir = staging_dir + "/kubernetes-v1.17.5+vmware.1/"
+output_dir = staging_dir + "/kubernetes-v#{kubernetes_version}/"
 binary_dir = output_dir + "bin/linux/amd64/"
 FileUtils.mkdir_p binary_dir
 
 container_images = [
-    "kube-proxy-v1.17.5_vmware.1.tar.gz",
-    "kube-apiserver-v1.17.5_vmware.1.tar.gz",
-    "kube-scheduler-v1.17.5_vmware.1.tar.gz",
-    "kube-controller-manager-v1.17.5_vmware.1.tar.gz",
-]
-
-container_binaries = [
     "kube-proxy",
     "kube-apiserver",
     "kube-scheduler",
@@ -111,21 +104,23 @@ Dir.chdir "#{release_dir}" do
   end
 end
 
+PksKubernetesRelease::DownloadFromBuildWeb.run(kubernetes_version, bora_number, container_images, binaries, staging_dir)
+
 container_images.each do |image|
-  PksKubernetesRelease::ExtractBinariesFromDockerImage.run(image, binary_dir)
+  PksKubernetesRelease::ExtractBinariesFromDockerImage.run(kubernetes_version, image, staging_dir, binary_dir)
 end
 
 binaries.each do |binary|
-  file = binary + "linux-v1.17.5+vmware.1.gz" #     "kubelet-linux-v1.17.5+vmware.1.gz",
+  file = binary + "-linux-v#{kubernetes_version}.gz" # "kubelet-linux-v1.17.5+vmware.1.gz",
   initial_executable = file.split(".gz")[0] # kubectl-linux-v1.17.5+vmware.1.gz => kubectl-linux-v1.17.5+vmware.1
   final_executable = file.split("-linux")[0] # kubectl-linux-v1.17.5+vmware.1.gz => kubectl
-  execute_system_call"cp #{file} #{binary_dir}"
-  execute_system_call"gunzip #{binary_dir}/#{file}"
-  execute_system_call"mv #{binary_dir}/#{initial_executable} #{binary_dir}/#{final_executable}"
-  execute_system_call"chmod +x #{binary_dir}/#{final_executable}"
+  execute_system_call "cp #{staging_dir}/#{file} #{binary_dir}"
+  execute_system_call "gunzip #{binary_dir}/#{file}"
+  execute_system_call "mv #{binary_dir}/#{initial_executable} #{binary_dir}/#{final_executable}"
+  execute_system_call "chmod +x #{binary_dir}/#{final_executable}"
 end
 
-container_binaries.each do |binary|
+container_images.each do |binary|
   add_blob(binary, release_dir, binary_dir, kubernetes_version)
 end
 
