@@ -9,6 +9,8 @@ builds:
     version: 0.10.0
   0cbc93b8-cad3-4d3a-7b09-2713be6937d7:
     version: 1.7.0-build.73
+  1792fa4d-8d14-414f-61d9-37ce5f581cb9:
+    version: 1.9.0-build.24-iaas-restart
   18cd3d40-ddf1-42d9-6988-6107be84f252:
     version: 0.0.3
   255a7505-ecd5-4141-470f-9338b25cb944:
