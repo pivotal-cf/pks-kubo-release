@@ -9,6 +9,8 @@ builds:
     version: 1.7.0-build.73
   18cd3d40-ddf1-42d9-6988-6107be84f252:
     version: 0.0.3
+  20394c62-928a-48dc-7f98-c0f26afce107:
+    version: 1.7.0-build.100-replace-nginx-1.7.x
   255a7505-ecd5-4141-470f-9338b25cb944:
     version: 0.31.0
   2605f42c-2cf5-44af-773f-4fed45caa1c7:
@@ -61,6 +63,8 @@ builds:
     version: 0.15.0
   a4dccd15-2f95-4c08-6ef5-f2debb580418:
     version: 0.17.0
+  a681e22c-6068-4a89-764c-d978af3fa767:
+    version: 1.7.1-build.1-replace-nginx-1.7.x
   a6ea6323-e579-4ac5-5b05-fa728c776102:
     version: 0.7.0
   ace19e30-6c6a-4dbc-46c0-0070c0b31dc9:
