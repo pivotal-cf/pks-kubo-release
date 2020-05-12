@@ -64,70 +64,68 @@ def add_blob(binary_name, release_dir, binary_dir, kubernetes_version)
   end
 end
 
-# bora_number = "16143127"
-# kubernetes_version = "1.16.9+vmware.1"
+def main(bora_number, kubernetes_version)
+  release_dir = "/Users/pivotal/workspace/pks-kubernetes-release"
 
-bora_number = "16162671"
-kubernetes_version = "1.18.1+vmware.1"
+  staging_dir = execute_system_call("mktemp -d")
 
+  binary_dir = staging_dir + "/kubernetes-v#{kubernetes_version}/"
+  FileUtils.mkdir_p binary_dir
 
-release_dir = "/Users/pivotal/workspace/pks-kubernetes-release"
+  container_images = [
+      "kube-proxy",
+      "kube-apiserver",
+      "kube-scheduler",
+      "kube-controller-manager",
+  ]
 
-staging_dir = execute_system_call("mktemp -d")
+  binaries = [
+      "kubelet",
+      "kubectl"
+  ]
 
-output_dir = staging_dir + "/kubernetes-v#{kubernetes_version}/"
-binary_dir = output_dir + "bin/linux/amd64/"
-FileUtils.mkdir_p binary_dir
+  Dir.chdir release_dir do
+    existing_k8s_spec = execute_system_call "bosh blobs --column path | grep '#{binaries[0]}' | grep -o -E 'kubernetes-([0-9]+\.)+[0-9]+'"
+    existing_k8s_version = execute_system_call "echo '#{existing_k8s_spec}' | grep -o -E '([0-9]+\.)+[0-9]+'"
 
-container_images = [
-    "kube-proxy",
-    "kube-apiserver",
-    "kube-scheduler",
-    "kube-controller-manager",
-]
+    if existing_k8s_version == kubernetes_version
+      puts "Kubernetes version already up-to-date."
+      exit
+    end
 
-binaries = [
-    "kubelet",
-    "kubectl"
-]
-
-Dir.chdir release_dir do
-  existing_k8s_spec = execute_system_call "bosh blobs --column path | grep '#{binaries[0]}' | grep -o -E 'kubernetes-([0-9]+\.)+[0-9]+'"
-  existing_k8s_version = execute_system_call "echo '#{existing_k8s_spec}' | grep -o -E '([0-9]+\.)+[0-9]+'"
-
-  if existing_k8s_version == kubernetes_version
-    puts "Kubernetes version already up-to-date."
-    exit
+    execute_system_call "sed -i '' 's/KUBERNETES_VERSION=\"([0-9]+\.)+[0-9]+\"/KUBERNETES_VERSION=\"#{kubernetes_version}\"/' packages/kubernetes/packaging"
+    execute_system_call "sed -i '' s/#{existing_k8s_spec}/kubernetes-#{kubernetes_version}/ packages/kubernetes/spec"
   end
 
-  Dir.chdir "packages/kubernetes" do
-    execute_system_call "sed -E -i -e 's/KUBERNETES_VERSION=\"([0-9]+\.)+[0-9]+\"/KUBERNETES_VERSION=\"#{kubernetes_version}\"/' packaging"
-    execute_system_call "sed -E -i -e s/#{existing_k8s_spec}/kubernetes-#{kubernetes_version}/ spec"
+  PksKubernetesRelease::DownloadFromBuildWeb.run(kubernetes_version, bora_number, container_images, binaries, staging_dir)
+
+  container_images.each do |image|
+    PksKubernetesRelease::ExtractBinariesFromDockerImage.run(kubernetes_version, image, staging_dir, binary_dir)
   end
+
+  binaries.each do |binary|
+    file = binary + "-linux-v#{kubernetes_version}.gz" # "kubelet-linux-v1.17.5+vmware.1.gz",
+    initial_executable = file.split(".gz")[0] # kubectl-linux-v1.17.5+vmware.1.gz => kubectl-linux-v1.17.5+vmware.1
+    final_executable = file.split("-linux")[0] # kubectl-linux-v1.17.5+vmware.1.gz => kubectl
+    execute_system_call "cp #{staging_dir}/#{file} #{binary_dir}"
+    execute_system_call "gunzip #{binary_dir}/#{file}"
+    execute_system_call "mv #{binary_dir}/#{initial_executable} #{binary_dir}/#{final_executable}"
+    execute_system_call "chmod +x #{binary_dir}/#{final_executable}"
+  end
+
+  container_images.each do |binary|
+    add_blob(binary, release_dir, binary_dir, kubernetes_version)
+  end
+
+  binaries.each do |binary|
+    add_blob(binary, release_dir, binary_dir, kubernetes_version)
+  end
+
+  execute_system_call("cd #{release_dir}; bosh upload-blobs")
 end
 
-PksKubernetesRelease::DownloadFromBuildWeb.run(kubernetes_version, bora_number, container_images, binaries, staging_dir)
 
-container_images.each do |image|
-  PksKubernetesRelease::ExtractBinariesFromDockerImage.run(kubernetes_version, image, staging_dir, binary_dir)
-end
+bora_number = "16143127"
+kubernetes_version = "1.16.9+vmware.1"
 
-binaries.each do |binary|
-  file = binary + "-linux-v#{kubernetes_version}.gz" # "kubelet-linux-v1.17.5+vmware.1.gz",
-  initial_executable = file.split(".gz")[0] # kubectl-linux-v1.17.5+vmware.1.gz => kubectl-linux-v1.17.5+vmware.1
-  final_executable = file.split("-linux")[0] # kubectl-linux-v1.17.5+vmware.1.gz => kubectl
-  execute_system_call "cp #{staging_dir}/#{file} #{binary_dir}"
-  execute_system_call "gunzip #{binary_dir}/#{file}"
-  execute_system_call "mv #{binary_dir}/#{initial_executable} #{binary_dir}/#{final_executable}"
-  execute_system_call "chmod +x #{binary_dir}/#{final_executable}"
-end
-
-container_images.each do |binary|
-  add_blob(binary, release_dir, binary_dir, kubernetes_version)
-end
-
-binaries.each do |binary|
-  add_blob(binary, release_dir, binary_dir, kubernetes_version)
-end
-
-execute_system_call("cd #{release_dir}; bosh upload-blobs")
+main(bora_number, kubernetes_version)
