@@ -57,9 +57,11 @@ def execute_system_call(command)
 end
 
 def add_blob(binary_name, release_dir, binary_dir, kubernetes_version)
-  blob_name = execute_system_call("cd #{release_dir}; bosh blobs --column path | grep '#{binary_name}\\s$' | xargs")
-  execute_system_call("cd #{release_dir}; bosh remove-blob '#{blob_name}'")
-  execute_system_call("cd #{release_dir}; bosh add-blob '#{binary_dir}/#{binary_name}' 'common-core-kubernetes-#{kubernetes_version}/#{binary_name}'")
+  Dir.chdir release_dir do
+    blob_name = execute_system_call("bosh blobs --column path | grep '#{binary_name}\\s$' | xargs")
+    execute_system_call("bosh remove-blob '#{blob_name}'")
+    execute_system_call("bosh add-blob '#{binary_dir}/#{binary_name}' 'common-core-kubernetes-#{kubernetes_version}/#{binary_name}'")
+  end
 end
 
 # bora_number = "16143127"
@@ -89,7 +91,7 @@ binaries = [
     "kubectl"
 ]
 
-Dir.chdir "#{release_dir}" do
+Dir.chdir release_dir do
   existing_k8s_spec = execute_system_call "bosh blobs --column path | grep '#{binaries[0]}' | grep -o -E 'kubernetes-([0-9]+\.)+[0-9]+'"
   existing_k8s_version = execute_system_call "echo '#{existing_k8s_spec}' | grep -o -E '([0-9]+\.)+[0-9]+'"
 
