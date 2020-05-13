@@ -77,6 +77,8 @@ builds:
     version: 1.7.1-build.3
   bc2eb970-2115-4588-6da6-a032610a9e9c:
     version: 1.7.0-build.75
+  c05d9e51-86f1-4618-7ecd-d5c638b0b107:
+    version: 1.7.1-build.4
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
     version: 0.27.0
   c9984ee5-d029-48d0-5c49-6ec099bf12b3:
