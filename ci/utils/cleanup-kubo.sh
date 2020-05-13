@@ -17,3 +17,15 @@ cleanupKubo() {
   fi
 }
 
+cleanupKuboWindows() {
+  local deployment = $1
+
+  if [ -d "$1" ]
+  then
+    bosh delete-deployment \
+      --non-interactive \
+      --deployment="${deployment}" \
+      || true
+  fi
+}
+
