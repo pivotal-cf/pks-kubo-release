@@ -1,4 +1,4 @@
-fly ---
+---
 resource_types:
 - name: gcs
   type: docker-image
