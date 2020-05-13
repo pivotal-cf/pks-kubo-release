@@ -9,10 +9,10 @@ releases:
 stemcells:
   - alias: linux
     os: ubuntu-xenial
-    version: "456.30"
+    version: "621.55" #https://github.com/pivotal-cf/p-pks-integrations/blob/master/dependencies.yml TODO read from this repo to load latest stemcell
   - alias: windows
     os: windows2019
-    version: "2019.12"
+    version: "2019.19" #https://github.com/pivotal-cf/p-pks-integrations/blob/master/dependencies.yml TODO read from this repo to load latest stemcell
 
 update:
   canaries: 1

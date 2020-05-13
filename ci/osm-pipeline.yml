@@ -45,6 +45,18 @@ resources:
     private_key: ((git-ssh-key.private_key))
     paths: [ci]
 
+- name: linux-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-xenial-go_agent
+    version_family: "621.55"
+  type: bosh-io-stemcell
+
+- name: windows-stemcell
+  source:
+    name: bosh-google-kvm-windows2019-go_agent
+    version_family: "2019.19"
+  type: bosh-io-stemcell
+
 jobs:
 - name: claim-lock
   max_in_flight: 1
@@ -71,10 +83,11 @@ jobs:
       tags: ['gcp']
       input_mapping:
         locks-repo: pool-pks-locks
-      file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+      file: git-kubo-odb-ci/tasks/create-bosh-config.yml  
     - task: upload-kubo-release
       privileged: true
       file: git-boshcycle-ci/ci/utils/upload-kubo-release.yml
+    
 
 - name: upload-kubo-release-windows
   plan:
@@ -110,11 +123,23 @@ jobs:
     - get: gcs-pks-kubo-release-windows
       trigger: true
       passed: [ 'upload-kubo-release-windows' ]
+    - get: linux-stemcell
+    - get: windows-stemcell
   - task: create-bosh-config
     tags: ['gcp']
     input_mapping:
       locks-repo: pool-pks-locks
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+  - task: upload-linux-stemcell
+    privileged: true
+    input_mapping:
+      stemcell: linux-stemcell
+    file: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+  - task: upload-windows-stemcell
+    privileged: true
+    input_mapping:
+      stemcell: windows-stemcell
+    file: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.yml
   - task: deploy-release
     privileged: true
     file: git-boshcycle-ci/ci/open-source-management/deploy-manifest.yml
