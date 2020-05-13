@@ -6,7 +6,7 @@ source git-boshcycle-ci/ci/utils/use-bosh.sh
 source git-boshcycle-ci/ci/utils/kubo-sha.sh
 
 cleanupKubo() {
-  local deployment = $1
+  local deployment=$1
 
   if [ -d "$1" ]
   then
@@ -18,7 +18,7 @@ cleanupKubo() {
 }
 
 cleanupKuboWindows() {
-  local deployment = $1
+  local deployment=$1
 
   if [ -d "$1" ]
   then
