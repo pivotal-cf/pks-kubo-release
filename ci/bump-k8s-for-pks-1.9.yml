@@ -47,14 +47,6 @@ resources:
     branch: master
     private_key: ((git-ssh-key.private_key))
 
-- name: k8s-release
-  type: github-release-with-version-filtering
-  source:
-    owner: kubernetes
-    repository: kubernetes
-    # only patches get updated
-    version_filter: "< 1.19.0"
-
 jobs:
 - name: bump-dependencies-in-pks-kubo-release
   plan:
@@ -85,36 +77,6 @@ jobs:
         GIT_USER_TOKEN: ((git-write-token))
         GIT_SSH_KEY: |
           ((git-ssh-key.private_key))
-
-- name: bump-upstream-k8s-in-pks-kubo-release
-  plan:
-    - in_parallel:
-        - get: git-pks-kubernetes-release
-        - get: git-pks-kubernetes-release-ci
-        - get: k8s-release
-          trigger: true
-    - task: bump-k8s-in-pks-kubernetes-release
-      config: &config
-        platform: linux
-        image_resource:
-          type: docker-image
-          source:
-            repository: odpks/pks-ci
-        run:
-          path: git-pks-kubernetes-release-ci/ci/scripts/bump-k8s.sh
-        inputs:
-          - name: git-pks-kubernetes-release
-          - name: git-pks-kubernetes-release-ci
-          - name: k8s-release
-        params:
-          BASE_BRANCH: master
-          BINARY_DIRECTORY: k8s-release
-          BUMP_DOCKER: true
-          USE_COMMON_CORE: false
-          GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
-          GIT_USER_TOKEN: ((git-write-token))
-          GIT_SSH_KEY: |
-            ((git-ssh-key.private_key))
 
 - name: bump-dependencies-in-pks-kubo-release-windows
   plan:
