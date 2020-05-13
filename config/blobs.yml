@@ -18,30 +18,30 @@ cni/util-linux_2.27.1-6ubuntu3_amd64.deb:
   size: 847730
   object_id: 27eb3ec3-220f-4a25-6c4f-ec219c37ac8d
   sha: 568f62cb031608ab09ba1e3c2121e9e8b92dcae4
-common-core-kubernetes-1.16.7/kube-apiserver:
-  size: 157936511
-  object_id: 18146b42-8564-47a6-6d1a-9c03e0451457
-  sha: b296e31d2e583330a94fd68034e30197f1df38de
-common-core-kubernetes-1.16.7/kube-controller-manager:
-  size: 149074747
-  object_id: f0ca2e47-325a-449d-7b12-44d3b4b26e4f
-  sha: a3737c4f9609b9bde657117bb28500af0c0015f0
-common-core-kubernetes-1.16.7/kube-proxy:
-  size: 51268768
-  object_id: f432f1cb-da0e-4924-4481-0ae084a2db93
-  sha: 0b9ee944fc38ab11d729c3cc4e028cf9f3ae179a
-common-core-kubernetes-1.16.7/kube-scheduler:
-  size: 56866646
-  object_id: d6a9b1cf-f6f5-4bd5-4fee-c335c2db8422
-  sha: 05f78ff88c6d7e7c4356c9c0f3c94d5804283794
-common-core-kubernetes-1.16.7/kubectl:
-  size: 58484684
-  object_id: bb97e432-292c-4f21-5851-252a589beb57
-  sha: f0ae5964b50666d476f37fa4458aeb19c9eab502
-common-core-kubernetes-1.16.7/kubelet:
-  size: 149957864
-  object_id: 114c493a-5651-46fa-7939-57376e9ffef9
-  sha: cd8db79dcf4e697f87390de67e80cd634b5d17c3
+common-core-kubernetes-1.16.9+vmware.1/kube-apiserver:
+  size: 158126116
+  object_id: c7038cb4-19d2-4306-4223-6a00cc690498
+  sha: sha256:d58f329cc9d736c76ab8c1ed1e0f4633baae91155740a5fb985241c6ab7d153d
+common-core-kubernetes-1.16.9+vmware.1/kube-controller-manager:
+  size: 149226039
+  object_id: 30217095-f1d7-4f1b-62ab-2e80a8c89d2a
+  sha: sha256:77522772e5199e4f2694d8762ca275483468f432b4a737dfbe6a7563cd1d0ae6
+common-core-kubernetes-1.16.9+vmware.1/kube-proxy:
+  size: 51272656
+  object_id: 350ecfa6-2f67-487a-7069-c98e147445e2
+  sha: sha256:b12fa520df43b7b5bf0b5b7a804b44d3bfc15217e1c5d594335fddda75991c41
+common-core-kubernetes-1.16.9+vmware.1/kube-scheduler:
+  size: 56870485
+  object_id: 76ede33a-432b-4314-59b2-bf7adec79aef
+  sha: sha256:479056c7674aa9bd220c1507ea42866c7e5b640aca30df7a3db1179052388eaf
+common-core-kubernetes-1.16.9+vmware.1/kubectl:
+  size: 58573541
+  object_id: 924125bf-8d2d-460a-614f-f2dab4c0b6c7
+  sha: sha256:da4db9f0378eb271ca11c25f0497f3a8aa059ea608e759cbb63c39a5382f37b0
+common-core-kubernetes-1.16.9+vmware.1/kubelet:
+  size: 150036360
+  object_id: bbb6112f-372a-44d6-7175-55d7a264ffe7
+  sha: sha256:2f29b54c73f6b3caa12c1b5a4af006f04c1981385f9a5e6d42b723fd5b21009d
 conntrack/conntrack_1.4.3-3_amd64.deb:
   size: 27346
   object_id: 0c4aa633-3de8-4a8c-7170-36b3fc9e4a9c
