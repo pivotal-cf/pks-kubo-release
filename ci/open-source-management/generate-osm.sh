@@ -12,8 +12,10 @@ bosh run-errand \
   > linux_versions.txt
 
 echo "Linux version output:"
-cat linux_versions.txt
+jq -r .Tables[0].Rows[0].stdout linux_versions.txt > osl_linux.txt
+cat osl_linux.txt
 echo ""
+
 
 bosh run-errand \
   -d "${DEPLOYMENT_NAME}" \
