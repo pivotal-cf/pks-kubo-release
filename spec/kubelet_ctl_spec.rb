@@ -96,8 +96,8 @@ describe 'kubelet_ctl' do
         expect(labels).to include('bosh.zone=z1')
         expect(labels).to include('spec.ip=fake-bosh-ip')
         expect(labels).to include('bosh.id=fake-bosh-id')
-        expect(labels).to include('k8s.node=custom')
-        expect(labels).to include('foo=bar')
+
+        expect(labels).to include('foo=bar,k8s.node=custom')
       end
     end
 
@@ -111,8 +111,7 @@ describe 'kubelet_ctl' do
         rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
         taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
 
-        expect(taints).to include('foo=bar:NoExecute')
-        expect(taints).to include('k8s.node=custom:NoExecute')
+        expect(taints).to include('foo=bar:NoExecute,k8s.node=custom:NoExecute')
       end
     end
 
@@ -131,11 +130,9 @@ describe 'kubelet_ctl' do
         expect(labels).to include('bosh.zone=z1')
         expect(labels).to include('spec.ip=fake-bosh-ip')
         expect(labels).to include('bosh.id=fake-bosh-id')
-        expect(labels).to include('k8s.node=custom')
-        expect(labels).to include('foo=bar')
+        expect(labels).to include('foo=bar,k8s.node=custom')
 
-        expect(taints).to include('foo=bar:NoExecute')
-        expect(taints).to include('k8s.node=custom:NoExecute')
+        expect(taints).to include('foo=bar:NoExecute,k8s.node=custom:NoExecute')
       end
     end
 
@@ -170,8 +167,9 @@ describe 'kubelet_ctl' do
           expect(labels).to include('bosh.zone=z1')
           expect(labels).to include('spec.ip=fake-bosh-ip')
           expect(labels).to include('bosh.id=fake-bosh-id')
-          expect(labels).to include('l1=l1')
-          expect(labels).to include('l2=l2')
+
+          ## make sure concatenated by comma
+          expect(labels).to include('l1=l1,l2=l2')
         end
       end
 
@@ -184,8 +182,8 @@ describe 'kubelet_ctl' do
           rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
           taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
 
-          expect(taints).to include('t1=t1:NoExecute')
-          expect(taints).to include('t2=t2:Execute')
+          ## make sure concatenated by comma
+          expect(taints).to include('t1=t1:NoExecute,t2=t2:Execute')
         end
       end
 
@@ -202,25 +200,23 @@ describe 'kubelet_ctl' do
           labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
           taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
 
-          expect(labels).to include('l1=l1')
-          expect(labels).to include('l2=l2')
-
-          expect(taints).to include('t1=t1:NoExecute')
-          expect(taints).to include('t2=t2:Execute')
+          ## make sure concatenated by comma
+          expect(labels).to include('l1=l1,l2=l2')
+          expect(taints).to include('t1=t1:NoExecute,t2=t2:Execute')
         end
       end
 
       describe 'label_file and taint_file has content, labels and taints are passed through k8s-args' do
         it 'should add custom labels and taints' do
           File.open(custom_file_context['label_file'], 'w', 0o600) do |f|
-            f.write("l1=l1\nl2=l2\n")
+            f.write("tkg.l1/do=l1\nl2=l2\n")
           end
           File.open(custom_file_context['taint_file'], 'w', 0o600) do |f|
             f.write("t1=t1:NoExecute\nt2=t2:Execute\n")
           end
           manifest_properties = {
             'k8s-args' => {
-              'node-labels' => 'foo=bar,k8s.node=custom',
+              'node-labels' => 'pks.foo/do=bar,k8s.node=custom',
               'register-with-taints' => 'foo=bar:NoExecute,k8s.node=custom:NoExecute'
             }
           }
@@ -232,14 +228,13 @@ describe 'kubelet_ctl' do
           expect(labels).to include('spec.ip=fake-bosh-ip')
           expect(labels).to include('bosh.id=fake-bosh-id')
           expect(labels).to include('k8s.node=custom')
-          expect(labels).to include('foo=bar')
-          expect(labels).to include('l1=l1')
-          expect(labels).to include('l2=l2')
+          ## make sure concatenated by comma
+          expect(labels).to include('pks.foo/do=bar,k8s.node=custom')
+          expect(labels).to include('tkg.l1/do=l1,l2=l2')
 
-          expect(taints).to include('foo=bar:NoExecute')
-          expect(taints).to include('k8s.node=custom:NoExecute')
-          expect(taints).to include('t1=t1:NoExecute')
-          expect(taints).to include('t2=t2:Execute')
+          ## make sure concatenated by comma
+          expect(taints).to include('foo=bar:NoExecute,k8s.node=custom:NoExecute')
+          expect(taints).to include('t1=t1:NoExecute,t2=t2:Execute')
         end
       end
     end
