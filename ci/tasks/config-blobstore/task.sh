@@ -11,6 +11,7 @@ blobstore:
     json_key: |
 $GCS_JSON_KEY
 EOF
+  fi
 popd
 
 pushd "git-pks-kubernetes-windows-release"
@@ -23,4 +24,5 @@ blobstore:
     json_key: |
 $GCS_JSON_KEY
 EOF
+  fi
 popd
