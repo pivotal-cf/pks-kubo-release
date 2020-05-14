@@ -5,21 +5,14 @@ require 'spec_helper'
 require 'fileutils'
 require 'open3'
 
-def get_node_labels(rendered_kubelet_ctl)
-  node_labels = rendered_kubelet_ctl.split("\n").select { |line| line[/--node-labels=/i] }
-  expect(node_labels.length).to be(1)
-  labels = node_labels[0].match(/--node-labels=(.*) \\/).captures[0]
-  labels.split(",")
-end
-
-def call_get_hostname_override(rendered_kubelet_ctl, executable_path)
+def call_function(rendered_kubelet_ctl, executable_path, function_name)
   File.open(executable_path, 'w', 0o777) do |f|
     f.write(rendered_kubelet_ctl)
   end
 
   # exercise bash function by changing path for any necessary executables to our mocks in /tmp/mock/*
-  cmd = format('PATH=%<dirname>s:%<env_path>s /bin/bash -c "source %<exe>s && get_hostname_override"',
-               dirname: File.dirname(executable_path), env_path: ENV['PATH'], exe: executable_path)
+  cmd = format('PATH=%<dirname>s:%<env_path>s /bin/bash -c "source %<exe>s && %<func_name>s"',
+               dirname: File.dirname(executable_path), env_path: ENV['PATH'], exe: executable_path, func_name: function_name)
 
   # capturing stderr (ignored) prevents expected warnings from showing up in test console
   result, = Open3.capture3(cmd)
@@ -61,33 +54,195 @@ describe 'kubelet_ctl' do
     expect(rendered_template).to include(',bosh.id=fake-bosh-id')
   end
 
-  it 'labels the kubelet with custom labels' do
-    manifest_properties = {
-      'k8s-args' => {
-        'node-labels' => 'foo=bar,k8s.node=custom'
-      }
-    }
-    rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
-    labels = get_node_labels(rendered_kubelet_ctl)
+  describe 'kubelet labels and taints' do
+    let(:test_context) do
+      mock_dir = '/tmp/kubelet_mock'
+      FileUtils.remove_dir(mock_dir, true)
+      FileUtils.mkdir(mock_dir)
+      kubelet_ctl_file = mock_dir + '/kubelet_ctl'
 
-    expect(labels).to include('bosh.zone=z1')
-    expect(labels).to include('spec.ip=fake-bosh-ip')
-    expect(labels).to include('bosh.id=fake-bosh-id')
-    expect(labels).to include('k8s.node=custom')
-    expect(labels).to include('foo=bar')
-  end
+      { 'mock_dir' => mock_dir, 'kubelet_ctl_file' => kubelet_ctl_file }
+    end
+    after(:each) do
+      FileUtils.remove_dir(test_context['mock_dir'], true)
+    end
 
-  it 'labels the kubelet with default labels' do
-    manifest_properties = {
-      'k8s-args' => {
-      }
-    }
-    rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
-    labels = get_node_labels(rendered_kubelet_ctl)
+    describe 'without input from k8s-args' do
+      it 'should add default label' do
+        manifest_properties = {
+          'k8s-args' => {
+          }
+        }
+        rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
+        labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
+        taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
 
-    expect(labels).to include('bosh.zone=z1')
-    expect(labels).to include('spec.ip=fake-bosh-ip')
-    expect(labels).to include('bosh.id=fake-bosh-id')
+        expect(labels).to include('bosh.zone=z1')
+        expect(labels).to include('spec.ip=fake-bosh-ip')
+        expect(labels).to include('bosh.id=fake-bosh-id')
+      end
+    end
+
+    describe 'with custom labels passed to k8s-args' do
+      it 'should add custom label' do
+        manifest_properties = {
+          'k8s-args' => {
+            'node-labels' => 'foo=bar,k8s.node=custom'
+          }
+        }
+        rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
+        labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
+
+        expect(labels).to include('bosh.zone=z1')
+        expect(labels).to include('spec.ip=fake-bosh-ip')
+        expect(labels).to include('bosh.id=fake-bosh-id')
+        expect(labels).to include('k8s.node=custom')
+        expect(labels).to include('foo=bar')
+      end
+    end
+
+    describe 'with custom taints passed to k8s-args' do
+      it 'should add custom taints' do
+        manifest_properties = {
+          'k8s-args' => {
+            'register-with-taints' => 'foo=bar:NoExecute,k8s.node=custom:NoExecute'
+          }
+        }
+        rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
+        taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+
+        expect(taints).to include('foo=bar:NoExecute')
+        expect(taints).to include('k8s.node=custom:NoExecute')
+      end
+    end
+
+    describe 'with custom labels and taints passed to k8s-args' do
+      it 'should add custom taints' do
+        manifest_properties = {
+          'k8s-args' => {
+            'node-labels' => 'foo=bar,k8s.node=custom',
+            'register-with-taints' => 'foo=bar:NoExecute,k8s.node=custom:NoExecute'
+          }
+        }
+        rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
+        labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
+        taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+
+        expect(labels).to include('bosh.zone=z1')
+        expect(labels).to include('spec.ip=fake-bosh-ip')
+        expect(labels).to include('bosh.id=fake-bosh-id')
+        expect(labels).to include('k8s.node=custom')
+        expect(labels).to include('foo=bar')
+
+        expect(taints).to include('foo=bar:NoExecute')
+        expect(taints).to include('k8s.node=custom:NoExecute')
+      end
+    end
+
+    describe 'with custom labels and taints read from custom-label-taint folder' do
+      let(:custom_file_context) do
+        folder = "/var/vcap/store/custom-label-taint"
+        label_file = folder + "/labels"
+        taint_file = folder + "/taints"
+
+        FileUtils.mkdir_p(folder)
+        File.open(label_file, 'w', 0o600)
+        File.open(taint_file, 'w', 0o600)
+        {
+          'label_file' => label_file,
+          'taint_file' => taint_file,
+          'folder' => folder
+        }
+      end
+      after(:each) do
+        FileUtils.remove_dir(custom_file_context['folder'], true)
+      end
+
+      describe 'label_file has content' do
+        it 'should add custom labels' do
+          File.open(custom_file_context['label_file'], 'w', 0o600) do |f|
+            f.write("l1=l1\nl2=l2\n")
+          end
+          manifest_properties = {'k8s-args' => {}}
+          rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
+          labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
+
+          expect(labels).to include('bosh.zone=z1')
+          expect(labels).to include('spec.ip=fake-bosh-ip')
+          expect(labels).to include('bosh.id=fake-bosh-id')
+          expect(labels).to include('l1=l1')
+          expect(labels).to include('l2=l2')
+        end
+      end
+
+      describe 'taint_file has content' do
+        it 'should add custom taints' do
+          File.open(custom_file_context['taint_file'], 'w', 0o600) do |f|
+            f.write("t1=t1:NoExecute\nt2=t2:Execute\n")
+          end
+          manifest_properties = {'k8s-args' => {}}
+          rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
+          taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+
+          expect(taints).to include('t1=t1:NoExecute')
+          expect(taints).to include('t2=t2:Execute')
+        end
+      end
+
+      describe 'label_file and taint_file has content' do
+        it 'should add custom labels and taints' do
+          File.open(custom_file_context['label_file'], 'w', 0o600) do |f|
+            f.write("l1=l1\nl2=l2\n")
+          end
+          File.open(custom_file_context['taint_file'], 'w', 0o600) do |f|
+            f.write("t1=t1:NoExecute\nt2=t2:Execute\n")
+          end
+          manifest_properties = {'k8s-args' => {}}
+          rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
+          labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
+          taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+
+          expect(labels).to include('l1=l1')
+          expect(labels).to include('l2=l2')
+
+          expect(taints).to include('t1=t1:NoExecute')
+          expect(taints).to include('t2=t2:Execute')
+        end
+      end
+
+      describe 'label_file and taint_file has content, labels and taints are passed through k8s-args' do
+        it 'should add custom labels and taints' do
+          File.open(custom_file_context['label_file'], 'w', 0o600) do |f|
+            f.write("l1=l1\nl2=l2\n")
+          end
+          File.open(custom_file_context['taint_file'], 'w', 0o600) do |f|
+            f.write("t1=t1:NoExecute\nt2=t2:Execute\n")
+          end
+          manifest_properties = {
+            'k8s-args' => {
+              'node-labels' => 'foo=bar,k8s.node=custom',
+              'register-with-taints' => 'foo=bar:NoExecute,k8s.node=custom:NoExecute'
+            }
+          }
+          rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
+          labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
+          taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+
+          expect(labels).to include('bosh.zone=z1')
+          expect(labels).to include('spec.ip=fake-bosh-ip')
+          expect(labels).to include('bosh.id=fake-bosh-id')
+          expect(labels).to include('k8s.node=custom')
+          expect(labels).to include('foo=bar')
+          expect(labels).to include('l1=l1')
+          expect(labels).to include('l2=l2')
+
+          expect(taints).to include('foo=bar:NoExecute')
+          expect(taints).to include('k8s.node=custom:NoExecute')
+          expect(taints).to include('t1=t1:NoExecute')
+          expect(taints).to include('t2=t2:Execute')
+        end
+      end
+    end
   end
 
   it 'has no http proxy when no proxy is defined' do
@@ -166,7 +321,7 @@ describe 'kubelet_ctl' do
       it 'sets hostname_override to IP address of container IP' do
         expected_spec_ip = '1111'
         rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', { 'cloud-provider' => 'nonsense' }, link_spec, {}, 'az1', expected_spec_ip)
-        result = call_get_hostname_override(rendered_kubelet_ctl, test_context['kubelet_ctl_file'])
+        result = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], 'get_hostname_override')
 
         expect(result).to include(expected_spec_ip)
       end
@@ -216,7 +371,7 @@ describe 'kubelet_ctl' do
         rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, test_link)
         expect(rendered_kubelet_ctl).to include('cloud_provider="gce"')
 
-        result = call_get_hostname_override(rendered_kubelet_ctl, test_context['kubelet_ctl_file'])
+        result = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], 'get_hostname_override')
         expect(result).to include(expected_google_hostname)
       end
     end
