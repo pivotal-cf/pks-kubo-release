@@ -7,12 +7,12 @@ image_resource:
 inputs:
   - name: pool-pks-locks
   - name: git-kubo-odb-ci
-  - name: git-boshcycle-ci
+  - name: git-pks-kubernetes-release-ci
   - name: bosh-release
   - name: gcs-director-config
 
 run:
-  path: git-boshcycle-ci/ci/tasks/upload-release/task.sh
+  path: git-pks-kubernetes-release-ci/ci/tasks/upload-release/task.sh
 
 params:
   GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))

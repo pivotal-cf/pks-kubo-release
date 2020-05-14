@@ -19,4 +19,4 @@ bosh deploy \
   --var=kubo-windows-version="${WINDOWS_GIT_SHA}" \
   --var=network-name="${NETWORK_NAME}" \
   --var=first-az="${FIRST_AZ}" \
-  git-boshcycle-ci/ci/minimum-release-verification/manifest.yml
+  git-pks-kubernetes-release-ci/ci/minimum-release-verification/manifest.yml
