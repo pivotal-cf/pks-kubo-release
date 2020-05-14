@@ -1,0 +1,23 @@
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kubo:internal:kubelet-pre-stop
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["list", "get"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kubo:internal:kubelet-pre-stop
+subjects:
+- kind: User
+  name: kubelet-pre-stop
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: kubo:internal:kubelet-pre-stop
+  apiGroup: rbac.authorization.k8s.io
+

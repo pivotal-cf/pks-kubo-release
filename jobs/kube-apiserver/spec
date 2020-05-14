@@ -55,6 +55,8 @@ properties:
     description: The password for the system:kube-scheduler user
   kubelet-drain-password:
     description: The password for the kubelet drain user
+  kubelet-pre-stop-password:
+    description: The password for the kubelet pre-stop user
   kubelet-password:
     description: The password for the kubelet user
   no_proxy:

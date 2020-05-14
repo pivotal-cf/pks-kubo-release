@@ -15,7 +15,7 @@ trap ensure_safe_exit EXIT
 JQ_PATH=/var/vcap/packages/jq/bin/jq
 CUSTOM_LABEL_PATH=/var/vcap/store/custom-label-taint/labels
 CUSTOM_TAINT_PATH=/var/vcap/store/custom-label-taint/taints
-LABEL_TAINT_PREFIX="pks-custom"
+LABEL_TAINT_PREFIX="tkgi-"
 
 main() {
   send_process_stdout_to_logfile
@@ -89,9 +89,9 @@ check_if_pidfile_exists() {
 }
 
 store_custom_labels_taints() {
-  node_info=$(kubectl --kubeconfig /var/vcap/jobs/kubelet/config/kubeconfig-drain get no -l "bosh.id=<%= spec.id %>" -o json)
+  node_info=$(kubectl --kubeconfig /var/vcap/jobs/kubelet/config/kubeconfig-pre-stop get no -l "bosh.id=<%= spec.id %>" -o json)
 
-  LABELS=$(echo "$node_info" | "$JQ_PATH" -r ".items[].metadata| select(.labels != null) | .labels | to_entries | map(select(.\"key\" | contains(\"$LABEL_TAINT_PREFIX\"))) | .[] | join(\"=\")")
+  LABELS=$(echo "$node_info" | "$JQ_PATH" -r ".items[].metadata | select(.labels != null) | .labels | to_entries | map(select(.\"key\" | contains(\"$LABEL_TAINT_PREFIX\"))) | .[] | join(\"=\")")
   printf "[%s] -- Custom Labels:\n" "$(date -u)"
   printf "%s\n" "$LABELS"
 
