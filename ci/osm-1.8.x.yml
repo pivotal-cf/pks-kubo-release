@@ -13,37 +13,31 @@ resources:
     uri: git@github.com:pivotal-cf/pks-locks.git
     pool: gcp-flannel-om26-terraform
     branch: master
-    private_key: ((pks-bot-ssh-key.private_key))
+    private_key: ((git-ssh-key.private_key))
 
 - name: git-kubo-odb-ci
   type: git
   source:
     uri: git@github.com:pivotal-cf/kubo-odb-ci
     branch: master
-    private_key: ((pks-bot-ssh-key.private_key))
+    private_key: ((git-ssh-key.private_key))
 
 - name: git-pks-kubernetes-release
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
     branch: 1.8.x
-    private_key: ((pks-bot-ssh-key.private_key))
+    private_key: ((git-ssh-key.private_key))
     disable_ci_skip: true
     paths: 
     - "releases/kubo/kubo-1.8*.yml"
-- name: git-pks-kubernetes-release-ci
-  type: git
-  source:
-    uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
-    branch: master
-    private_key: ((pks-bot-ssh-key.private_key))
-    
+
 - name: git-pks-kubernetes-windows-release
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-windows-release.git
     branch: 1.8.x
-    private_key: ((pks-bot-ssh-key.private_key))
+    private_key: ((git-ssh-key.private_key))
     disable_ci_skip: true
     paths: 
     - "releases/kubo-windows/kubo-windows-1.8*.yml"
@@ -51,10 +45,10 @@ resources:
 
 # redeclare the same git resource to isolate the CI as something that can rapidly change
 # without triggering or requiring passed
-- name: git-boshcycle-ci
+- name: git-pks-kubernetes-release-ci
   type: git
   source:
-    uri: git@github.com:pivotal-cf/git-pks-kubernetes-release.git
+    uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
     branch: osl-pipeline
     private_key: ((git-ssh-key.private_key))
     paths: [ci]
@@ -90,7 +84,6 @@ jobs:
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
     - get: pool-pks-locks
       passed:
         - 'claim-lock'    
@@ -100,6 +93,7 @@ jobs:
     - get: git-pks-kubernetes-windows-release
       trigger: true
       passed: [ 'claim-lock' ]
+    - get: git-pks-kubernetes-release-ci
     - get: linux-stemcell
     - get: windows-stemcell
   - task: create-bosh-config
@@ -111,27 +105,27 @@ jobs:
     privileged: true
     input_mapping:
       stemcell: linux-stemcell
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/upload-stemcell/task.yml
   - task: upload-windows-stemcell
     privileged: true
     input_mapping:
       stemcell: windows-stemcell
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/upload-stemcell/task.yml
   - task: config-blobstore
-    file: git-boshcycle-ci/ci/tasks/config-blobstore/task.yml
+    file: git-pks-kubernetes-release-ci/ci/tasks/config-blobstore/task.yml
     params:
       ACCESS_KEY_ID: ((gcs-access-key-id))
       SECRET_ACCESS_KEY: ((gcs-secret-access-key))
 
   - task: deploy-release
     privileged: true
-    file: git-boshcycle-ci/ci/open-source-management/deploy-manifest.yml
+    file: git-pks-kubernetes-release-ci/ci/open-source-management/deploy-manifest.yml
 
 - name: generate-osm
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: pool-pks-locks
       passed: [ 'deploy-manifest' ]
     - get: git-pks-kubernetes-release
@@ -147,13 +141,13 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: run-tests
     privileged: true
-    file: git-boshcycle-ci/ci/open-source-management/generate-osm.yml
+    file: git-pks-kubernetes-release-ci/ci/open-source-management/generate-osm.yml
 
 - name: cleanup
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: pool-pks-locks
       trigger: true
       passed: [ 'generate-osm' ]
@@ -168,7 +162,7 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: delete-release
     privileged: true
-    file: git-boshcycle-ci/ci/open-source-management/cleanup.yml
+    file: git-pks-kubernetes-release-ci/ci/open-source-management/cleanup.yml
   - put: pool-pks-locks
     params:
       release: pool-pks-locks
