@@ -15,7 +15,7 @@ spec:
       labels:
         app: {{.Deployment}}
     spec:
-      serviceaccount: default
+      serviceAccount: default
       containers:
         - name: simple-server
           image: simple-server:latest

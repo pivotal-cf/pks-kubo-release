@@ -59,7 +59,9 @@ var _ = Describe("Smoke Tests for pks-kubernetes-release", func() {
 			tmpl, err := template.ParseFiles(path)
 			Expect(err).ToNot(HaveOccurred())
 
-			f, err := ioutil.TempFile("fixtures", "templated-deployment")
+			tmpDir, err = ioutil.TempDir("", "smoke-tests")
+			Expect(err).NotTo(HaveOccurred())
+			f, err := ioutil.TempFile(tmpDir, "templated-deployment")
 			Expect(err).NotTo(HaveOccurred())
 			Expect(tmpl.Execute(f, replacement)).To(Succeed())
 			err = f.Close()
