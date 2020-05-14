@@ -11,7 +11,7 @@ resources:
   type: pool
   source:
     uri: git@github.com:pivotal-cf/pks-locks.git
-    pool: gcp-flannel-om25-terraform
+    pool: gcp-flannel-om26-terraform
     branch: master
     private_key: ((pks-bot-ssh-key.private_key))
 
@@ -22,25 +22,39 @@ resources:
     branch: master
     private_key: ((pks-bot-ssh-key.private_key))
 
-- name: gcs-pks-kubo-release
-  type: gcs
+- name: git-pks-kubernetes-release
+  type: git
   source:
-    bucket: pipeline-store
-    json_key: ((gcs-json-key))
-    regexp: ((release-line))/cfcr/kubo-release-(\d+.*).tgz
-- name: gcs-pks-kubo-release-windows
-  type: gcs
+    uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
+    branch: 1.8.x
+    private_key: ((pks-bot-ssh-key.private_key))
+    disable_ci_skip: true
+    paths: 
+    - "releases/kubo/kubo-1.8*.yml"
+- name: git-pks-kubernetes-release-ci
+  type: git
   source:
-    bucket: pipeline-store
-    json_key: ((gcs-json-key))
-    regexp: ((release-line))/cfcr/kubo-release-windows-(.*).tgz
+    uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
+    branch: master
+    private_key: ((pks-bot-ssh-key.private_key))
+    
+- name: git-pks-kubernetes-windows-release
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pks-kubernetes-windows-release.git
+    branch: 1.8.x
+    private_key: ((pks-bot-ssh-key.private_key))
+    disable_ci_skip: true
+    paths: 
+    - "releases/kubo-windows/kubo-windows-1.8*.yml"
+
 
 # redeclare the same git resource to isolate the CI as something that can rapidly change
 # without triggering or requiring passed
 - name: git-boshcycle-ci
   type: git
   source:
-    uri: git@github.com:pivotal-cf/pks-kubo-release.git
+    uri: git@github.com:pivotal-cf/git-pks-kubernetes-release.git
     branch: osl-pipeline
     private_key: ((git-ssh-key.private_key))
     paths: [ci]
@@ -63,50 +77,14 @@ jobs:
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: gcs-pks-kubo-release
-    - get: gcs-pks-kubo-release-windows
+    - get: git-pks-kubernetes-release
+      trigger: true
+    - get: git-pks-kubernetes-windows-release
+      trigger: true
     - get: pool-pks-locks
   - put: pool-pks-locks
     params:
       acquire: true
-
-- name: upload-kubo-release
-  plan:
-    - in_parallel:
-        - get: git-kubo-odb-ci
-        - get: git-boshcycle-ci
-        - get: gcs-pks-kubo-release
-        - get: pool-pks-locks
-          trigger: true
-          passed: [ 'claim-lock' ]
-    - task: create-bosh-config
-      tags: ['gcp']
-      input_mapping:
-        locks-repo: pool-pks-locks
-      file: git-kubo-odb-ci/tasks/create-bosh-config.yml  
-    - task: upload-kubo-release
-      privileged: true
-      file: git-boshcycle-ci/ci/utils/upload-kubo-release.yml
-    
-
-- name: upload-kubo-release-windows
-  plan:
-    - in_parallel:
-        - get: git-kubo-odb-ci
-        - get: git-boshcycle-ci
-        - get: pool-pks-locks
-          trigger: true
-          passed: [ 'claim-lock' ]
-        - get: gcs-pks-kubo-release-windows
-          passed: [ 'claim-lock' ]
-    - task: create-bosh-config
-      tags: ['gcp']
-      input_mapping:
-        locks-repo: pool-pks-locks
-      file: git-kubo-odb-ci/tasks/create-bosh-config.yml
-    - task: upload-kubo-release-windows
-      privileged: true
-      file: git-boshcycle-ci/ci/utils/upload-kubo-release-windows.yml
 
 - name: deploy-manifest
   plan:
@@ -115,14 +93,13 @@ jobs:
     - get: git-boshcycle-ci
     - get: pool-pks-locks
       passed:
-        - 'upload-kubo-release'
-        - 'upload-kubo-release-windows'
-    - get: gcs-pks-kubo-release
+        - 'claim-lock'    
+    - get: git-pks-kubernetes-release
       trigger: true
-      passed: [ 'upload-kubo-release' ]
-    - get: gcs-pks-kubo-release-windows
+      passed: [ 'claim-lock' ]
+    - get: git-pks-kubernetes-windows-release
       trigger: true
-      passed: [ 'upload-kubo-release-windows' ]
+      passed: [ 'claim-lock' ]
     - get: linux-stemcell
     - get: windows-stemcell
   - task: create-bosh-config
@@ -140,6 +117,12 @@ jobs:
     input_mapping:
       stemcell: windows-stemcell
     file: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+  - task: config-blobstore
+    file: git-boshcycle-ci/ci/tasks/config-blobstore/task.yml
+    params:
+      ACCESS_KEY_ID: ((gcs-access-key-id))
+      SECRET_ACCESS_KEY: ((gcs-secret-access-key))
+
   - task: deploy-release
     privileged: true
     file: git-boshcycle-ci/ci/open-source-management/deploy-manifest.yml
@@ -151,10 +134,10 @@ jobs:
     - get: git-boshcycle-ci
     - get: pool-pks-locks
       passed: [ 'deploy-manifest' ]
-    - get: gcs-pks-kubo-release
+    - get: git-pks-kubernetes-release
       trigger: true
       passed: [ 'deploy-manifest' ]
-    - get: gcs-pks-kubo-release-windows
+    - get: git-pks-kubernetes-windows-release
       trigger: true
       passed: [ 'deploy-manifest' ]
   - task: create-bosh-config
@@ -174,9 +157,9 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed: [ 'generate-osm' ]
-    - get: gcs-pks-kubo-release
+    - get: git-pks-kubernetes-release
       passed: [ 'generate-osm' ]
-    - get: gcs-pks-kubo-release-windows
+    - get: git-pks-kubernetes-windows-release
       passed: [ 'generate-osm' ]
   - task: create-bosh-config
     tags: ['gcp']
