@@ -2,8 +2,10 @@ package smoke_tests_test
 
 import (
 	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"os/exec"
+	"text/template"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -30,8 +32,8 @@ func curlCaller(endpoint string) func() (string, error) {
 	}
 }
 
-var _ = Describe("CFCR Smoke Tests", func() {
-	Describe("System Compenents", func() {
+var _ = Describe("Smoke Tests for pks-kubernetes-release", func() {
+	Describe("System Components", func() {
 		It("should be healthy", func() {
 			command := exec.Command("kubectl", "get", "componentstatuses", "-o", "jsonpath={.items[*].conditions[*].type}")
 			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
@@ -47,7 +49,23 @@ var _ = Describe("CFCR Smoke Tests", func() {
 
 		BeforeEach(func() {
 			deploymentName = randSeq(10)
-			args := []string{"run", deploymentName, "--image=simple-server:latest", "--image-pull-policy=Never", "-l", "app=" + deploymentName, "--serviceaccount=default"}
+
+			type DeploymentReplacement struct {
+				Deployment string
+			}
+			replacement := DeploymentReplacement{deploymentName}
+
+			path := getFixturePath("smoke-test-deployment.yml")
+			tmpl, err := template.ParseFiles(path)
+			Expect(err).ToNot(HaveOccurred())
+
+			f, err := ioutil.TempFile("fixtures", "templated-deployment")
+			Expect(err).NotTo(HaveOccurred())
+			Expect(tmpl.Execute(f, replacement)).To(Succeed())
+			err = f.Close()
+			Expect(err).NotTo(HaveOccurred())
+
+			args := []string{"apply", "-f", f.Name()}
 			session := k8sRunner.RunKubectlCommand(args...)
 			Eventually(session, "60s").Should(gexec.Exit(0))
 
@@ -55,8 +73,8 @@ var _ = Describe("CFCR Smoke Tests", func() {
 			session = k8sRunner.RunKubectlCommand(exposeArgs...)
 			Eventually(session, "120s").Should(gexec.Exit(0))
 
-			rolloutWatch := k8sRunner.RunKubectlCommand("rollout", "status", "deployment/"+deploymentName, "-w")
-			Eventually(rolloutWatch, "120s").Should(gexec.Exit(0))
+			watch := k8sRunner.RunKubectlCommand("rollout", "status", "deployment/"+deploymentName, "-w")
+			Eventually(watch, "120s").Should(gexec.Exit(0))
 		})
 
 		AfterEach(func() {
