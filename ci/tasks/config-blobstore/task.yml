@@ -11,4 +11,7 @@ inputs:
   - name: git-pks-kubernetes-release-ci
 params:
   GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
+
+outputs:
+  - name: git-pks-kubernetes-release
   

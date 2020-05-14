@@ -23,6 +23,7 @@ fi
 
 export NETWORK_NAME=`bosh int <(bosh cloud-config) --path /networks | yq -r '.[] | select(.name|test(".*pks-services-subnet.*")) | .name'`
 export FIRST_AZ=`bosh int <(bosh cloud-config) --path /networks | yq -r '.[] | select(.name|test(".*pks-services-subnet.*")) | .subnets[0].azs[0]'`
+pushd git-pks-kubernetes-release
 
 bosh deploy \
   --non-interactive \
@@ -32,4 +33,5 @@ bosh deploy \
   --var=kubo-windows-version="${PKS_KUBO_WINDOWS_VERSION}" \
   --var=network-name="${NETWORK_NAME}" \
   --var=first-az="${FIRST_AZ}" \
-git-pks-kubernetes-release-ci/ci/open-source-management/osm-deployment-manifest.yml
+../git-pks-kubernetes-release-ci/ci/open-source-management/osm-deployment-manifest.yml
+popd

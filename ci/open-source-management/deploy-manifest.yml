@@ -15,7 +15,6 @@ inputs:
     optional: true
   # - name: gcs-director-config
   - name: git-pks-kubernetes-release
-    optional: true
   - name: git-pks-kubernetes-windows-release
     optional: true
 
