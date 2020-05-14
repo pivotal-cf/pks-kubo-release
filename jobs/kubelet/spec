@@ -11,6 +11,7 @@ templates:
   config/file-arguments.json.erb: config/file-arguments.json
   config/kubeconfig-drain.erb: config/kubeconfig-drain
   config/kubeconfig.erb: config/kubeconfig
+  config/kubeconfig-pre-stop.erb: config/kubeconfig-pre-stop
   config/kubelet-client-ca.pem.erb: config/kubelet-client-ca.pem
   config/kubelet-key.pem.erb: config/kubelet-key.pem
   config/kubelet.pem.erb: config/kubelet.pem
@@ -31,6 +32,8 @@ properties:
     description: "The type of cloud-provider that is being deployed"
   drain-api-token:
     description: The token to access Kubernetes API used to drain the kubelet.
+  pre-stop-api-token:
+    description: The token to access Kubernetes API used to for kubelet pre-stop job.
   http_proxy:
     description: http_proxy env var for cloud provider interactions, i.e. for the
       kubelet
