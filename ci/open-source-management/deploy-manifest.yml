@@ -9,8 +9,16 @@ inputs:
   - name: git-kubo-odb-ci
   - name: git-boshcycle-ci
   - name: gcs-pks-kubo-release
+    optional: true
   - name: gcs-pks-kubo-release-windows
-  - name: gcs-director-config
+    optional: true
+  # - name: gcs-director-config
+  - name: git-pks-kubernetes-release
+    optional: true
+  - name: git-pks-kubernetes-windows-release
+    optional: true
 
+params:
+  VERSION: 
 run:
-  path: git-boshcycle-ci/ci/open-source-management/deploy-manifest.sh
+  path: 
