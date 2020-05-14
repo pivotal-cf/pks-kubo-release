@@ -21,4 +21,4 @@ inputs:
 params:
   VERSION: 
 run:
-  path: 
+  path: git-pks-kubernetes-release-ci/ci/open-source-management/deploy-manifest.sh
