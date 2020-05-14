@@ -25,7 +25,7 @@ resources:
 
 # redeclare the same git resource to isolate the CI as something that can rapidly change
 #  without triggering or requiring passed
-- name: git-boshcycle-ci
+- name: git-pks-kubernetes-release-ci
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
@@ -56,19 +56,19 @@ jobs:
 - name: run-unit-tests
   plan:
     - in_parallel:
-        - get: git-boshcycle-ci
+        - get: git-pks-kubernetes-release-ci
         - get: git-pks-kubernetes-release
         - get: git-pks-kubernetes-windows-release
     - task: run-tests-kubo-release
       privileged: true
       input_mapping:
         bosh-release: git-pks-kubernetes-release
-      file: git-boshcycle-ci/ci/tasks/run-tests/task.yml
+      file: git-pks-kubernetes-release-ci/ci/tasks/run-tests/task.yml
     - task: run-tests-kubo-release-windows
       privileged: true
       input_mapping:
         bosh-release: git-pks-kubernetes-windows-release
-      file: git-boshcycle-ci/ci/tasks/run-tests/task.yml
+      file: git-pks-kubernetes-release-ci/ci/tasks/run-tests/task.yml
 
 - name: claim-lock
   max_in_flight: 1
@@ -90,7 +90,7 @@ jobs:
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: git-pks-kubernetes-release
 #      passed: [ 'claim-lock' ]
     - get: pool-pks-locks
@@ -107,13 +107,13 @@ jobs:
       bosh-release: git-pks-kubernetes-release
     params:
       DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
-    file: git-boshcycle-ci/ci/tasks/upload-release/task.yml
+    file: git-pks-kubernetes-release-ci/ci/tasks/upload-release/task.yml
 
 - name: upload-pks-kubernetes-windows-release
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: pool-pks-locks
       trigger: true
       passed: [ 'claim-lock' ]
@@ -130,13 +130,13 @@ jobs:
       bosh-release: git-pks-kubernetes-windows-release
     params:
       DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
-    file: git-boshcycle-ci/ci/tasks/upload-release/task.yml
+    file: git-pks-kubernetes-release-ci/ci/tasks/upload-release/task.yml
 
 - name: upload-linux-stemcell
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: gcp-linux-stemcell
     - get: pool-pks-locks
       trigger: true
@@ -150,13 +150,13 @@ jobs:
     privileged: true
     input_mapping:
       stemcell: gcp-linux-stemcell
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/upload-stemcell/task.yml
 
 - name: upload-windows-stemcell
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: gcp-windows-stemcell
     - get: pool-pks-locks
       trigger: true
@@ -170,13 +170,13 @@ jobs:
     privileged: true
     input_mapping:
       stemcell: gcp-windows-stemcell
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/upload-stemcell/task.yml
 
 - name: deploy-manifest
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: pool-pks-locks
       trigger: true
       passed:
@@ -195,13 +195,13 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: deploy-release
     privileged: true
-    file: git-boshcycle-ci/ci/minimum-release-verification/deploy-manifest/task.yml
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/deploy-manifest/task.yml
 
 - name: print-component-versions
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: pool-pks-locks
       trigger: true
       passed: [ 'deploy-manifest' ]
@@ -216,13 +216,13 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: print-component-versions
     privileged: true
-    file: git-boshcycle-ci/ci/minimum-release-verification/print-component-versions/task.yml
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/print-component-versions/task.yml
 
 - name: cleanup
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: pool-pks-locks
       trigger: true
       passed: [ 'print-component-versions' ]
@@ -237,7 +237,7 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: delete-release
     privileged: true
-    file: git-boshcycle-ci/ci/minimum-release-verification/cleanup/task.yml
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/cleanup/task.yml
   - put: pool-pks-locks
     params:
       release: pool-pks-locks

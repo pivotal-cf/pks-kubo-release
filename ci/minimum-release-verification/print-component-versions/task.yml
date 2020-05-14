@@ -7,7 +7,7 @@ image_resource:
 inputs:
   - name: pool-pks-locks
   - name: git-kubo-odb-ci
-  - name: git-boshcycle-ci
+  - name: git-pks-kubernetes-release-ci
   - name: git-pks-kubernetes-release
   - name: git-pks-kubernetes-windows-release
   - name: gcs-director-config
@@ -16,4 +16,4 @@ params:
   DEPLOYMENT_NAME: "MINIMUM_RELEASE_VERIFICATION_DEPLOYMENT"
 
 run:
-  path: git-boshcycle-ci/ci/minimum-release-verification/print-component-versions/task.sh
+  path: git-pks-kubernetes-release-ci/ci/minimum-release-verification/print-component-versions/task.sh
