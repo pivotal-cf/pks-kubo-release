@@ -60,10 +60,9 @@ construct_labels() {
 }
 
 <%
-  taints = []
+  taints = ''
   if_p('k8s-args') do |args|
-    custom_taints = args.fetch('register-with-taints', "").split(",")
-    taints = custom_taints + taints
+    taints = args.fetch('register-with-taints', "")
     args.delete('register-with-taints')
   end
 %>
