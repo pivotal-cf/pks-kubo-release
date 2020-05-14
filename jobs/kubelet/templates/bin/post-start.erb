@@ -24,6 +24,9 @@ load_cached_containers() {
     for img in ${CONTAINER_IMAGE_DIR}/*.tgz; do
         load_container ${img}
     done
+    for img in ${CONTAINER_IMAGE_DIR}/*.tar.gz; do
+        load_container ${img}
+    done
 }
 
 TIMEOUT=120
