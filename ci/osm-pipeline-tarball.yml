@@ -37,7 +37,7 @@ resources:
 
 # redeclare the same git resource to isolate the CI as something that can rapidly change
 # without triggering or requiring passed
-- name: git-boshcycle-ci
+- name: git-pks-kubernetes-release-ci
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubo-release.git
@@ -74,7 +74,7 @@ jobs:
   plan:
     - in_parallel:
         - get: git-kubo-odb-ci
-        - get: git-boshcycle-ci
+        - get: git-pks-kubernetes-release-ci
         - get: gcs-pks-kubo-release
         - get: pool-pks-locks
           trigger: true
@@ -86,14 +86,14 @@ jobs:
       file: git-kubo-odb-ci/tasks/create-bosh-config.yml  
     - task: upload-kubo-release
       privileged: true
-      file: git-boshcycle-ci/ci/utils/upload-kubo-release.yml
+      file: git-pks-kubernetes-release-ci/ci/utils/upload-kubo-release.yml
     
 
 - name: upload-kubo-release-windows
   plan:
     - in_parallel:
         - get: git-kubo-odb-ci
-        - get: git-boshcycle-ci
+        - get: git-pks-kubernetes-release-ci
         - get: pool-pks-locks
           trigger: true
           passed: [ 'claim-lock' ]
@@ -106,13 +106,13 @@ jobs:
       file: git-kubo-odb-ci/tasks/create-bosh-config.yml
     - task: upload-kubo-release-windows
       privileged: true
-      file: git-boshcycle-ci/ci/utils/upload-kubo-release-windows.yml
+      file: git-pks-kubernetes-release-ci/ci/utils/upload-kubo-release-windows.yml
 
 - name: deploy-manifest
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: pool-pks-locks
       passed:
         - 'upload-kubo-release'
@@ -134,21 +134,23 @@ jobs:
     privileged: true
     input_mapping:
       stemcell: linux-stemcell
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/upload-stemcell/task.yml
   - task: upload-windows-stemcell
     privileged: true
     input_mapping:
       stemcell: windows-stemcell
-    file: git-boshcycle-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/upload-stemcell/task.yml
   - task: deploy-release
     privileged: true
-    file: git-boshcycle-ci/ci/open-source-management/deploy-manifest.yml
+    file: git-pks-kubernetes-release-ci/ci/open-source-management/deploy-manifest.yml
+    params:
+      MANIFEST: git-boshcycle-ci/ci/open-source-management/osm-deployment-manifest.yml
 
 - name: generate-osm
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: pool-pks-locks
       passed: [ 'deploy-manifest' ]
     - get: gcs-pks-kubo-release
@@ -164,13 +166,13 @@ jobs:
     file: git-kubo-odb-ci/tasks/create-bosh-config.yml
   - task: run-tests
     privileged: true
-    file: git-boshcycle-ci/ci/open-source-management/generate-osm.yml
+    file: git-pks-kubernetes-release-ci/ci/open-source-management/generate-osm.yml
 
 - name: cleanup
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: git-boshcycle-ci
+    - get: git-pks-kubernetes-release-ci
     - get: pool-pks-locks
       trigger: true
       passed: [ 'generate-osm' ]
@@ -186,7 +188,7 @@ jobs:
   - task: delete-release
     tags: ['gcp']
     privileged: true
-    file: git-boshcycle-ci/ci/open-source-management/cleanup.yml
+    file: git-pks-kubernetes-release-ci/ci/open-source-management/cleanup.yml
   - put: pool-pks-locks
     params:
       release: pool-pks-locks

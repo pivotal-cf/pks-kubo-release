@@ -120,6 +120,8 @@ jobs:
   - task: deploy-release
     privileged: true
     file: git-pks-kubernetes-release-ci/ci/open-source-management/deploy-manifest.yml
+    params:
+      VERSION: "1.8"
 
 - name: generate-osm
   plan:
