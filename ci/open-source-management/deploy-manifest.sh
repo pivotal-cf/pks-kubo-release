@@ -32,4 +32,4 @@ bosh deploy \
   --var=kubo-windows-version="${PKS_KUBO_WINDOWS_VERSION}" \
   --var=network-name="${NETWORK_NAME}" \
   --var=first-az="${FIRST_AZ}" \
-git-boshcycle-ci/ci/open-source-management/deploy-manifest.yml
+git-pks-kubernetes-release-ci/ci/open-source-management/osm-deployment-manifest.yml
