@@ -17,7 +17,7 @@ if [-d gcs-pks-kubo-release-windows] #use tarball
 then
   PKS_KUBO_WINDOWS_VERSION=$(cat gcs-pks-kubo-release-windows/version)
 else #use final release
-  files=(`ls git-pks-kubernetes-windows-release/releases/kubo/*${VERSION}*`)
+  files=(`ls git-pks-kubernetes-windows-release/releases/kubo-windows/*${VERSION}*`)
   PKS_KUBO_WINDOWS_VERSION=$(yq -r .version ${files[-1]})
 fi
 
