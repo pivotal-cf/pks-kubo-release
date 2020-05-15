@@ -6,6 +6,7 @@ templates:
   bin/pre-start: bin/pre-start
   bin/pre-stop.erb: bin/pre-stop
   bin/post-start.erb: bin/post-start
+  bin/store-custom-labels-taints.erb: bin/store-custom-labels-taints
   config/apiserver-ca.pem.erb: config/apiserver-ca.pem
   config/cloud-provider.ini.erb: config/cloud-provider.ini
   config/file-arguments.json.erb: config/file-arguments.json

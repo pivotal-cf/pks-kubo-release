@@ -5,20 +5,23 @@ require 'spec_helper'
 require 'fileutils'
 require 'open3'
 
-def call_function(rendered_kubelet_ctl, executable_path, function_name)
+## rendered_kubelet_pre_stop: script content
+## executable_path: mock path for excuting script
+## extra_env: used for overwriting environment variable inside script
+## function_name: function to be executed inside the script
+def call_function(rendered_kubelet_pre_stop, executable_path, extra_env, function_name)
   File.open(executable_path, 'w', 0o777) do |f|
-    f.write(rendered_kubelet_ctl)
+    f.write(rendered_kubelet_pre_stop)
   end
 
   # exercise bash function by changing path for any necessary executables to our mocks in /tmp/mock/*
-  cmd = format('PATH=%<dirname>s:%<env_path>s /bin/bash -c "source %<exe>s && %<func_name>s"',
-               dirname: File.dirname(executable_path), env_path: ENV['PATH'], exe: executable_path, func_name: function_name)
+  cmd = format('PATH=%<dirname>s:%<env_path>s /bin/bash -c "source %<exe>s && %<extra_env>s %<func_name>s"',
+               dirname: File.dirname(executable_path), env_path: ENV['PATH'], exe: executable_path, extra_env: extra_env, func_name: function_name)
 
   # capturing stderr (ignored) prevents expected warnings from showing up in test console
   result, = Open3.capture3(cmd)
   result
 end
-
 describe 'kubelet_ctl' do
   let(:link_spec) do {
     'kube-apiserver' => {
@@ -74,8 +77,8 @@ describe 'kubelet_ctl' do
           }
         }
         rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
-        labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
-        taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+        labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], '', "construct_labels")
+        taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], '', "construct_taints")
 
         expect(labels).to include('bosh.zone=z1')
         expect(labels).to include('spec.ip=fake-bosh-ip')
@@ -91,7 +94,7 @@ describe 'kubelet_ctl' do
           }
         }
         rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
-        labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
+        labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], '', "construct_labels")
 
         expect(labels).to include('bosh.zone=z1')
         expect(labels).to include('spec.ip=fake-bosh-ip')
@@ -109,7 +112,7 @@ describe 'kubelet_ctl' do
           }
         }
         rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
-        taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+        taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], '', "construct_taints")
 
         expect(taints).to include('foo=bar:NoExecute,k8s.node=custom:NoExecute')
       end
@@ -124,8 +127,8 @@ describe 'kubelet_ctl' do
           }
         }
         rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
-        labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
-        taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+        labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], '', "construct_labels")
+        taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], '', "construct_taints")
 
         expect(labels).to include('bosh.zone=z1')
         expect(labels).to include('spec.ip=fake-bosh-ip')
@@ -138,21 +141,16 @@ describe 'kubelet_ctl' do
 
     describe 'with custom labels and taints read from custom-label-taint folder' do
       let(:custom_file_context) do
-        folder = "/var/vcap/store/custom-label-taint"
-        label_file = folder + "/labels"
-        taint_file = folder + "/taints"
+        label_file = test_context['mock_dir'] + "/labels"
+        taint_file = test_context['mock_dir'] + "/taints"
 
-        FileUtils.mkdir_p(folder)
         File.open(label_file, 'w', 0o600)
         File.open(taint_file, 'w', 0o600)
+
         {
           'label_file' => label_file,
           'taint_file' => taint_file,
-          'folder' => folder
         }
-      end
-      after(:each) do
-        FileUtils.remove_dir(custom_file_context['folder'], true)
       end
 
       describe 'label_file has content' do
@@ -162,7 +160,7 @@ describe 'kubelet_ctl' do
           end
           manifest_properties = {'k8s-args' => {}}
           rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
-          labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
+          labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], 'CUSTOM_LABEL_PATH='+custom_file_context['label_file']+' CUSTOM_TAINT_PATH='+custom_file_context['taint_file'], "construct_labels")
 
           expect(labels).to include('bosh.zone=z1')
           expect(labels).to include('spec.ip=fake-bosh-ip')
@@ -180,7 +178,7 @@ describe 'kubelet_ctl' do
           end
           manifest_properties = {'k8s-args' => {}}
           rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
-          taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+          taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], 'CUSTOM_LABEL_PATH='+custom_file_context['label_file']+' CUSTOM_TAINT_PATH='+custom_file_context['taint_file'], "construct_taints")
 
           ## make sure concatenated by comma
           expect(taints).to include('t1=t1:NoExecute,t2=t2:Execute')
@@ -197,8 +195,8 @@ describe 'kubelet_ctl' do
           end
           manifest_properties = {'k8s-args' => {}}
           rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
-          labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
-          taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+          labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], 'CUSTOM_LABEL_PATH='+custom_file_context['label_file']+' CUSTOM_TAINT_PATH='+custom_file_context['taint_file'], "construct_labels")
+          taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], 'CUSTOM_LABEL_PATH='+custom_file_context['label_file']+' CUSTOM_TAINT_PATH='+custom_file_context['taint_file'], "construct_taints")
 
           ## make sure concatenated by comma
           expect(labels).to include('l1=l1,l2=l2')
@@ -221,8 +219,8 @@ describe 'kubelet_ctl' do
             }
           }
           rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, link_spec, {}, 'z1', 'fake-bosh-ip', 'fake-bosh-id')
-          labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_labels")
-          taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], "construct_taints")
+          labels = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], 'CUSTOM_LABEL_PATH='+custom_file_context['label_file']+' CUSTOM_TAINT_PATH='+custom_file_context['taint_file'], "construct_labels")
+          taints = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], 'CUSTOM_LABEL_PATH='+custom_file_context['label_file']+' CUSTOM_TAINT_PATH='+custom_file_context['taint_file'], "construct_taints")
 
           expect(labels).to include('bosh.zone=z1')
           expect(labels).to include('spec.ip=fake-bosh-ip')
@@ -316,7 +314,7 @@ describe 'kubelet_ctl' do
       it 'sets hostname_override to IP address of container IP' do
         expected_spec_ip = '1111'
         rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', { 'cloud-provider' => 'nonsense' }, link_spec, {}, 'az1', expected_spec_ip)
-        result = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], 'get_hostname_override')
+        result = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], '', 'get_hostname_override')
 
         expect(result).to include(expected_spec_ip)
       end
@@ -366,7 +364,7 @@ describe 'kubelet_ctl' do
         rendered_kubelet_ctl = compiled_template('kubelet', 'bin/kubelet_ctl', manifest_properties, test_link)
         expect(rendered_kubelet_ctl).to include('cloud_provider="gce"')
 
-        result = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], 'get_hostname_override')
+        result = call_function(rendered_kubelet_ctl, test_context['kubelet_ctl_file'], '', 'get_hostname_override')
         expect(result).to include(expected_google_hostname)
       end
     end

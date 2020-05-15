@@ -1,0 +1,23 @@
+#!/bin/bash
+
+export PATH=/var/vcap/packages/kubernetes/bin:$PATH
+
+JQ_PATH=/var/vcap/packages/jq/bin/jq
+CUSTOM_LABEL_PATH=/var/vcap/store/custom-label-taint/labels
+CUSTOM_TAINT_PATH=/var/vcap/store/custom-label-taint/taints
+LABEL_TAINT_PREFIX="tkgi-"
+
+store_custom_labels_taints() {
+  node_info=$(kubectl --kubeconfig /var/vcap/jobs/kubelet/config/kubeconfig-pre-stop get no -l "bosh.id=<%= spec.id %>" -o json)
+
+  LABELS=$(echo "$node_info" | "$JQ_PATH" -r ".items[].metadata | select(.labels != null) | .labels | to_entries | map(select(.\"key\" | contains(\"$LABEL_TAINT_PREFIX\"))) | .[] | join(\"=\")")
+  printf "[%s] -- Custom Labels:\n" "$(date -u)"
+  printf "%s\n" "$LABELS"
+
+  TAINTS=$(echo "$node_info" | "$JQ_PATH" -r ".items[].spec | select(.taints != null) | .taints | map(select(.\"key\" | contains(\"$LABEL_TAINT_PREFIX\"))) | .[] | .key + \"=\" + .value + \":\" + .effect")
+  printf "[%s] -- Custom Taints:\n" "$(date -u)"
+  printf "%s\n" "$TAINTS"
+
+  echo "$LABELS" > "$CUSTOM_LABEL_PATH"
+  echo "$TAINTS" > "$CUSTOM_TAINT_PATH"
+}

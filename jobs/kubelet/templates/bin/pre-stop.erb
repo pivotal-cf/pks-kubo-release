@@ -5,17 +5,12 @@
 
 set -eu
 
-export PATH=/var/vcap/packages/kubernetes/bin:$PATH
+source /var/vcap/jobs/kubelet/bin/store-custom-labels-taints
 
 LOG_DIR=/var/vcap/sys/log/kubelet
 PIDFILE=/var/vcap/sys/run/kubernetes/kubelet.pid
 
 trap ensure_safe_exit EXIT
-
-JQ_PATH=/var/vcap/packages/jq/bin/jq
-CUSTOM_LABEL_PATH=/var/vcap/store/custom-label-taint/labels
-CUSTOM_TAINT_PATH=/var/vcap/store/custom-label-taint/taints
-LABEL_TAINT_PREFIX="tkgi-"
 
 main() {
   send_process_stdout_to_logfile
@@ -86,21 +81,6 @@ check_if_pidfile_exists() {
     echo "$(date) -- Pidfile not found, so not attempting to pre-stop."
     exit
   fi
-}
-
-store_custom_labels_taints() {
-  node_info=$(kubectl --kubeconfig /var/vcap/jobs/kubelet/config/kubeconfig-pre-stop get no -l "bosh.id=<%= spec.id %>" -o json)
-
-  LABELS=$(echo "$node_info" | "$JQ_PATH" -r ".items[].metadata | select(.labels != null) | .labels | to_entries | map(select(.\"key\" | contains(\"$LABEL_TAINT_PREFIX\"))) | .[] | join(\"=\")")
-  printf "[%s] -- Custom Labels:\n" "$(date -u)"
-  printf "%s\n" "$LABELS"
-
-  TAINTS=$(echo "$node_info" | "$JQ_PATH" -r ".items[].spec | select(.taints != null) | .taints | map(select(.\"key\" | contains(\"$LABEL_TAINT_PREFIX\"))) | .[] | .key + \"=\" + .value + \":\" + .effect")
-  printf "[%s] -- Custom Taints:\n" "$(date -u)"
-  printf "%s\n" "$TAINTS"
-
-  echo "$LABELS" > "$CUSTOM_LABEL_PATH"
-  echo "$TAINTS" > "$CUSTOM_TAINT_PATH"
 }
 
 main
