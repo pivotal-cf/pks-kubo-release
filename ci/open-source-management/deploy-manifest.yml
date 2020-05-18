@@ -9,14 +9,9 @@ inputs:
   - name: git-kubo-odb-ci
   - name: git-pks-kubernetes-release-ci
   - name: gcs-director-config
-  - name: gcs-pks-kubo-release
-    optional: true
-  - name: gcs-pks-kubo-release-windows
-    optional: true
+  - name: pks-kubernetes-release
+  - name: pks-kubernetes-windows-release
   # - name: gcs-director-config
-  - name: git-pks-kubernetes-release
-  - name: git-pks-kubernetes-windows-release
-    optional: true
 
 params:
   VERSION: 
