@@ -6,9 +6,9 @@ image_resource:
 
 inputs:
   - name: git-kubo-odb-ci
-  - name: git-boshcycle-ci
-  - name: gcs-pks-kubo-release
+  - name: git-pks-kubernetes-release-ci
+  - name: pks-kubernetes-release
   - name: gcs-director-config
 
 run:
-  path: git-boshcycle-ci/ci/utils/upload-kubo-release.sh
+  path: git-pks-kubernetes-release-ci/ci/utils/upload-kubo-release.sh

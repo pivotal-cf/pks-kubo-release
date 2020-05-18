@@ -4,7 +4,12 @@ resource_types:
   type: docker-image
   source:
     repository: frodenas/gcs-resource
-    tag: latest
+    tag: latest   
+
+- name: bosh-release
+  type: docker-image
+  source:
+    repository: dpb587/bosh-release-resource
 
 resources:
 - name: pool-pks-locks
@@ -18,22 +23,33 @@ resources:
 - name: git-kubo-odb-ci
   type: git
   source:
-    uri: git@github.com:pivotal-cf/kubo-odb-ci
+    uri: git@github.com:pivotal-cf/kubo-odb-ci.git
     branch: master
     private_key: ((pks-bot-ssh-key.private_key))
 
-- name: gcs-pks-kubo-release
-  type: gcs
+- name: pks-kubernetes-release
+  type: bosh-release
   source:
-    bucket: pipeline-store
-    json_key: ((gcs-json-key))
-    regexp: ((release-line))/cfcr/kubo-release-(\d+.*).tgz
-- name: gcs-pks-kubo-release-windows
-  type: gcs
+    uri: git@github.com:pivotal-cf/pks-kubernetes-release
+    branch: ((release-line))
+    private_config:
+      blobstore:
+        options:
+          credentials_source: static
+          json_key: ((gcs-json-key))
+    private_key: ((pks-bot-ssh-key.private_key))
+
+- name: pks-kubernetes-windows-release
+  type: bosh-release
   source:
-    bucket: pipeline-store
-    json_key: ((gcs-json-key))
-    regexp: ((release-line))/cfcr/kubo-release-windows-(.*).tgz
+    uri: git@github.com:pivotal-cf/pks-kubernetes-windows-release
+    branch: ((release-line))
+    private_config:
+      blobstore:
+        options:
+          credentials_source: static
+          json_key: ((gcs-json-key))
+    private_key: ((pks-bot-ssh-key.private_key))
 
 # redeclare the same git resource to isolate the CI as something that can rapidly change
 # without triggering or requiring passed
@@ -63,8 +79,8 @@ jobs:
   plan:
   - in_parallel:
     - get: git-kubo-odb-ci
-    - get: gcs-pks-kubo-release
-    - get: gcs-pks-kubo-release-windows
+    - get: pks-kubernetes-release
+    - get: pks-kubernetes-windows-release
     - get: pool-pks-locks
   - put: pool-pks-locks
     params:
@@ -75,7 +91,7 @@ jobs:
     - in_parallel:
         - get: git-kubo-odb-ci
         - get: git-pks-kubernetes-release-ci
-        - get: gcs-pks-kubo-release
+        - get: pks-kubernetes-release
         - get: pool-pks-locks
           trigger: true
           passed: [ 'claim-lock' ]
@@ -97,7 +113,7 @@ jobs:
         - get: pool-pks-locks
           trigger: true
           passed: [ 'claim-lock' ]
-        - get: gcs-pks-kubo-release-windows
+        - get: pks-kubernetes-windows-release
           passed: [ 'claim-lock' ]
     - task: create-bosh-config
       tags: ['gcp']
@@ -117,10 +133,10 @@ jobs:
       passed:
         - 'upload-kubo-release'
         - 'upload-kubo-release-windows'
-    - get: gcs-pks-kubo-release
+    - get: pks-kubernetes-release
       trigger: true
       passed: [ 'upload-kubo-release' ]
-    - get: gcs-pks-kubo-release-windows
+    - get: pks-kubernetes-windows-release
       trigger: true
       passed: [ 'upload-kubo-release-windows' ]
     - get: linux-stemcell
@@ -153,10 +169,10 @@ jobs:
     - get: git-pks-kubernetes-release-ci
     - get: pool-pks-locks
       passed: [ 'deploy-manifest' ]
-    - get: gcs-pks-kubo-release
+    - get: pks-kubernetes-release
       trigger: true
       passed: [ 'deploy-manifest' ]
-    - get: gcs-pks-kubo-release-windows
+    - get: pks-kubernetes-windows-release
       trigger: true
       passed: [ 'deploy-manifest' ]
   - task: create-bosh-config
@@ -176,9 +192,9 @@ jobs:
     - get: pool-pks-locks
       trigger: true
       passed: [ 'generate-osm' ]
-    - get: gcs-pks-kubo-release
+    - get: pks-kubernetes-release
       passed: [ 'generate-osm' ]
-    - get: gcs-pks-kubo-release-windows
+    - get: pks-kubernetes-windows-release
       passed: [ 'generate-osm' ]
   - task: create-bosh-config
     tags: ['gcp']
