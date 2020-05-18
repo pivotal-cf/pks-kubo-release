@@ -7,13 +7,10 @@ image_resource:
 inputs:
   - name: pool-pks-locks
   - name: git-kubo-odb-ci
-  - name: git-pks-kubernetes-release-ci
-  - name: gcs-director-config
   - name: pks-kubernetes-release
   - name: pks-kubernetes-windows-release
-  # - name: gcs-director-config
+  - name: git-pks-kubernetes-release-ci
+  - name: gcs-director-config
 
-params:
-  VERSION: 
 run:
-  path: git-pks-kubernetes-release-ci/ci/open-source-management/deploy-manifest.sh
+  path: git-pks-kubernetes-release-ci/ci/open-source-management/cleanup/task.sh

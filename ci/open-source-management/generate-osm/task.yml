@@ -13,4 +13,4 @@ inputs:
   - name: gcs-director-config
 
 run:
-  path: git-pks-kubernetes-release-ci/ci/open-source-management/generate-osm.sh
+  path: git-pks-kubernetes-release-ci/ci/open-source-management/generate-osm/task.sh

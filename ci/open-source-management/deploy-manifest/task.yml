@@ -5,10 +5,12 @@ image_resource:
     repository: odpks/pks-ci
 
 inputs:
+  - name: pool-pks-locks
   - name: git-kubo-odb-ci
   - name: git-pks-kubernetes-release-ci
-  - name: pks-kubernetes-release
   - name: gcs-director-config
+  - name: pks-kubernetes-release
+  - name: pks-kubernetes-windows-release
 
 run:
-  path: git-pks-kubernetes-release-ci/ci/utils/upload-kubo-release.sh
+  path: git-pks-kubernetes-release-ci/ci/open-source-management/deploy-manifest/task.sh
