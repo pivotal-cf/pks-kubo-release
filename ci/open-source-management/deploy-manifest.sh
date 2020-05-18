@@ -5,7 +5,7 @@ set -euxo pipefail
 source git-pks-kubernetes-release-ci/ci/utils/use-bosh.sh
 source git-pks-kubernetes-release-ci/ci/open-source-management/deployment-name.sh
 
-PKS_KUBO_VERSION=$(cat git-pks-kubernetes-release/version)
+PKS_KUBO_VERSION=$(cat pks-kubernetes-release/version)
 PKS_KUBO_WINDOWS_VERSION=$(cat pks-kubernetes-windows-release)
 
 export NETWORK_NAME=`bosh int <(bosh cloud-config) --path /networks | yq -r '.[] | select(.name|test(".*pks-services-subnet.*")) | .name'`
