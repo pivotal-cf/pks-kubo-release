@@ -92,6 +92,7 @@ jobs:
         - get: git-kubo-odb-ci
         - get: git-pks-kubernetes-release-ci
         - get: pks-kubernetes-release
+          passed: [ 'claim-lock' ]
         - get: pool-pks-locks
           trigger: true
           passed: [ 'claim-lock' ]
