@@ -2,8 +2,8 @@
 
 set -euxo pipefail
 
-source git-boshcycle-ci/ci/utils/use-bosh.sh
-source git-boshcycle-ci/ci/open-source-management/deployment-name.sh
+source git-pks-kubernetes-release-ci/ci/utils/use-bosh.sh
+source git-pks-kubernetes-release-ci/ci/open-source-management/deployment-name.sh
 
 bosh run-errand \
   -d "${DEPLOYMENT_NAME}" \

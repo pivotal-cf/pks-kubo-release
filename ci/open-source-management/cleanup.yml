@@ -7,10 +7,10 @@ image_resource:
 inputs:
   - name: pool-pks-locks
   - name: git-kubo-odb-ci
-  - name: gcs-pks-kubo-release
-  - name: git-boshcycle-ci
-  - name: gcs-pks-kubo-release-windows
+  - name: pks-kubernetes-release
+  - name: pks-kubernetes-windows-release
+  - name: git-pks-kubernetes-release-ci
   - name: gcs-director-config
 
 run:
-  path: git-boshcycle-ci/ci/open-source-management/cleanup.sh
+  path: git-pks-kubernetes-release-ci/ci/open-source-management/cleanup.sh

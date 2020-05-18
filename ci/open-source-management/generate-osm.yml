@@ -7,10 +7,10 @@ image_resource:
 inputs:
   - name: pool-pks-locks
   - name: git-kubo-odb-ci
-  - name: git-boshcycle-ci
-  - name: gcs-pks-kubo-release
-  - name: gcs-pks-kubo-release-windows
+  - name: git-pks-kubernetes-release-ci
+  - name: pks-kubernetes-release
+  - name: pks-kubernetes-windows-release
   - name: gcs-director-config
 
 run:
-  path: git-boshcycle-ci/ci/open-source-management/generate-osm.sh
+  path: git-pks-kubernetes-release-ci/ci/open-source-management/generate-osm.sh

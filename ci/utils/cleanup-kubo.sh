@@ -2,8 +2,8 @@
 
 set -euxo pipefail
 
-source git-boshcycle-ci/ci/utils/use-bosh.sh
-source git-boshcycle-ci/ci/utils/kubo-sha.sh
+source git-pks-kubernetes-release-ci/ci/utils/use-bosh.sh
+source git-pks-kubernetes-release-ci/ci/utils/kubo-sha.sh
 
 cleanupKubo() {
   local deployment=$1
