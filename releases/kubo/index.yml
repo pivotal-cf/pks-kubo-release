@@ -3,6 +3,8 @@ builds:
     version: 1.9.0-build.20
   06781654-e47d-4e51-567b-2f35860cfeca:
     version: 0.41.0
+  06a04e05-bb20-4aaa-7ace-e90835edf03d:
+    version: 1.9.0-build.35-persist-node-taint-label
   07c7a55d-b2c6-4a63-46a7-a8fbf6c0f7b1:
     version: 0.13.0
   0bdbfd2b-222b-4c6d-532a-5183acbc6589:
