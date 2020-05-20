@@ -1,5 +1,5 @@
 check process kube-scheduler
   with pidfile /var/vcap/sys/run/bpm/kube-scheduler/kube-scheduler.pid
-  start program "/var/vcap/jobs/bpm/bin/bpm start kube-scheduler"
+  start program "/var/vcap/jobs/bpm/bin/bpm start kube-scheduler" with timeout 180 seconds
   stop program "/var/vcap/jobs/bpm/bin/bpm stop kube-scheduler"
   group vcap
