@@ -96,16 +96,21 @@ case $1 in
   stop)
     # Stop Docker containers
     echo "Stopping docker containers..."
-    # stopping 50 containers at a time
-    containers="$(/var/vcap/packages/docker/bin/docker --host unix://${DOCKER_PID_DIR}/docker.sock ps -q | head -n 50)"
-    while [[ ! -z "$containers" ]]; do
-      echo "Stopping docker containers: ${containers}"
+    containers="$(/var/vcap/packages/docker/bin/docker --host unix://${DOCKER_PID_DIR}/docker.sock ps -q | head -n -0)"
+    containerArray=($containers)
+    numContainers=${#containerArray[@]}
+    index=0
+    set +e
+    while [[ "$index" -lt "$numContainers" ]]; do
+      # stopping 50 containers at a time
+      containersToStop="${containerArray[@]:$index:50}"
+      echo "stopping these containers: $containersToStop"
       # default timeout per container is 10 seconds, this may take longer than that depending on the number of docker
       # processes running and the time taken to initiate communication with all of them at once
-      /var/vcap/packages/docker/bin/docker --host unix://${DOCKER_PID_DIR}/docker.sock stop ${containers}
-      echo "Number of remaining containers: $(/var/vcap/packages/docker/bin/docker --host unix://${DOCKER_PID_DIR}/docker.sock ps -q | wc -l)"
-      containers="$(/var/vcap/packages/docker/bin/docker --host unix://${DOCKER_PID_DIR}/docker.sock ps -q | head -n 50)"
+      /var/vcap/packages/docker/bin/docker --host unix://${DOCKER_PID_DIR}/docker.sock stop $containersToStop
+      index=$((50 + index))
     done
+    set -e
 
     # Stop Docker daemon
     echo -n "Stopping docker daemon..."
