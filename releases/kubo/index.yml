@@ -85,6 +85,8 @@ builds:
     version: 1.9.0-build.14-replace-nginx
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
     version: 0.27.0
+  c89aba99-5eba-430d-42cf-189ca0fad85b:
+    version: 1.8.0-build.37
   c9984ee5-d029-48d0-5c49-6ec099bf12b3:
     version: 0.0.1
   ccb50e8c-b2da-447e-7ba7-43e70846d98f:
