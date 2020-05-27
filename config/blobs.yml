@@ -18,30 +18,30 @@ cni/util-linux_2.27.1-6ubuntu3_amd64.deb:
   size: 847730
   object_id: 27eb3ec3-220f-4a25-6c4f-ec219c37ac8d
   sha: 568f62cb031608ab09ba1e3c2121e9e8b92dcae4
-common-core-kubernetes-1.16.9+vmware.1/kube-apiserver:
-  size: 158126116
-  object_id: c7038cb4-19d2-4306-4223-6a00cc690498
-  sha: sha256:d58f329cc9d736c76ab8c1ed1e0f4633baae91155740a5fb985241c6ab7d153d
-common-core-kubernetes-1.16.9+vmware.1/kube-controller-manager:
-  size: 149226039
-  object_id: 30217095-f1d7-4f1b-62ab-2e80a8c89d2a
-  sha: sha256:77522772e5199e4f2694d8762ca275483468f432b4a737dfbe6a7563cd1d0ae6
-common-core-kubernetes-1.16.9+vmware.1/kube-proxy:
-  size: 51272656
-  object_id: 350ecfa6-2f67-487a-7069-c98e147445e2
-  sha: sha256:b12fa520df43b7b5bf0b5b7a804b44d3bfc15217e1c5d594335fddda75991c41
-common-core-kubernetes-1.16.9+vmware.1/kube-scheduler:
-  size: 56870485
-  object_id: 76ede33a-432b-4314-59b2-bf7adec79aef
-  sha: sha256:479056c7674aa9bd220c1507ea42866c7e5b640aca30df7a3db1179052388eaf
-common-core-kubernetes-1.16.9+vmware.1/kubectl:
-  size: 58573541
-  object_id: 924125bf-8d2d-460a-614f-f2dab4c0b6c7
-  sha: sha256:da4db9f0378eb271ca11c25f0497f3a8aa059ea608e759cbb63c39a5382f37b0
-common-core-kubernetes-1.16.9+vmware.1/kubelet:
-  size: 150036360
-  object_id: bbb6112f-372a-44d6-7175-55d7a264ffe7
-  sha: sha256:2f29b54c73f6b3caa12c1b5a4af006f04c1981385f9a5e6d42b723fd5b21009d
+common-core-kubernetes-1.16.10+vmware.1/kube-apiserver:
+  size: 158150753
+  object_id: e9e32071-2948-4438-59cb-5e577fbbc399
+  sha: sha256:76b0e784b879cfdafaa4d94294bb9f76273ebf9d308e08bccdacb55285d68309
+common-core-kubernetes-1.16.10+vmware.1/kube-controller-manager:
+  size: 149217908
+  object_id: b8e47abf-3ed4-473f-7d59-069c9d52b006
+  sha: sha256:4ae2e699fe791552564891d3fb33367d206ffbc7ea22e6cfaecc9b1d56d1a3b5
+common-core-kubernetes-1.16.10+vmware.1/kube-proxy:
+  size: 51272763
+  object_id: 37a04d84-f490-4863-6641-6af5b278db3d
+  sha: sha256:b3d9593af29f42ce7ab612930df30adf701a8bd033e4d758492fdc7a7c36de4b
+common-core-kubernetes-1.16.10+vmware.1/kube-scheduler:
+  size: 56862416
+  object_id: 6f500a02-8e88-41a2-79b9-85506447b0e2
+  sha: sha256:5338704e19eeec0d492e5d99e27b1ccd9e28c57ec2e3371c82090c73c23c4457
+common-core-kubernetes-1.16.10+vmware.1/kubectl:
+  size: 58573648
+  object_id: 40585a9a-9345-476d-4de7-1feec62ace16
+  sha: sha256:f6fa3a8471c8d73f66a2995154b6116d47c6eb90b6946639a32ded0313e0d305
+common-core-kubernetes-1.16.10+vmware.1/kubelet:
+  size: 150051072
+  object_id: 040c17b3-78dc-4b9d-6191-811279514e57
+  sha: sha256:ac564e7d782a59363b6a95b927cbd05ea72ab33f19c9f1e0366c439c6075f7d7
 conntrack/conntrack_1.4.3-3_amd64.deb:
   size: 27346
   object_id: 0c4aa633-3de8-4a8c-7170-36b3fc9e4a9c
