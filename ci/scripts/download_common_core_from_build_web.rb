@@ -64,6 +64,15 @@ def add_blob(binary_name, release_dir, binary_dir, kubernetes_version)
   end
 end
 
+def git_commit_and_push(release_dir, kubernetes_version)
+  Dir.chdir release_dir do
+    execute_system_call("git co -b bump-kubernetes-#{kubernetes_version}")
+    execute_system_call("git add .")
+    execute_system_call("git commit -m 'Bumps kubernetes #{kubernetes_version}'")
+    execute_system_call("git push -u origin bump-kubernetes-#{kubernetes_version}")
+  end
+end
+
 def main(bora_number, kubernetes_version)
   release_dir = "/Users/pivotal/workspace/pks-kubernetes-release"
 
@@ -122,6 +131,8 @@ def main(bora_number, kubernetes_version)
   end
 
   execute_system_call("cd #{release_dir}; bosh upload-blobs")
+
+  git_commit_and_push(release_dir, kubernetes_version)
 end
 
 
