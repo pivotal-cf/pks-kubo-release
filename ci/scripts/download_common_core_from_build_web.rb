@@ -102,7 +102,7 @@ def main(bora_number, kubernetes_version)
       exit
     end
 
-    execute_system_call "sed -i '' s/KUBERNETES_VERSION=\"#{existing_k8s_version}\"/KUBERNETES_VERSION=\"#{kubernetes_version}\"/ packages/kubernetes/packaging"
+    execute_system_call "sed -i '' s/KUBERNETES_VERSION=\\\"#{existing_k8s_version}\\\"/KUBERNETES_VERSION=\\\"#{kubernetes_version}\\\"/ packages/kubernetes/packaging"
     execute_system_call "sed -i '' s/kubernetes-#{existing_k8s_version}/kubernetes-#{kubernetes_version}/ packages/kubernetes/spec"
   end
 
