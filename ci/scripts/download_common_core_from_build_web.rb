@@ -85,16 +85,16 @@ def main(bora_number, kubernetes_version)
   ]
 
   Dir.chdir release_dir do
-    existing_k8s_spec = execute_system_call "bosh blobs --column path | grep '#{binaries[0]}' | grep -o -E 'kubernetes-([0-9]+\.)+[0-9]+'"
-    existing_k8s_version = execute_system_call "echo '#{existing_k8s_spec}' | grep -o -E '([0-9]+\.)+[0-9]+'"
+    existing_k8s_spec = execute_system_call "bosh blobs --column path | grep '#{binaries[0]}' | grep -o -E 'kubernetes-([0-9]+\.)+[0-9]+[\+vmware.[0-9]+]*'"
+    existing_k8s_version = execute_system_call "echo '#{existing_k8s_spec}' | grep -o -E '([0-9]+\.)+[0-9]+[\+vmware.[0-9]+]*'"
 
     if existing_k8s_version == kubernetes_version
       puts "Kubernetes version already up-to-date."
       exit
     end
 
-    execute_system_call "sed -i '' 's/KUBERNETES_VERSION=\"([0-9]+\.)+[0-9]+\"/KUBERNETES_VERSION=\"#{kubernetes_version}\"/' packages/kubernetes/packaging"
-    execute_system_call "sed -i '' s/#{existing_k8s_spec}/kubernetes-#{kubernetes_version}/ packages/kubernetes/spec"
+    execute_system_call "sed -i '' s/KUBERNETES_VERSION=\"#{existing_k8s_version}\"/KUBERNETES_VERSION=\"#{kubernetes_version}\"/ packages/kubernetes/packaging"
+    execute_system_call "sed -i '' s/kubernetes-#{existing_k8s_version}/kubernetes-#{kubernetes_version}/ packages/kubernetes/spec"
   end
 
   PksKubernetesRelease::DownloadFromBuildWeb.run(kubernetes_version, bora_number, container_images, binaries, staging_dir)
