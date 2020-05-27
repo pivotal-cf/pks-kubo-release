@@ -9,20 +9,22 @@ function load_container_images {
   local image_dir=${packages_dir}/images
 
   for filename in ${image_dir}/*.tar; do
-    /var/vcap/packages/docker/bin/docker load ${filename}
+    if [ -e "${filename}" ]; then   # guard against no files found (bash pitfall)
+      /var/vcap/packages/docker/bin/docker load "${filename}"
+    fi
   done
 
   return 0
 }
 
-
+docker_ctl="/var/vcap/jobs/docker/bin/ctl"
 # start docker
-/var/vcap/jobs/docker/bin/ctl start
+$docker_ctl start
 wait_for_docker
 
 # load images for directory
 load_container_images
 
 # kill docker and ensure PID file is deleted
-/var/vcap/jobs/docker/bin/ctl stop
+$docker_ctl stop
 # TODO: wait for docker to have stopped
