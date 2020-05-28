@@ -49,6 +49,8 @@ builds:
     version: 0.37.0
   7acb57cc-ef32-44ae-47ef-f476fca5a40a:
     version: 0.23.0
+  7ad4725d-6673-4907-77bf-e6e6aeb9c11e:
+    version: 1.9.0-build.39-k8s-1.17.5-fake-update
   7c1ab334-3ca4-467b-7829-66b428c8f95c:
     version: 0.33.0
   7ee39501-bde2-4a49-446b-50971371cdad:
