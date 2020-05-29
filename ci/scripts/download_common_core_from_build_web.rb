@@ -67,7 +67,9 @@ end
 def git_commit_and_push(release_dir, kubernetes_version)
   Dir.chdir release_dir do
     execute_system_call("git co -b bump-kubernetes-#{kubernetes_version}")
-    execute_system_call("git add .")
+    execute_system_call("git add config/blobs.yml")
+    execute_system_call("git add packages/kubernetes/packaging")
+    execute_system_call("git add packages/kubernetes/spec")
     execute_system_call("git commit -m 'Bumps kubernetes #{kubernetes_version}'")
     execute_system_call("git push -u origin bump-kubernetes-#{kubernetes_version}")
   end
