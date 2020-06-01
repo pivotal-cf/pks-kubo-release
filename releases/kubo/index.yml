@@ -45,6 +45,8 @@ builds:
     version: 1.9.0-build.15-replace-nginx
   665d71a9-8522-4c64-692a-7899458abae6:
     version: 0.8.0
+  66ceb4d1-453e-4479-66cf-e222c86b29f1:
+    version: 1.8.0-build.39-etcdClient-permissions
   744fe93d-7c3e-4f35-4932-e2f39b471420:
     version: 0.37.0
   7acb57cc-ef32-44ae-47ef-f476fca5a40a:
