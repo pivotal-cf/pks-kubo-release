@@ -2,6 +2,7 @@
 name: load-images
 
 templates:
+  bin/load_container_images.sh: bin/load_container_images.sh
   bin/run.sh: bin/run.sh
   bin/pre-start.sh: bin/pre-start.sh
 
