@@ -184,6 +184,24 @@ setup_users_auth() {
     <% end %>
     <% end %>
   <% end %>
+
+  # Add etcdClient user permissions only for the 1.8.x upgrade path, this user will be removed by apply-specs
+  versions=${versions}v3
+
+  version="v3"
+  username="etcdClient"
+  password="$(date +%s | sha256sum | base64 | head -c 16)"
+  echo "Set up user etcdClient"
+  ## this password is used for all commands to make the script idempotent
+  etcdctl_add_user "$version" "$username" "$password"
+  role="${username}-role"
+  etcdctl_add_role "$version" "$role"
+  path="*"
+  etcdctl_grant_read_permission "$version" "$role" "$path"
+  etcdctl_grant_write_permission "$version" "$role" "$path"
+  etcdctl_bind_role_to_user "$version" "$username" "$role"
+  etcdctl_show_user_role "$version" "$username" "$role"
+
   turn_on_authentication $versions
   <% end %>
 }

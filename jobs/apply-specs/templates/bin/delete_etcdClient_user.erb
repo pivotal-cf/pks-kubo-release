@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source /var/vcap/jobs/etcd/bin/utils.sh
+
+etcdctl_v3() {
+  ETCDCTL_API=3 /var/vcap/packages/etcd/bin/etcdctl \
+    --cacert /var/vcap/jobs/etcd/config/etcdctl-ca.crt \
+    --cert /var/vcap/jobs/etcd/config/etcdctl-root.crt \
+    --key /var/vcap/jobs/etcd/config/etcdctl-root.key \
+    --endpoints "${etcd_endpoints}" \
+    "$@"
+}
+
+main() {
+    if etcdctl_v3 user get etcdClient 2> /dev/null
+    then
+        etcdctl_v3 user delete etcdClient
+    fi
+}
+
+main

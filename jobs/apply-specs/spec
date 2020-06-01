@@ -3,6 +3,7 @@ name: apply-specs
 templates:
   bin/deploy-specs.erb: bin/deploy-specs
   bin/run.erb: bin/run
+  bin/delete_etcdClient_user.erb: bin/delete_etcdClient_user
   config/kubeconfig.erb: config/kubeconfig
   config/ca.pem.erb: config/ca.pem
   specs/addon-spec.yml.erb: specs/addon-spec.yml

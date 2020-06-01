@@ -10,7 +10,8 @@ main() {
     echo "failed to start all system specs after $TIMEOUT with exit code $?"
     exit 1
   fi
+
+  /var/vcap/jobs/apply-specs/bin/delete_etcdClient_user
 }
 
 main
-
