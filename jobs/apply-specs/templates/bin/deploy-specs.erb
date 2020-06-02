@@ -30,7 +30,7 @@ main() {
   end
   %>
 <% if_p("private_registry.server", "private_registry.username", "private_registry.password", "private_registry.email") do |server, username, password, email| %>
-  kubectl create secret docker-registry regcred --docker-server=<%=server %> --docker-username=<%=username %> --docker-password="<%=password %>" --docker-email=<%=email %> -n kube-system
+  ${kubectl} create secret docker-registry regcred --docker-server=<%=server %> --docker-username=<%=username %> --docker-password="<%=password %>" --docker-email=<%=email %> -n kube-system
 <% end %>
   <% if bootstrap_addons.include?('coredns') %>
     apply_spec "coredns-infra.yml"

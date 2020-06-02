@@ -10,19 +10,31 @@ CONTAINER_IMAGE_DIR=/var/vcap/packages/kubernetes/container-images
 
 load_container() {
     path=$1
+    filename=$2
 
     echo "loading cached container: ${path}"
-    if sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker -H ${DOCKER_SOCKET} load < "${path}"; then
+
+    <% if_p("private_registry.server", "private_registry.username", "private_registry.password") do |server, username, password| %>
+    echo "Logging into private registry"
+    sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker  -H ${DOCKER_SOCKET} login -u <%=username %> -p "<%=password %>"  <%=server %>
+    <% end %>
+    if cat ${path} | sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker -H ${DOCKER_SOCKET} import - ${filename}; then
       echo "successfully loaded container: ${path}"
     else
       echo "failed to load container: ${path}"
       exit 1
     fi
+
+    <% if_p("private_registry.server") do |server| %>
+    echo "Pushing image to private registry"
+    sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker  -H ${DOCKER_SOCKET} tag ${filename} <%= server %>/${filename}
+    sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker  -H ${DOCKER_SOCKET} push <%= server %>/${filename}
+    <% end %>     
 }
 
 load_cached_containers() {
     for img in ${CONTAINER_IMAGE_DIR}/*.tgz; do
-        load_container ${img}
+        load_container ${img} $(basename ${img} ".tgz")
     done
 }
 
