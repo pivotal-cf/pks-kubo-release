@@ -18,6 +18,7 @@ load_container() {
     echo "Logging into private registry"
     sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker  -H ${DOCKER_SOCKET} login -u <%=username %> -p "<%=password %>"  <%=server %>
     <% end %>
+    #TODO need to rename all images in kubernetes yaml to match filename
     if cat ${path} | sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker -H ${DOCKER_SOCKET} import - ${filename}; then
       echo "successfully loaded container: ${path}"
     else
