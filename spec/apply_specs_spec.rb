@@ -157,4 +157,32 @@ describe 'apply-specs' do
       expect {rendered_deploy_specs}.to raise_error(RuntimeError, "crap is not a supported addon")
     end
   end
+
+  context 'when using private registry' do
+    let(:coredns_yml) do
+      YAML.safe_load(compiled_template('apply-specs', 'specs/coredns.yml', {:private_registry =>{:server => "gcr.io/cf-pks-bosh-lifecycle-main"}}, {}))
+    end
+
+    it 'contains imagePullSecrets' do
+      expect(coredns_yml['spec']['template']['spec']['imagePullSecrets']).to eq([{"name"=>"regcred"}])
+    end
+
+    it 'refers to private registry name in the container image' do
+      expect(coredns_yml['spec']['template']['spec']['containers'][0]['image']).to include("gcr.io/cf-pks-bosh-lifecycle-main/")
+    end
+  end
+
+  context 'when not using private registry' do
+    let(:coredns_yml) do
+      YAML.safe_load(compiled_template('apply-specs', 'specs/coredns.yml', {}, {}))
+    end
+
+    it 'does not contain imagePullSecrets' do
+      expect(coredns_yml['spec']['template']['spec']['imagePullSecrets']).to be(nil)
+    end
+
+    it 'does not refer to private registry name in the container image' do
+      expect(coredns_yml['spec']['template']['spec']['containers'][0]['image']).not_to include("gcr.io/cf-pks-bosh-lifecycle-main/")
+    end
+  end
 end

@@ -6,6 +6,7 @@ templates:
   config/kubeconfig.erb: config/kubeconfig
   config/ca.pem.erb: config/ca.pem
   specs/addon-spec.yml.erb: specs/addon-spec.yml
+  specs/coredns-infra.yml.erb: specs/coredns-infra.yml
   specs/coredns.yml.erb: specs/coredns.yml
   specs/metrics-server/auth-delegator.yml: specs/metrics-server/auth-delegator.yml
   specs/metrics-server/auth-reader.yml: specs/metrics-server/auth-reader.yml
@@ -43,6 +44,17 @@ properties:
     description: "DEPRECATED: Certificate authority, certificate, and private key for the Kubernetes dashboard"
   tls.metrics-server:
     description: "Certificate authority, certificate, and private key for Metrics Server"
+  private_registry.username:
+    description: "username to use with docker login for private registry"
+    default: "admin"
+  private_registry.password:
+    description: "password value to use with docker login for private registry"
+    default: "password"
+  private_registry.email:
+    description: "email to use with docker login for private registry"
+    default: "user@domain.com"
+  private_registry.server:
+    description: "location of private registry, ex. 'gcr.io/cf-pks-bosh-lifecycle-main', DO NOT INCLUDE HTTPS"
 
 consumes:
 - name: kube-apiserver

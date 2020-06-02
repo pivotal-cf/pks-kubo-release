@@ -30,6 +30,7 @@ main() {
   end
   %>
   <% if bootstrap_addons.include?('coredns') %>
+    apply_spec "coredns-infra.yml"
     apply_spec "coredns.yml"
     wait_for coredns
   <% end %>
