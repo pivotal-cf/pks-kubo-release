@@ -28,7 +28,7 @@ spec:
       tolerations:
         - key: "CriticalAddonsOnly"
           operator: "Exists"
-        <% if_p("private_registry.server") do |_| %>
+        <% if_p("private_registry.server", "private_registry.username", "private_registry.password", "private_registry.email") do |_| %>
       imagePullSecrets:
         - name: regcred
         <% end %>

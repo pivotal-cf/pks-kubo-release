@@ -158,9 +158,26 @@ describe 'apply-specs' do
     end
   end
 
-  context 'when using private registry' do
+  # TODO: figure out how to use json files for GCR auth if necessary
+  context 'when using private authenticated harbor registry' do
+    let(:manifest_properties) do
+      {
+          :private_registry => {
+              :server => "gcr.io/cf-pks-bosh-lifecycle-main",
+              :username => 'admin',
+              :password => 'password',
+              :email => "user@domain.com"
+          },
+          :addons => ['coredns']
+      }
+    end
+
     let(:coredns_yml) do
-      YAML.safe_load(compiled_template('apply-specs', 'specs/coredns.yml', {:private_registry =>{:server => "gcr.io/cf-pks-bosh-lifecycle-main"}}, {}))
+      YAML.safe_load(compiled_template('apply-specs', 'specs/coredns.yml', manifest_properties, {}))
+    end
+
+    let(:deploy_specs) do
+      compiled_template('apply-specs', 'bin/deploy-specs', manifest_properties, {})
     end
 
     it 'contains imagePullSecrets' do
@@ -170,11 +187,50 @@ describe 'apply-specs' do
     it 'refers to private registry name in the container image' do
       expect(coredns_yml['spec']['template']['spec']['containers'][0]['image']).to include("gcr.io/cf-pks-bosh-lifecycle-main/")
     end
+
+    it 'creates a docker registry secret' do
+      expect(deploy_specs).to include('kubectl create secret docker-registry regcred --docker-server=gcr.io/cf-pks-bosh-lifecycle-main --docker-username=admin --docker-password="password" --docker-email=user@domain.com -n kube-system')
+    end
+  end
+
+  context 'when using private unauthenticated registry' do
+    let(:manifest_properties) do
+      {
+          :private_registry => {
+              :server => "gcr.io/cf-pks-bosh-lifecycle-main",
+          },
+          :addons => ['coredns']
+      }
+    end
+
+    let(:coredns_yml) do
+      YAML.safe_load(compiled_template('apply-specs', 'specs/coredns.yml', manifest_properties, {}))
+    end
+
+    let(:deploy_specs) do
+      compiled_template('apply-specs', 'bin/deploy-specs', manifest_properties, {})
+    end
+
+    it 'does not contain imagePullSecrets' do
+      expect(coredns_yml['spec']['template']['spec']['imagePullSecrets']).to be(nil)
+    end
+
+    it 'refers to private registry name in the container image' do
+      expect(coredns_yml['spec']['template']['spec']['containers'][0]['image']).to include("gcr.io/cf-pks-bosh-lifecycle-main/")
+    end
+
+    it 'should not create a docker registry secret' do
+      expect(deploy_specs).not_to include('kubectl create secret docker-registry')
+    end
   end
 
   context 'when not using private registry' do
     let(:coredns_yml) do
       YAML.safe_load(compiled_template('apply-specs', 'specs/coredns.yml', {}, {}))
+    end
+
+    let(:deploy_specs) do
+      compiled_template('apply-specs', 'bin/deploy-specs', {:addons=>['coredns']}, {})
     end
 
     it 'does not contain imagePullSecrets' do
@@ -183,6 +239,10 @@ describe 'apply-specs' do
 
     it 'does not refer to private registry name in the container image' do
       expect(coredns_yml['spec']['template']['spec']['containers'][0]['image']).not_to include("gcr.io/cf-pks-bosh-lifecycle-main/")
+    end
+
+    it 'should not create a docker registry secret' do
+      expect(deploy_specs).not_to include('kubectl create secret docker-registry')
     end
   end
 end
