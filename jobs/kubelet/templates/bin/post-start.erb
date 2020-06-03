@@ -7,19 +7,16 @@ kubectl="/var/vcap/packages/kubernetes/bin/kubectl --kubeconfig=/var/vcap/jobs/k
 
 DOCKER_SOCKET=unix:///var/vcap/sys/run/docker/docker.sock
 CONTAINER_IMAGE_DIR=/var/vcap/packages/kubernetes/container-images
+DOCKER="sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker  -H ${DOCKER_SOCKET}"
 
 load_container() {
     path=$1
-    filename=$2
+    filename=$(basename ${img} ".tgz")
 
     echo "loading cached container: ${path}"
-
-    <% if_p("private_registry.server", "private_registry.username", "private_registry.password") do |server, username, password| %>
-    echo "Logging into private registry"
-    sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker  -H ${DOCKER_SOCKET} login -u <%=username %> -p "<%=password %>"  <%=server %>
-    <% end %>
-    #TODO need to rename all images in kubernetes yaml to match filename
-    if cat ${path} | sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker -H ${DOCKER_SOCKET} import - ${filename}; then
+    
+    # TODO need to rename all images in kubernetes yaml to match filename
+    if cat ${path} | ${DOCKER} import - ${filename}; then
       echo "successfully loaded container: ${path}"
     else
       echo "failed to load container: ${path}"
@@ -28,14 +25,18 @@ load_container() {
 
     <% if_p("private_registry.server") do |server| %>
     echo "Pushing image to private registry"
-    sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker  -H ${DOCKER_SOCKET} tag ${filename} <%= server %>/${filename}
-    sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker  -H ${DOCKER_SOCKET} push <%= server %>/${filename}
+    ${DOCKER} tag ${filename} <%= server %>/${filename}
+    ${DOCKER} push <%= server %>/${filename}
     <% end %>     
 }
 
 load_cached_containers() {
+   <% if_p("privateregistry.server", "private_registry.username", "private_registry.password") do |server, username, password| %>
+    echo "Logging into private registry"
+    ${DOCKER} login -u <%=username %> -p "<%=password %>"  <%=server %>
+    <% end %>
     for img in ${CONTAINER_IMAGE_DIR}/*.tgz; do
-        load_container ${img} $(basename ${img} ".tgz")
+        load_container ${img}
     done
 }
 
