@@ -162,22 +162,32 @@ describe 'apply-specs' do
   context 'when using private authenticated harbor registry' do
     let(:manifest_properties) do
       {
-          :private_registry => {
-              :server => "gcr.io/cf-pks-bosh-lifecycle-main",
-              :username => 'admin',
-              :password => 'password',
-              :email => "user@domain.com"
-          },
           :addons => ['coredns']
       }
-    end
+      end
+      let(:links) do
+      {
+          'kubelet' => {
+            'instances' => [],
+            'properties' => {
+              :private_registry => {
+                :server => "gcr.io/cf-pks-bosh-lifecycle-main",
+                :username => 'admin',
+                :password => 'password',
+                :email => "user@domain.com"
+              }
+            }
+          }
+      }
+      end
+    
 
     let(:coredns_yml) do
-      YAML.safe_load(compiled_template('apply-specs', 'specs/coredns.yml', manifest_properties, {}))
+      YAML.safe_load(compiled_template('apply-specs', 'specs/coredns.yml', manifest_properties, links))
     end
 
     let(:deploy_specs) do
-      compiled_template('apply-specs', 'bin/deploy-specs', manifest_properties, {})
+      compiled_template('apply-specs', 'bin/deploy-specs', manifest_properties, links)
     end
 
     it 'contains imagePullSecrets' do
@@ -189,22 +199,31 @@ describe 'apply-specs' do
     end
 
     it 'creates a docker registry secret' do
-      expect(deploy_specs).to include('kubectl create secret docker-registry regcred --docker-server=gcr.io/cf-pks-bosh-lifecycle-main --docker-username=admin --docker-password="password" --docker-email=user@domain.com -n kube-system')
+      expect(deploy_specs).to include("${kubectl} create secret docker-registry regcred --docker-server=gcr.io/cf-pks-bosh-lifecycle-main --docker-username=admin --docker-password='password' --docker-email=user@domain.com -n kube-system")
     end
   end
 
   context 'when using private unauthenticated registry' do
     let(:manifest_properties) do
+    {
+        :addons => ['coredns']
+    }
+    end
+    let(:links) do
       {
-          :private_registry => {
-              :server => "gcr.io/cf-pks-bosh-lifecycle-main",
-          },
-          :addons => ['coredns']
+          'kubelet' => {
+            'instances' => [],
+            'properties' => {
+              :private_registry => {
+                :server => "gcr.io/cf-pks-bosh-lifecycle-main"
+              }
+            }
+          }
       }
     end
 
     let(:coredns_yml) do
-      YAML.safe_load(compiled_template('apply-specs', 'specs/coredns.yml', manifest_properties, {}))
+      YAML.safe_load(compiled_template('apply-specs', 'specs/coredns.yml', manifest_properties, links))
     end
 
     let(:deploy_specs) do

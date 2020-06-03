@@ -80,6 +80,14 @@ properties:
     description: CA certificate of the authority granting access to kubelet server
   tls.kubernetes:
     description: Certificate and private key for the Kubernetes master
+  private_registry.username:
+    description: "username to use with docker login for private registry"
+  private_registry.password:
+    description: "password value to use with docker login for private registry"
+  private_registry.email:
+    description: "email to use with docker login for private registry"
+  private_registry.server:
+    description: "location of private registry, ex. 'gcr.io/cf-pks-bosh-lifecycle-main', DO NOT INCLUDE HTTPS"
 consumes:
 - name: cloud-provider
   optional: true
@@ -87,6 +95,14 @@ consumes:
 # TODO: it doesn't make sense for kubelet to depend on kube-apiserver, should we extract a common config package / job?
 - name: kube-apiserver
   type: kube-apiserver
+# TODO: not clear where kubernetes-workers is coming from an why the provider stanza is a non-standard format
 provides:
 - name: kubernetes-workers
   type: kubernetes-workers
+- name: kubelet
+  type: kubelet
+  properties:
+  - private_registry.username
+  - private_registry.password
+  - private_registry.email
+  - private_registry.server

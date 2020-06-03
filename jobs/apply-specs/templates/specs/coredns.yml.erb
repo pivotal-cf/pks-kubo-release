@@ -28,15 +28,17 @@ spec:
       tolerations:
         - key: "CriticalAddonsOnly"
           operator: "Exists"
-        <% if_p("private_registry.server", "private_registry.username", "private_registry.password", "private_registry.email") do |_| %>
+        <% if_link('kubelet') do |kubelet| %>
+          <% kubelet.if_p("private_registry.server", "private_registry.username", "private_registry.password", "private_registry.email") do |_| %>
       imagePullSecrets:
         - name: regcred
+          <% end %>
         <% end %>
       containers:
         - name: coredns
           # TODO: should we only add a slash if it's missing?
           # TODO: should we strip https:// from server if it's present?
-          image: <% if_p("private_registry.server") do |server| %><%= server %>/<% end %>vmware.io/coredns:v1.6.2_vmware.2
+          image:  <% if_link('kubelet') do |kubelet| %><% kubelet.if_p("private_registry.server") do |server| %><%= server %>/<% end %><% end %>vmware.io/coredns:v1.6.2_vmware.2
           imagePullPolicy: IfNotPresent
           resources:
             limits:
