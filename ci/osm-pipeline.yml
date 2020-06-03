@@ -1,0 +1,211 @@
+---
+resource_types:
+- name: gcs
+  type: docker-image
+  source:
+    repository: frodenas/gcs-resource
+    tag: latest   
+
+- name: bosh-release
+  type: docker-image
+  source:
+    repository: dpb587/bosh-release-resource
+
+resources:
+- name: pool-pks-locks
+  type: pool
+  source:
+    uri: git@github.com:pivotal-cf/pks-locks.git
+    pool: gcp-flannel-om25-terraform
+    branch: master
+    private_key: ((pks-bot-ssh-key.private_key))
+
+- name: git-kubo-odb-ci
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/kubo-odb-ci.git
+    branch: master
+    private_key: ((pks-bot-ssh-key.private_key))
+
+- name: pks-kubernetes-release
+  type: bosh-release
+  source:
+    uri: git@github.com:pivotal-cf/pks-kubernetes-release
+    branch: ((release-line))
+    private_config:
+      blobstore:
+        options:
+          credentials_source: static
+          json_key: ((gcs-json-key))
+    private_key: ((pks-bot-ssh-key.private_key))
+
+- name: pks-kubernetes-windows-release
+  type: bosh-release
+  source:
+    uri: git@github.com:pivotal-cf/pks-kubernetes-windows-release
+    branch: ((release-line))
+    private_config:
+      blobstore:
+        options:
+          credentials_source: static
+          json_key: ((gcs-json-key))
+    private_key: ((pks-bot-ssh-key.private_key))
+
+# redeclare the same git resource to isolate the CI as something that can rapidly change
+# without triggering or requiring passed
+- name: git-pks-kubernetes-release-ci
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pks-kubo-release.git
+    branch: master
+    private_key: ((git-ssh-key.private_key))
+    paths: [ci]
+
+- name: linux-stemcell
+  source:
+    name: bosh-google-kvm-ubuntu-xenial-go_agent
+    version_family: "621.55"
+  type: bosh-io-stemcell
+
+- name: windows-stemcell
+  source:
+    name: bosh-google-kvm-windows2019-go_agent
+    version_family: "2019.19"
+  type: bosh-io-stemcell
+
+jobs:
+- name: claim-lock
+  max_in_flight: 1
+  plan:
+  - in_parallel:
+    - get: git-kubo-odb-ci
+    - get: pks-kubernetes-release
+    - get: pks-kubernetes-windows-release
+    - get: pool-pks-locks
+  - put: pool-pks-locks
+    params:
+      acquire: true
+
+- name: upload-kubo-release
+  plan:
+    - in_parallel:
+        - get: git-kubo-odb-ci
+        - get: git-pks-kubernetes-release-ci
+        - get: pks-kubernetes-release
+          passed: [ 'claim-lock' ]
+        - get: pool-pks-locks
+          trigger: true
+          passed: [ 'claim-lock' ]
+    - task: create-bosh-config
+      tags: ['gcp']
+      input_mapping:
+        locks-repo: pool-pks-locks
+      file: git-kubo-odb-ci/tasks/create-bosh-config.yml  
+    - task: upload-kubo-release
+      privileged: true
+      file: git-pks-kubernetes-release-ci/ci/open-source-management/upload-kubo-release/task.yml
+    
+
+- name: upload-kubo-release-windows
+  plan:
+    - in_parallel:
+        - get: git-kubo-odb-ci
+        - get: git-pks-kubernetes-release-ci
+        - get: pool-pks-locks
+          trigger: true
+          passed: [ 'claim-lock' ]
+        - get: pks-kubernetes-windows-release
+          passed: [ 'claim-lock' ]
+    - task: create-bosh-config
+      tags: ['gcp']
+      input_mapping:
+        locks-repo: pool-pks-locks
+      file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+    - task: upload-kubo-release-windows
+      privileged: true
+      file: git-pks-kubernetes-release-ci/ci/open-source-management/upload-kubo-release-windows/task.yml
+
+- name: deploy-manifest
+  plan:
+  - in_parallel:
+    - get: git-kubo-odb-ci
+    - get: git-pks-kubernetes-release-ci
+    - get: pool-pks-locks
+      passed:
+        - 'upload-kubo-release'
+        - 'upload-kubo-release-windows'
+    - get: pks-kubernetes-release
+      trigger: true
+      passed: [ 'upload-kubo-release' ]
+    - get: pks-kubernetes-windows-release
+      trigger: true
+      passed: [ 'upload-kubo-release-windows' ]
+    - get: linux-stemcell
+    - get: windows-stemcell
+  - task: create-bosh-config
+    tags: ['gcp']
+    input_mapping:
+      locks-repo: pool-pks-locks
+    file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+  - task: upload-linux-stemcell
+    privileged: true
+    input_mapping:
+      stemcell: linux-stemcell
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+  - task: upload-windows-stemcell
+    privileged: true
+    input_mapping:
+      stemcell: windows-stemcell
+    file: git-pks-kubernetes-release-ci/ci/minimum-release-verification/upload-stemcell/task.yml
+  - task: deploy-release
+    privileged: true
+    file: git-pks-kubernetes-release-ci/ci/open-source-management/deploy-manifest/task.yml
+    params:
+      MANIFEST: git-boshcycle-ci/ci/open-source-management/osm-deployment-manifest.yml
+
+- name: generate-osm
+  plan:
+  - in_parallel:
+    - get: git-kubo-odb-ci
+    - get: git-pks-kubernetes-release-ci
+    - get: pool-pks-locks
+      passed: [ 'deploy-manifest' ]
+    - get: pks-kubernetes-release
+      trigger: true
+      passed: [ 'deploy-manifest' ]
+    - get: pks-kubernetes-windows-release
+      trigger: true
+      passed: [ 'deploy-manifest' ]
+  - task: create-bosh-config
+    tags: ['gcp']
+    input_mapping:
+      locks-repo: pool-pks-locks
+    file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+  - task: run-tests
+    privileged: true
+    file: git-pks-kubernetes-release-ci/ci/open-source-management/generate-osm/task.yml
+
+- name: cleanup
+  plan:
+  - in_parallel:
+    - get: git-kubo-odb-ci
+    - get: git-pks-kubernetes-release-ci
+    - get: pool-pks-locks
+      trigger: true
+      passed: [ 'generate-osm' ]
+    - get: pks-kubernetes-release
+      passed: [ 'generate-osm' ]
+    - get: pks-kubernetes-windows-release
+      passed: [ 'generate-osm' ]
+  - task: create-bosh-config
+    tags: ['gcp']
+    input_mapping:
+      locks-repo: pool-pks-locks
+    file: git-kubo-odb-ci/tasks/create-bosh-config.yml
+  - task: delete-release
+    tags: ['gcp']
+    privileged: true
+    file: git-pks-kubernetes-release-ci/ci/open-source-management/cleanup/task.yml
+  - put: pool-pks-locks
+    params:
+      release: pool-pks-locks

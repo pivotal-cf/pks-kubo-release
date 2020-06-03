@@ -8,12 +8,9 @@ inputs:
   - name: pool-pks-locks
   - name: git-kubo-odb-ci
   - name: git-pks-kubernetes-release-ci
-  - name: bosh-release
   - name: gcs-director-config
+  - name: pks-kubernetes-release
+  - name: pks-kubernetes-windows-release
 
 run:
-  path: git-pks-kubernetes-release-ci/ci/tasks/upload-release/task.sh
-
-params:
-  GCS_JSON_KEY: ((gcs-bosh-blobstore-json-key))
-  DEPLOYMENT_NAME: "SOME_DEFAULT_DEPLOYMENT"
+  path: git-pks-kubernetes-release-ci/ci/open-source-management/deploy-manifest/task.sh

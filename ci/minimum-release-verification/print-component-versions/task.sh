@@ -21,6 +21,10 @@ bosh run-errand \
   --json \
   > windows_versions.txt
 
+echo "Windows version output:"
+cat windows_versions.txt
+echo ""
+
 # stdout will be 'Kubernetes v1.15.5'
 # cut will trim that down to 1.15.5
 WINDOWS_VERSION="$(cat windows_versions.txt | \

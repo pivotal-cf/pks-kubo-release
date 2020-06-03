@@ -5,8 +5,8 @@ image_resource:
     repository: odpks/pks-ci
 
 inputs:
-  - name: git-boshcycle-ci
+  - name: git-pks-kubernetes-release-ci
   - name: bosh-release
 
 run:
-  path: git-boshcycle-ci/ci/tasks/run-tests/task.sh
+  path: git-pks-kubernetes-release-ci/ci/tasks/run-tests/task.sh

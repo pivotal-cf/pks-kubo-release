@@ -1,0 +1,14 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: odpks/pks-ci
+
+inputs:
+  - name: git-kubo-odb-ci
+  - name: git-pks-kubernetes-release-ci
+  - name: pks-kubernetes-windows-release
+  - name: gcs-director-config
+
+run:
+  path: git-pks-kubernetes-release-ci/ci/open-source-management/upload-kubo-release-windows/task.sh
