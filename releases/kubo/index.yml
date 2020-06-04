@@ -9,6 +9,8 @@ builds:
     version: 0.10.0
   0cbc93b8-cad3-4d3a-7b09-2713be6937d7:
     version: 1.7.0-build.73
+  0d93e0ee-54cf-480b-41ba-6e557714ac8b:
+    version: 1.9.0-build.46-static-pods
   18cd3d40-ddf1-42d9-6988-6107be84f252:
     version: 0.0.3
   208a04d4-8956-4a4d-6680-7ee15fdf2f9f:
