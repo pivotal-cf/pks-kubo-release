@@ -1,3 +1,4 @@
+<% if spec.bootstrap %>
 ---
 apiVersion: v1
 kind: Pod
@@ -39,4 +40,4 @@ spec:
   tolerations:
     - key: "CriticalAddonsOnly"
       operator: "Exists"
-    
+<% end %>
