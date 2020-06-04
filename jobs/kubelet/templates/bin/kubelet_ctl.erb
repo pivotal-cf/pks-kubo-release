@@ -149,6 +149,7 @@ start_kubelet() {
     --node-labels=<%= labels %> \
     --config="/var/vcap/jobs/kubelet/config/kubeletconfig.yml" \
     --tls-cipher-suites=<%= link('kube-apiserver').p('tls-cipher-suites') %> \
+    --pod-manifest-path=/var/vcap/jobs/kubelet/config/static/ \
   1>> $LOG_DIR/kubelet.stdout.log \
   2>> $LOG_DIR/kubelet.stderr.log
 }
