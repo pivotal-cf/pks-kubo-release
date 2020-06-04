@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: metrics-server
+  labels:
+    k8s-app: metrics-server
+spec:
+  serviceAccountName: metrics-server
+  volumes:
+  # mount in tmp so we can safely use from-scratch images and/or read-only containers
+  - name: tmp-dir
+    emptyDir: {}
+  - name: metrics-server-secrets
+    secret:
+        secretName: metrics-server-certs
+  containers:
+  - name: metrics-server
+    image: cnabu-docker-local.artifactory.eng.vmware.com/k8s/metrics-server-amd64:v0.3.6-vmware-0001
+    imagePullPolicy: IfNotPresent
+    command:
+    - /metrics-server
+    - --kubelet-preferred-address-types=InternalIP
+    - --kubelet-insecure-tls
+    - --client-ca-file=/var/run/kubernetes/client-ca.crt
+    - --requestheader-client-ca-file=/var/run/kubernetes/requestheader-client-ca.crt
+    - --tls-cert-file=/var/run/kubernetes/client.crt
+    - --tls-private-key-file=/var/run/kubernetes/client.key
+    <%= "- --tls-cipher-suites=#{link('kube-apiserver').p('tls-cipher-suites')}" %>
+    ports:
+    - containerPort: 443
+      name: https
+      protocol: TCP
+    volumeMounts:
+    - name: tmp-dir
+      mountPath: /tmp
+    - name: metrics-server-secrets
+      mountPath: /var/run/kubernetes
+  tolerations:
+    - key: "CriticalAddonsOnly"
+      operator: "Exists"
+    
