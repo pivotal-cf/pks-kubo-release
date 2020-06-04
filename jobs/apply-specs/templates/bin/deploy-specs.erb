@@ -31,12 +31,10 @@ main() {
   %>
   <% if bootstrap_addons.include?('coredns') %>
     apply_spec "coredns.yml"
-    wait_for coredns
   <% end %>
 
   <% if bootstrap_addons.include?('metrics-server') %>
     apply_spec "metrics-server/"
-    wait_for metrics-server
   <% end %>
 
   <% if_link('cloud-provider') do |cloud_provider| %>
