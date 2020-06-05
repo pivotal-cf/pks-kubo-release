@@ -77,6 +77,8 @@ builds:
     version: 0.15.0
   9f9c79e8-e3d6-4a9e-5ba1-e4ec5f36b569:
     version: 1.9.0-build.23-iaas-restart
+  a234ce2c-67b0-4d79-440a-9f09475b9e5f:
+    version: 1.9.0-build.49-static-pods
   a4dccd15-2f95-4c08-6ef5-f2debb580418:
     version: 0.17.0
   a6ea6323-e579-4ac5-5b05-fa728c776102:
