@@ -9,14 +9,31 @@ metadata:
     k8s-app: metrics-server
     version: v0.3.6
 spec:
-  serviceAccountName: metrics-server
+  # serviceAccountName: metrics-server
+  automountServiceAccountToken: false
   volumes:
   # mount in tmp so we can safely use from-scratch images and/or read-only containers
   - name: tmp-dir
     emptyDir: {}
-  - name: metrics-server-secrets
-    secret:
-        secretName: metrics-server-certs
+#  - name: metrics-server-secrets
+#    secret:
+#        secretName: metrics-server-certs
+  - name: client-ca-crt
+    hostPath:
+      path: /var/vcap/jobs/kubelet/config/static/client-ca.crt
+      type: File
+  - name: client-crt
+    hostPath:
+      path: /var/vcap/jobs/kubelet/config/static/client.crt
+      type: File
+  - name: client-key
+    hostPath:
+      path: /var/vcap/jobs/kubelet/config/static/client.key
+      type: File
+  - name: requestheader-client-ca-crt
+    hostPath:
+      path: /var/vcap/jobs/kubelet/config/static/requestheader-client-ca.crt
+      type: File
   containers:
   - name: metrics-server
     image: cnabu-docker-local.artifactory.eng.vmware.com/k8s/metrics-server-amd64:v0.3.6-vmware-0001
@@ -37,8 +54,16 @@ spec:
     volumeMounts:
     - name: tmp-dir
       mountPath: /tmp
-    - name: metrics-server-secrets
-      mountPath: /var/run/kubernetes
+#    - name: metrics-server-secrets
+#      mountPath: /var/run/kubernetes
+    - name: client-ca-crt
+      mountPath: /var/run/kubernetes/client-ca.crt
+    - name: client-crt
+      mountPath: /var/run/kubernetes/client.crt
+    - name: client-key
+      mountPath: /var/run/kubernetes/client.key
+    - name: requestheader-client-ca-crt
+      mountPath: /var/run/kubernetes/requestheader-client-ca.crt
   tolerations:
     - key: "CriticalAddonsOnly"
       operator: "Exists"
