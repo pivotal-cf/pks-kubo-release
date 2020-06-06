@@ -20,19 +20,19 @@ spec:
 #        secretName: metrics-server-certs
   - name: client-ca-crt
     hostPath:
-      path: /var/vcap/jobs/kubelet/config/static/client-ca.crt
+      path: /var/vcap/jobs/kubelet/config/static/metrics-server.ca
       type: File
   - name: client-crt
     hostPath:
-      path: /var/vcap/jobs/kubelet/config/static/client.crt
+      path: /var/vcap/jobs/kubelet/config/static/metrics-server.cert
       type: File
   - name: client-key
     hostPath:
-      path: /var/vcap/jobs/kubelet/config/static/client.key
+      path: /var/vcap/jobs/kubelet/config/static/metrics-server.key
       type: File
   - name: requestheader-client-ca-crt
     hostPath:
-      path: /var/vcap/jobs/kubelet/config/static/requestheader-client-ca.crt
+      path: /var/vcap/jobs/kubelet/config/static/metrics-server-requestheader-client-ca.crt
       type: File
   containers:
   - name: metrics-server

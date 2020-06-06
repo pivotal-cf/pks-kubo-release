@@ -18,6 +18,12 @@ templates:
   config/service_key.json.erb: config/service_key.json
   config/static/coredns.yml.erb: config/static/coredns.yml
   config/static/metrics-server.yml.erb: config/static/metrics-server.yml
+  config/static/Corefile.erb: config/static/Corefile
+  config/static/metrics-server.ca.erb: config/static/metrics-server.ca
+  config/static/metrics-server.cert.erb: config/static/metrics-server.cert
+  config/static/metrics-server.key.erb: config/static/metrics-server.key
+  config/static/metrics-server-requestheader-client-ca.crt.erb: config/static/metrics-server-requestheader-client-ca.crt
+
 packages:
 - pid_utils
 - kubernetes
@@ -82,6 +88,9 @@ properties:
     description: CA certificate of the authority granting access to kubelet server
   tls.kubernetes:
     description: Certificate and private key for the Kubernetes master
+  tls.metrics-server:
+    description: "Certificate authority, certificate, and private key for Metrics Server"
+
 consumes:
 - name: cloud-provider
   optional: true

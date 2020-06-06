@@ -26,11 +26,17 @@ spec:
       requests:
         cpu: 100m
         memory: 70Mi
-    args: [ "-conf", "/etc/coredns/Corefile" ]
+    args: [ "-conf", "/etc/coredns/Corefile.erb" ]
     volumeMounts:
     - name: config-volume
-      mountPath: /etc/coredns
+      mountPath: /etc/coredns/Corefile.erb
       readOnly: true
+    - name: client-ca-crt
+      mountPath: /var/run/kubernetes/client-ca.crt
+    - name: client-crt
+      mountPath: /var/run/kubernetes/client.crt
+    - name: client-key
+      mountPath: /var/run/kubernetes/client.key
     ports:
     - containerPort: 53
       name: dns
@@ -66,33 +72,23 @@ spec:
   volumes:
     - name: config-volume
       hostPath:
-        path: /var/vcap/jobs/kubelet/config/static/Corefile
+        path: /var/vcap/jobs/kubelet/config/static/Corefile.erb
+        type: File
+    # TODO: use certificates signed for coreDNS user
+    - name: client-ca-crt
+      hostPath:
+        path: /var/vcap/jobs/kubelet/config/static/metrics-server.ca
+        type: File
+    - name: client-crt
+      hostPath:
+        path: /var/vcap/jobs/kubelet/config/static/metrics-server.cert
+        type: File
+    - name: client-key
+      hostPath:
+        path: /var/vcap/jobs/kubelet/config/static/metrics-server.key
         type: File
 #      configMap:
 #        name: coredns
 #        items:
-#        - key: Corefile
+#        - key: Corefile.erb
 #          path: Corefiles
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx
-  namespace: kube-system
-spec:
-  containers:
-    - name: nginx
-      image: nginx
-      imagePullPolicy: IfNotPresent
-      args: [  ]
-      volumeMounts:
-        - name: config-volume
-          mountPath: /etc/coredns
-          readOnly: true
-  volumes:
-    - name: config-volume
-      configMap:
-        name: coredns
-        items:
-          - key: Corefile
-            path: Corefiles

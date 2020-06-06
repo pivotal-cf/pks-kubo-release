@@ -13,7 +13,6 @@ templates:
   specs/metrics-server/metrics-server-deployment.yml.erb: specs/metrics-server/metrics-server-deployment.yml
   specs/metrics-server/metrics-server-service.yml: specs/metrics-server/metrics-server-service.yml
   specs/metrics-server/resource-reader.yml: specs/metrics-server/resource-reader.yml
-  specs/metrics-server/secrets.yml.erb: specs/metrics-server/secrets.yml
   specs/storage-class-gce.yml: specs/storage-class-gce.yml
 
 packages:
@@ -41,8 +40,6 @@ properties:
     description: "Certificate authority, certificate, and private key for the Kubernetes master"
   tls.kubernetes-dashboard:
     description: "DEPRECATED: Certificate authority, certificate, and private key for the Kubernetes dashboard"
-  tls.metrics-server:
-    description: "Certificate authority, certificate, and private key for Metrics Server"
 
 consumes:
 - name: kube-apiserver
