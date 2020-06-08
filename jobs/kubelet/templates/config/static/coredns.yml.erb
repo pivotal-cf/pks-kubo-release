@@ -26,10 +26,10 @@ spec:
       requests:
         cpu: 100m
         memory: 70Mi
-    args: [ "-conf", "/etc/coredns/Corefile.erb" ]
+    args: [ "-conf", "/etc/coredns/Corefile" ]
     volumeMounts:
     - name: config-volume
-      mountPath: /etc/coredns/Corefile.erb
+      mountPath: /etc/coredns/Corefile
       readOnly: true
     - name: client-ca-crt
       mountPath: /var/run/kubernetes/client-ca.crt
@@ -72,20 +72,19 @@ spec:
   volumes:
     - name: config-volume
       hostPath:
-        path: /var/vcap/jobs/kubelet/config/static/Corefile.erb
+        path: /var/vcap/jobs/kubelet/config/static/Corefile
         type: File
-    # TODO: use certificates signed for coreDNS user
     - name: client-ca-crt
       hostPath:
-        path: /var/vcap/jobs/kubelet/config/static/metrics-server.ca
+        path: /var/vcap/jobs/kubelet/config/static/coredns.ca
         type: File
     - name: client-crt
       hostPath:
-        path: /var/vcap/jobs/kubelet/config/static/metrics-server.cert
+        path: /var/vcap/jobs/kubelet/config/static/coredns.cert
         type: File
     - name: client-key
       hostPath:
-        path: /var/vcap/jobs/kubelet/config/static/metrics-server.key
+        path: /var/vcap/jobs/kubelet/config/static/coredns.key
         type: File
 #      configMap:
 #        name: coredns

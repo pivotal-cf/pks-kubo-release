@@ -16,12 +16,15 @@ templates:
   config/kubeletconfig.yml.erb: config/kubeletconfig.yml
   config/openstack-ca.crt.erb: config/openstack-ca.crt
   config/service_key.json.erb: config/service_key.json
+  config/static/coredns.ca.erb: config/static/coredns.ca
+  config/static/coredns.cert.erb: config/static/coredns.cert
+  config/static/coredns.key.erb: config/static/coredns.key
   config/static/coredns.yml.erb: config/static/coredns.yml
-  config/static/metrics-server.yml.erb: config/static/metrics-server.yml
   config/static/Corefile.erb: config/static/Corefile
   config/static/metrics-server.ca.erb: config/static/metrics-server.ca
   config/static/metrics-server.cert.erb: config/static/metrics-server.cert
   config/static/metrics-server.key.erb: config/static/metrics-server.key
+  config/static/metrics-server.yml.erb: config/static/metrics-server.yml
   config/static/metrics-server-requestheader-client-ca.crt.erb: config/static/metrics-server-requestheader-client-ca.crt
 
 packages:
@@ -78,6 +81,8 @@ properties:
         client-ca-file: base64 encoded config
   no_proxy:
     description: no_proxy env var for cloud provider interactions, i.e. for the kubelet
+  tls.coredns:
+    description: "Certificate authority, certificate, and private key for CoreDNS"
   tls.kubelet:
     description: Certificate and private key for the Kubernetes worker
     parameters:
