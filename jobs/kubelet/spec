@@ -21,6 +21,7 @@ templates:
   config/static/coredns.key.erb: config/static/coredns.key
   config/static/coredns.yml.erb: config/static/coredns.yml
   config/static/Corefile.erb: config/static/Corefile
+  config/static/kubeconfig.erb: config/static/kubeconfig
   config/static/metrics-server.ca.erb: config/static/metrics-server.ca
   config/static/metrics-server.cert.erb: config/static/metrics-server.cert
   config/static/metrics-server.key.erb: config/static/metrics-server.key

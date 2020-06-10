@@ -30,6 +30,10 @@ spec:
     hostPath:
       path: /var/vcap/jobs/kubelet/config/static/metrics-server.key
       type: File
+  - name: kubeconfig
+    hostPath:
+      path: /var/vcap/jobs/kubelet/config/static/kubeconfig
+      type: File
   - name: requestheader-client-ca-crt
     hostPath:
       path: /var/vcap/jobs/kubelet/config/static/metrics-server-requestheader-client-ca.crt
@@ -40,6 +44,9 @@ spec:
     imagePullPolicy: IfNotPresent
     command:
     - /metrics-server
+    - --authentication-kubeconfig=/var/run/kubernetes/kubeconfig
+    - --authorization-kubeconfig=/var/run/kubernetes/kubeconfig
+    - --kubeconfig=/var/run/kubernetes/kubeconfig
     - --kubelet-preferred-address-types=InternalIP
     - --kubelet-insecure-tls
     - --client-ca-file=/var/run/kubernetes/client-ca.crt
@@ -62,6 +69,8 @@ spec:
       mountPath: /var/run/kubernetes/client.crt
     - name: client-key
       mountPath: /var/run/kubernetes/client.key
+    - name: kubeconfig
+      mountPath: /var/run/kubernetes/kubeconfig
     - name: requestheader-client-ca-crt
       mountPath: /var/run/kubernetes/requestheader-client-ca.crt
   tolerations:
