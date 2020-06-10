@@ -10,7 +10,6 @@ templates:
   specs/metrics-server/auth-delegator.yml: specs/metrics-server/auth-delegator.yml
   specs/metrics-server/auth-reader.yml: specs/metrics-server/auth-reader.yml
   specs/metrics-server/metrics-apiservice.yml: specs/metrics-server/metrics-apiservice.yml
-  specs/metrics-server/metrics-server-deployment.yml.erb: specs/metrics-server/metrics-server-deployment.yml
   specs/metrics-server/metrics-server-service.yml: specs/metrics-server/metrics-server-service.yml
   specs/metrics-server/resource-reader.yml: specs/metrics-server/resource-reader.yml
   specs/storage-class-gce.yml: specs/storage-class-gce.yml
