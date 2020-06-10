@@ -9,6 +9,5 @@ roleRef:
   kind: Role
   name: extension-apiserver-authentication-reader
 subjects:
-- kind: ServiceAccount
+- kind: User
   name: metrics-server
-  namespace: kube-system
