@@ -36,7 +36,7 @@ builds:
   44b992f5-5eb6-402b-61d8-528577992ebe:
     version: 0.28.0
   48654ae8-a9c7-40bb-565f-1843182b35d4:
-    version: 1.9.0-a.build.43
+    version: 1.9.0-build.43-zzz
   4971acc4-f5b3-42ca-7d80-a59305ad8945:
     version: 1.9.0-build.11-replace-nginx
   4da46e99-4350-46c8-7158-03dca79ce947:
