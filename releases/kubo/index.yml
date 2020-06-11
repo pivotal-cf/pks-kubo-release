@@ -47,6 +47,8 @@ builds:
     version: 1.9.0-build.25
   5d9d225b-c595-4cf0-54d4-fd1c6d796aa4:
     version: 0.0.5
+  60610184-10a5-4a83-5805-68458b8cdd75:
+    version: 1.9.0-build.57-reload-images
   61ee0a75-f9ae-4351-7f13-9862bd537c7f:
     version: 1.9.0-build.15-replace-nginx
   665d71a9-8522-4c64-692a-7899458abae6:
