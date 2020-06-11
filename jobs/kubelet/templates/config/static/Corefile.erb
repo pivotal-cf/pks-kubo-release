@@ -2,7 +2,7 @@
     errors
     health
     kubernetes cluster.local in-addr.arpa ip6.arpa {
-      endpoint https://URL
+      endpoint https://master.cfcr.internal:8443
       tls /var/run/kubernetes/client.crt /var/run/kubernetes/client.key /var/run/kubernetes/client-ca.crt
       pods insecure
       upstream

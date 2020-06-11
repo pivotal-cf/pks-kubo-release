@@ -42,9 +42,8 @@ roleRef:
   kind: ClusterRole
   name: system:coredns
 subjects:
-- kind: ServiceAccount
+- kind: User
   name: coredns
-  namespace: kube-system
 ---
 apiVersion: v1
 kind: Service
