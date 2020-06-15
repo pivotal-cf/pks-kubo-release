@@ -23,12 +23,9 @@ load_containers() {
   local packages_dir=${BOSH_PACKAGES_DIR:-/var/vcap/packages}
   local CONTAINER_IMAGE_DIR=${packages_dir}/kubernetes/container-images
 
-  for img in ${CONTAINER_IMAGE_DIR}/*.tgz; do
-      load_one_container ${img}
-  done
-  for img in ${CONTAINER_IMAGE_DIR}/*.tar; do
-      load_one_container ${img}
+  for img in ${CONTAINER_IMAGE_DIR}/*.{tgz,tar.gz,tar}; do
+    # make sure that the file exists and is readable
+    [[ -f "${img}" && -r "${img}" ]] || { echo "skiping $img because it does not exist"; continue; }
+    load_one_container ${img}
   done
 }
-
-load_containers
