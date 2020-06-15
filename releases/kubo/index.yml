@@ -109,6 +109,8 @@ builds:
     version: 1.9.0-build.42
   e15812e1-6fb0-41e0-626c-5fd4c75f316d:
     version: 1.9.0-build.8
+  e2c5317d-10ea-43db-59e6-823b918ebfcc:
+    version: 1.9.0-build.58-reload-images
   e759bbc3-8061-46ff-42f6-707070f8e7c9:
     version: 1.9.0-build.18
   e8bebc9f-b75c-40c7-5313-2058b9c11c60:
