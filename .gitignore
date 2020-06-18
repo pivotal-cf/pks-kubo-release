@@ -12,3 +12,5 @@
 /.final_builds/packages/**/*.tgz
 /.cache
 /kubo-release.iml
+/src/simple-server/simple-server
+/src/simple-server/simple-server.tgz
