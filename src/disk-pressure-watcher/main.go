@@ -1,18 +1,30 @@
 package main
 
 import (
-	"context"
+	"disk-pressure-watcher/bosh"
+	"disk-pressure-watcher/core"
+	"disk-pressure-watcher/k8s"
 	"flag"
-	"fmt"
-	v1 "k8s.io/api/core/v1"
 	"os"
 	"path/filepath"
 	"time"
-
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
 )
+
+// get all nodes
+// if diskpressure {
+// add to list
+// else if in list{
+// run errand & remove from list
+// }
+
+/*
+ ideas for expansion:
+    * outer main loop wrap in smoething so we can handle errors instead of panicking
+    * should the inner app state be saved anywhere?
+    * if something goes in/out of diskpressure too fast, how will we catch it?
+    * do we want a catch-all to run the errand every <time period> ?  what is the UX of this?
+    * can we check docker caches for the images locally?
+ */
 
 func main() {
 	var kubeconfig *string
@@ -23,75 +35,20 @@ func main() {
 	}
 	flag.Parse()
 
-	// use the current context in kubeconfig
-	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
+	clientset, err := k8s.CreateKubeClient(*kubeconfig)
 	if err != nil {
 		panic(err.Error())
 	}
-
-	// create the clientset
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	//myIP := getIP()
 
 	for {
-		nodes, err := clientset.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{
-		})
-		if err != nil {
-			panic(err.Error())
+		watcher := core.GenerateWatcher()
+		commands := watcher.DoStuff(clientset)
+		for _, command := range commands {
+			bosh.RunErrand(command)
 		}
 
-		message := GetLoadImageMessage(nodes.Items)
-		fmt.Printf("Triggering message: %+v\n", message)
-
-		time.Sleep(10 * time.Second)
+		time.Sleep(60 * time.Second)
 	}
-}
-
-type LoadImageMessage struct {
-	DeploymentName string
-	Instances []string
-}
-
-func findDiskPressure(node *v1.Node) *v1.NodeCondition {
-	for _, condition := range node.Status.Conditions {
-		if condition.Type == "DiskPressure" {
-			return &condition
-		}
-	}
-	return nil
-}
-
-func GetLoadImageMessage(nodes []v1.Node) *LoadImageMessage {
-	affected := make([]*v1.Node, 0)
-	for _, node := range nodes {
-		condition := findDiskPressure(&node)
-		if condition.Status == "True" {
-			affected = append(affected, &node)
-		}
-	}
-
-	if len(affected) != 0 {
-		deploymentName := affected[0].Labels["pks-system/cluster.uuid"]
-		instances := make([]string, 0)
-		for _, node := range affected {
-			instances = append(instances, node.Labels["bosh.id"])
-		}
-		ret := &LoadImageMessage{
-			DeploymentName: deploymentName,
-			Instances: instances,
-		}
-		return ret
-	}
-	return nil
-}
-
-func getIP() string {
-	// ifconfig eth0 | grep "inet" | cut -d ':' -f 2 | cut -d ' ' -f 1
-	return "10.0.10.5"
 }
 
 func homeDir() string {
