@@ -118,7 +118,7 @@ func Test_FindHost_ValidHost(t *testing.T) {
 	searchResult := testData.FindHost("validHost")
 
 	if searchResult == nil {
-		t.Errorf("Should have found validHost")
+		t.Error("Should have found validHost")
 		return
 	}
 
@@ -126,7 +126,7 @@ func Test_FindHost_ValidHost(t *testing.T) {
 		t.Errorf("Wrong hostname: %s", searchResult.HostName)
 	}
 	if searchResult.HasDiskPressure {
-		t.Errorf("Host found should not have disk pressure")
+		t.Error("Host found should not have disk pressure")
 	}
 }
 
@@ -136,7 +136,7 @@ func Test_FindHost_PressuredHost(t *testing.T) {
 	searchResult := testData.FindHost("pressuredHost")
 
 	if searchResult == nil {
-		t.Errorf("Should have found pressuredHost")
+		t.Error("Should have found pressuredHost")
 		return
 	}
 
@@ -144,6 +144,151 @@ func Test_FindHost_PressuredHost(t *testing.T) {
 		t.Errorf("Wrong hostname: %s", searchResult.HostName)
 	}
 	if !searchResult.HasDiskPressure {
-		t.Errorf("Host found should have disk pressure")
+		t.Error("Host found should have disk pressure")
 	}
+}
+
+func Test_GenErrands_Nil(t *testing.T) {
+	watcher := core.GenerateWatcher()
+	errands, err := watcher.GenErrands(nil)
+	if errands != nil {
+		t.Error("Should have received a nil return value when calling GenErrands with a nil clientSet.")
+	}
+	if err == nil {
+		t.Error("Should have received a meaningful error message when calling GenErrands with a nil clientSet.")
+	}
+}
+
+type mockClientSet struct {
+	mockData *v1.NodeList
+}
+
+func (clientset *mockClientSet) GetNodes() (*v1.NodeList, error) {
+	return clientset.mockData, nil
+}
+
+func (clientset *mockClientSet) setMockReturnValue (nodes ...v1.Node) {
+	clientset.mockData = &v1.NodeList{
+		Items: nodes,
+	}
+}
+
+func Test_GenErrands_NoNodesUnderPressure(t *testing.T) {
+	clientset := &mockClientSet{}
+	watcher := core.GenerateWatcher()
+
+	clientset.setMockReturnValue(generateTestNode("False", "deployment", "node1"), generateTestNode("False", "deployment", "node2"))
+	errands, err := watcher.GenErrands(clientset)
+
+	expect_no_errands(errands, err, t)
+}
+
+func expect_errands_and_no_error(errands []*structs.ErrandParameters, err error, t *testing.T) {
+	if errands == nil {
+		t.Error("Received a nil return value for errands when a non-nil value was expected.")
+	}
+	if err != nil {
+		t.Errorf("Received a non-nil return value for err when a nil value was expected. err received was: %+v", err)
+	}
+}
+
+func expect_no_errands(errands []*structs.ErrandParameters, err error, t *testing.T) {
+	expect_errands_and_no_error(errands, err, t)
+	if len(errands) != 0 {
+		t.Errorf("Expected an empty array for errands, but instead received %d items.", len(errands))
+	}
+}
+
+func expect_one_errand(errands []*structs.ErrandParameters, err error, hostname structs.HostName, deployment structs.Deployment, t *testing.T) {
+	expect_errands_and_no_error(errands, err, t);
+	if len(errands) != 1 {
+		t.Errorf("Expected exactly one errand to be returned, instead got %d", len(errands))
+		return
+	}
+	if errands[0].HostName != hostname || errands[0].Deployment != deployment {
+		t.Errorf("Expected errand to be about '%s' in deployment '%s' but got: %+v", hostname, deployment, errands[0])
+	}
+}
+
+func Test_GenErrands_OneNodeUnderPressure(t *testing.T) {
+	clientset := &mockClientSet{}
+	watcher := core.GenerateWatcher()
+
+	clientset.setMockReturnValue(generateTestNode("True", "deployment", "node1"), generateTestNode("False", "deployment", "node2"))
+	errands, err := watcher.GenErrands(clientset)
+
+	expect_no_errands(errands, err, t)
+
+	clientset.setMockReturnValue(generateTestNode("False", "deployment", "node1"), generateTestNode("False", "deployment", "node2"))
+	errands, err = watcher.GenErrands(clientset)
+
+	expect_one_errand(errands, err, "node1", "deployment", t)
+
+	errands, err = watcher.GenErrands(clientset)
+	expect_no_errands(errands, err, t)
+}
+
+func Test_GenErrands_AlternatingDiskPressure(t *testing.T) {
+	clientset := &mockClientSet{}
+	watcher := core.GenerateWatcher()
+
+	clientset.setMockReturnValue(generateTestNode("True", "deployment", "node1"), generateTestNode("False", "deployment", "node2"))
+	errands, err := watcher.GenErrands(clientset)
+
+	expect_no_errands(errands, err, t)
+
+	clientset.setMockReturnValue(generateTestNode("False", "deployment", "node1"), generateTestNode("True", "deployment", "node2"))
+	errands, err = watcher.GenErrands(clientset)
+	expect_one_errand(errands, err, "node1", "deployment", t)
+
+	clientset.setMockReturnValue(generateTestNode("False", "deployment", "node1"), generateTestNode("False", "deployment", "node2"))
+	errands, err = watcher.GenErrands(clientset)
+	expect_one_errand(errands, err, "node2", "deployment", t)
+}
+
+func Test_GenErrands_TwoNodesUnderPressure(t *testing.T) {
+	clientset := &mockClientSet{}
+	watcher := core.GenerateWatcher()
+
+	clientset.setMockReturnValue(generateTestNode("True", "deployment", "node1"), generateTestNode("True", "deployment", "node2"))
+	errands, err := watcher.GenErrands(clientset)
+
+	expect_no_errands(errands, err, t)
+
+	clientset.setMockReturnValue(generateTestNode("False", "deployment", "node1"), generateTestNode("False", "deployment", "node2"))
+	errands, err = watcher.GenErrands(clientset)
+
+	expect_errands_and_no_error(errands, err, t);
+	if len(errands) != 2 {
+		t.Errorf("Expected exactly two errands to be returned, instead got %d", len(errands))
+		return
+	}
+	// TODO TODO TODO
+	// make this not order specific
+	if errands[0].HostName != "node1" || errands[0].Deployment != "deployment" {
+		t.Errorf("Expected errand to be about node1 in deployment 'deployment' but got: %+v", errands[0])
+	}
+	if errands[1].HostName != "node2" || errands[1].Deployment != "deployment" {
+		t.Errorf("Expected errand to be about 'node2' in deployment 'deployment' but got: %+v", errands[1])
+	}
+}
+
+func Test_GenErrands_OneNodeExtendedDiskPressure(t *testing.T) {
+	clientset := &mockClientSet{}
+	watcher := core.GenerateWatcher()
+
+	clientset.setMockReturnValue(generateTestNode("True", "deployment", "node1"), generateTestNode("True", "deployment", "node2"))
+	errands, err := watcher.GenErrands(clientset)
+
+	expect_no_errands(errands, err, t)
+
+	clientset.setMockReturnValue(generateTestNode("False", "deployment", "node1"), generateTestNode("True", "deployment", "node2"))
+	errands, err = watcher.GenErrands(clientset)
+
+	expect_one_errand(errands, err, "node1", "deployment", t)
+
+	clientset.setMockReturnValue(generateTestNode("False", "deployment", "node1"), generateTestNode("False", "deployment", "node2"))
+	errands, err = watcher.GenErrands(clientset)
+
+	expect_one_errand(errands, err, "node2", "deployment", t)
 }

@@ -1,42 +1,56 @@
 package core
 
 import (
+	"errors"
 	"disk-pressure-watcher/k8s"
 	"disk-pressure-watcher/structs"
 	v1 "k8s.io/api/core/v1"
 )
 
 type Watcher interface {
-	DoStuff(clientset k8s.KubeClient) []*structs.ErrandParameters
+	GenErrands(clientset k8s.KubeClient) ([]*structs.ErrandParameters, error)
 }
 
 type watcherImpl struct {
-	internalState map[structs.HostName]string
+	internalState map[structs.HostName]bool
 }
 
 func GenerateWatcher() Watcher {
-	internalState := make(map[structs.HostName]string)
+	internalState := make(map[structs.HostName]bool)
 	return &watcherImpl{
 		internalState: internalState,
 	}
 }
 
-func (w *watcherImpl) DoStuff(clientset k8s.KubeClient) []*structs.ErrandParameters {
+func (w *watcherImpl) GenErrands(clientset k8s.KubeClient) ([]*structs.ErrandParameters, error) {
+	if clientset == nil {
+		return nil, errors.New("Called GenErrands() with a nil cientset.")
+	}
+
 	nodes, err := clientset.GetNodes()
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	info := GenerateNodeInfo(nodes)
 	ret := make([]*structs.ErrandParameters, 0)
+
 	for _, nodeInfo := range info {
-		ret = append(ret, &structs.ErrandParameters{
-			HostName:   nodeInfo.HostName,
-			Deployment: nodeInfo.Deployment,
-		})
+		if nodeInfo.HasDiskPressure {
+			w.internalState[nodeInfo.HostName] = true
+		} else if val, ok := w.internalState[nodeInfo.HostName]; ok {
+			if val {
+				//generate errand
+				ret = append(ret, &structs.ErrandParameters{
+					HostName: nodeInfo.HostName,
+					Deployment: nodeInfo.Deployment,
+				})
+				w.internalState[nodeInfo.HostName] = false
+			}
+		}
 	}
 
-	return ret
+	return ret, nil
 }
 
 func findDiskPressure(node *v1.Node) *v1.NodeCondition {

@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"errors"
 	"context"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -36,6 +37,11 @@ type MyClient struct {
 }
 
 func (clientSet *MyClient) GetNodes() (*v1.NodeList, error) {
+
+	if clientSet == nil {
+		return nil, errors.New("Called GetNodes() on a nil clientSet.")
+	}
+
 	nodes, err := clientSet.k8sClient.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{})
 	return nodes, err
 }

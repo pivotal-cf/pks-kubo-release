@@ -42,7 +42,9 @@ func main() {
 
 	for {
 		watcher := core.GenerateWatcher()
-		commands := watcher.DoStuff(clientset)
+		// TODO TODO TODO
+		// Handle the error and nil case here better
+		commands, _ := watcher.GenErrands(clientset)
 		for _, command := range commands {
 			bosh.RunErrand(command)
 		}
