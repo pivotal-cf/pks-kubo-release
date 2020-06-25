@@ -20,8 +20,7 @@ type workKey struct {
 }
 
 type workState struct {
-	mutex sync.RWMutex
-	state map[workKey]bool
+	state sync.Map
 }
 
 func DefaultRetryConfig() RetryConfig{
@@ -51,9 +50,7 @@ func worker(errands chan *structs.ErrandParameters, method func(*structs.ErrandP
 			retry(errands, errand, retryConfig)
 		} else {
 			log.Printf("Successfully processed %+v\n", errand)
-			state.mutex.Lock()
-			delete(state.state, workKey{errand.HostName, errand.Deployment})
-			state.mutex.Unlock()
+			state.state.Delete(workKey{errand.HostName, errand.Deployment})
 		}
 	}
 	log.Println("Closing worker")
@@ -62,21 +59,18 @@ func worker(errands chan *structs.ErrandParameters, method func(*structs.ErrandP
 func enqueueController(queue <-chan *structs.ErrandParameters, errands chan<- *structs.ErrandParameters, state workState) {
 	for errand := range queue {
 		key := workKey{errand.HostName, errand.Deployment}
-		state.mutex.RLock()
-		if _, ok := state.state[key]; ok {
+		if _, ok := state.state.Load(key); ok {
 			log.Printf("Skipping %+v as it is already in queue", errand)
 		} else {
-			state.state[key] = true
+			state.state.Store(key, true)
 			errands <- errand
 		}
-		state.mutex.RUnlock()
 	}
 }
 
 func StartWorkerPool(numWorkers, maxBuffer int, method func(*structs.ErrandParameters) error, retryConfig RetryConfig) chan *structs.ErrandParameters {
 	state := workState{
-		mutex: sync.RWMutex{},
-		state: make(map[workKey]bool),
+		state: sync.Map{},
 	}
 	queue := make(chan *structs.ErrandParameters, maxBuffer)
 	errands := make(chan *structs.ErrandParameters, maxBuffer)
