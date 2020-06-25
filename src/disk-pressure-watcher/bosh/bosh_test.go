@@ -12,6 +12,8 @@ import (
 	"time"
 )
 
+const defaultRetryDelay = time.Millisecond * 10
+
 type resultsHolder struct {
 	waitGroup sync.WaitGroup
 	mutex sync.Mutex
@@ -26,7 +28,7 @@ func (rh *resultsHolder) alwaysSucceed(errand *structs.ErrandParameters) error {
 	return nil
 }
 
-func (rh *resultsHolder) retryEven(errand *structs.ErrandParameters) error {
+func (rh *resultsHolder) retryEvenOnce(errand *structs.ErrandParameters) error {
 	nodeNum := strings.Trim(string(errand.HostName), "node")
 	counter, _ := strconv.Atoi(nodeNum)
 	rh.mutex.Lock()
@@ -73,7 +75,7 @@ func generateErrand(index int) *structs.ErrandParameters {
 	}
 }
 
-func waitTimeout(wg *sync.WaitGroup, timeout time.Duration) bool {
+func waitTimeoutDuration(wg *sync.WaitGroup, timeout time.Duration) bool {
 	c := make(chan struct{})
 	go func() {
 		defer close(c)
@@ -87,9 +89,13 @@ func waitTimeout(wg *sync.WaitGroup, timeout time.Duration) bool {
 	}
 }
 
+func waitTimeout(wg *sync.WaitGroup) bool {
+	return waitTimeoutDuration(wg, time.Second)
+}
+
 func Test_WorkerPool(t *testing.T) {
 	resultsHolder := &resultsHolder{}
-	pool := bosh.StartWorkerPool(2, 100, resultsHolder.alwaysSucceed)
+	pool := bosh.StartWorkerPool(2, 100, resultsHolder.alwaysSucceed, defaultRetryDelay)
 
 	for index := 1; index < 20; index++ {
 		resultsHolder.waitGroup.Add(1)
@@ -98,7 +104,7 @@ func Test_WorkerPool(t *testing.T) {
 
 	close(pool)
 
-	if waitTimeout(&resultsHolder.waitGroup, time.Second) {
+	if waitTimeout(&resultsHolder.waitGroup) {
 		t.Errorf("Did not complete processing errands in 1 second")
 	}
 
@@ -112,7 +118,7 @@ func Test_WorkerPool(t *testing.T) {
 
 func Test_WorkerPool_Retry(t *testing.T) {
 	resultsHolder := &resultsHolder{}
-	pool := bosh.StartWorkerPool(2, 100, resultsHolder.retryEven)
+	pool := bosh.StartWorkerPool(2, 100, resultsHolder.retryEvenOnce, defaultRetryDelay)
 
 	for index := 1; index < 20; index++ {
 		delta := 1 + ((index + 1) % 2)
@@ -123,7 +129,7 @@ func Test_WorkerPool_Retry(t *testing.T) {
 
 	defer close(pool)
 
-	if waitTimeout(&resultsHolder.waitGroup, time.Second) {
+	if waitTimeout(&resultsHolder.waitGroup) {
 		t.Errorf("Did not complete processing errands in 1 second")
 	}
 
@@ -136,12 +142,33 @@ func Test_WorkerPool_Retry(t *testing.T) {
 }
 
 func Test_WorkerPool_Retry_Delay(t *testing.T) {
-	t.Skipf("Not yet implemented")
+	resultsHolder := &resultsHolder{}
+	pool := bosh.StartWorkerPool(2, 100, resultsHolder.retryEvenOnce, time.Second)
+
+	for index := 1; index < 20; index++ {
+		delta := 1 + ((index + 1) % 2)
+		errand := generateErrand(index)
+		resultsHolder.waitGroup.Add(delta)
+		pool <- errand
+	}
+
+	defer close(pool)
+
+	if waitTimeoutDuration(&resultsHolder.waitGroup, time.Second * 2) {
+		t.Errorf("Did not complete processing errands in 2 seconds")
+	}
+
+	for index := 1; index < 20; index++ {
+		errand := generateErrand(index)
+		if !resultsHolder.wasProcessed(errand.HostName, errand.Deployment) {
+			t.Errorf("Errand %+v was not processed", errand)
+		}
+	}
 }
 
 func Test_WorkerPool_Max_Retry_Attempts(t *testing.T) {
 	resultsHolder := &resultsHolder{}
-	pool := bosh.StartWorkerPool(2, 100, resultsHolder.rejectSeven)
+	pool := bosh.StartWorkerPool(2, 100, resultsHolder.rejectSeven, defaultRetryDelay)
 
 	for index := 1; index < 20; index++ {
 		if index != 7 {
@@ -155,7 +182,7 @@ func Test_WorkerPool_Max_Retry_Attempts(t *testing.T) {
 
 	defer close(pool)
 
-	if waitTimeout(&resultsHolder.waitGroup, time.Second) {
+	if waitTimeout(&resultsHolder.waitGroup) {
 		t.Errorf("Did not complete processing errands in 1 second")
 	}
 
