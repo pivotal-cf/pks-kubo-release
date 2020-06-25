@@ -5,40 +5,86 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	"sync"
 	"time"
 )
 
-func retry(queue chan *structs.ErrandParameters, errand *structs.ErrandParameters, retryDelay time.Duration) {
+type RetryConfig struct {
+	MaxRetries int
+	RetryDelay time.Duration
+}
+
+type workKey struct {
+	structs.HostName
+	structs.Deployment
+}
+
+type workState struct {
+	mutex sync.RWMutex
+	state map[workKey]bool
+}
+
+func DefaultRetryConfig() RetryConfig{
+	return RetryConfig{
+		MaxRetries: 5,
+		RetryDelay: time.Second * 10,
+	}
+}
+
+func retry(queue chan *structs.ErrandParameters, errand *structs.ErrandParameters, retryConfig *RetryConfig) {
 	errand.NumAttempts++
-	if errand.NumAttempts < 5 {
+	if errand.NumAttempts < retryConfig.MaxRetries {
 		go func(){
 			select {
-			case <- time.After(retryDelay):
+			case <- time.After(retryConfig.RetryDelay):
 			}
 			queue <- errand
 		}()
 	}
 }
 
-func worker(errands chan *structs.ErrandParameters, method func(*structs.ErrandParameters) error, retryDelay time.Duration) {
+func worker(errands chan *structs.ErrandParameters, method func(*structs.ErrandParameters) error, retryConfig *RetryConfig, state workState) {
 	for errand := range errands {
 		err := method(errand)
 		if err != nil {
 			log.Printf("Retrying %+v due to %s\n", errand, err)
-			retry(errands, errand, retryDelay)
+			retry(errands, errand, retryConfig)
 		} else {
 			log.Printf("Successfully processed %+v\n", errand)
+			state.mutex.Lock()
+			delete(state.state, workKey{errand.HostName, errand.Deployment})
+			state.mutex.Unlock()
 		}
 	}
 	log.Println("Closing worker")
 }
 
-func StartWorkerPool(numWorkers, maxBuffer int, method func(*structs.ErrandParameters) error, retryDelay time.Duration) chan *structs.ErrandParameters {
-	errands := make(chan *structs.ErrandParameters, maxBuffer)
-	for index := 0; index < numWorkers; index++ {
-		go worker(errands, method, retryDelay)
+func enqueueController(queue <-chan *structs.ErrandParameters, errands chan<- *structs.ErrandParameters, state workState) {
+	for errand := range queue {
+		key := workKey{errand.HostName, errand.Deployment}
+		state.mutex.RLock()
+		if _, ok := state.state[key]; ok {
+			log.Printf("Skipping %+v as it is already in queue", errand)
+		} else {
+			state.state[key] = true
+			errands <- errand
+		}
+		state.mutex.RUnlock()
 	}
-	return errands
+}
+
+func StartWorkerPool(numWorkers, maxBuffer int, method func(*structs.ErrandParameters) error, retryConfig RetryConfig) chan *structs.ErrandParameters {
+	state := workState{
+		mutex: sync.RWMutex{},
+		state: make(map[workKey]bool),
+	}
+	queue := make(chan *structs.ErrandParameters, maxBuffer)
+	errands := make(chan *structs.ErrandParameters, maxBuffer)
+	go enqueueController(queue, errands, state)
+	for index := 0; index < numWorkers; index++ {
+		go worker(errands, method, &retryConfig, state)
+	}
+	return queue
 }
 
 func runMe(command *exec.Cmd) error {

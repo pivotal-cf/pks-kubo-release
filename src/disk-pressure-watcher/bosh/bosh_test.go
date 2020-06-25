@@ -12,7 +12,12 @@ import (
 	"time"
 )
 
-const defaultRetryDelay = time.Millisecond * 10
+func testRetryConfig() bosh.RetryConfig {
+	return bosh.RetryConfig{
+		MaxRetries: 5,
+		RetryDelay: time.Millisecond * 10,
+	}
+}
 
 type resultsHolder struct {
 	waitGroup sync.WaitGroup
@@ -25,6 +30,19 @@ func (rh *resultsHolder) alwaysSucceed(errand *structs.ErrandParameters) error {
 	rh.errands = append(rh.errands, errand)
 	rh.mutex.Unlock()
 	rh.waitGroup.Done()
+	return nil
+}
+
+func (rh *resultsHolder) retryOnce(errand *structs.ErrandParameters) error {
+	rh.mutex.Lock()
+	defer func() {
+		rh.mutex.Unlock()
+		rh.waitGroup.Done()
+	}()
+	if errand.NumAttempts == 0 {
+		return errors.New("Retry me!")
+	}
+	rh.errands = append(rh.errands, errand)
 	return nil
 }
 
@@ -95,14 +113,13 @@ func waitTimeout(wg *sync.WaitGroup) bool {
 
 func Test_WorkerPool(t *testing.T) {
 	resultsHolder := &resultsHolder{}
-	pool := bosh.StartWorkerPool(2, 100, resultsHolder.alwaysSucceed, defaultRetryDelay)
+	pool := bosh.StartWorkerPool(2, 100, resultsHolder.alwaysSucceed, testRetryConfig())
+	defer close(pool)
 
 	for index := 1; index < 20; index++ {
 		resultsHolder.waitGroup.Add(1)
 		pool <- generateErrand(index)
 	}
-
-	close(pool)
 
 	if waitTimeout(&resultsHolder.waitGroup) {
 		t.Errorf("Did not complete processing errands in 1 second")
@@ -118,16 +135,14 @@ func Test_WorkerPool(t *testing.T) {
 
 func Test_WorkerPool_Retry(t *testing.T) {
 	resultsHolder := &resultsHolder{}
-	pool := bosh.StartWorkerPool(2, 100, resultsHolder.retryEvenOnce, defaultRetryDelay)
+	pool := bosh.StartWorkerPool(2, 100, resultsHolder.retryEvenOnce, testRetryConfig())
+	defer close(pool)
 
 	for index := 1; index < 20; index++ {
 		delta := 1 + ((index + 1) % 2)
-		errand := generateErrand(index)
 		resultsHolder.waitGroup.Add(delta)
-		pool <- errand
+		pool <- generateErrand(index)
 	}
-
-	defer close(pool)
 
 	if waitTimeout(&resultsHolder.waitGroup) {
 		t.Errorf("Did not complete processing errands in 1 second")
@@ -143,16 +158,16 @@ func Test_WorkerPool_Retry(t *testing.T) {
 
 func Test_WorkerPool_Retry_Delay(t *testing.T) {
 	resultsHolder := &resultsHolder{}
-	pool := bosh.StartWorkerPool(2, 100, resultsHolder.retryEvenOnce, time.Second)
+	retryConfig := testRetryConfig()
+	retryConfig.RetryDelay = time.Second
+	pool := bosh.StartWorkerPool(2, 100, resultsHolder.retryEvenOnce, retryConfig)
+	defer close(pool)
 
 	for index := 1; index < 20; index++ {
 		delta := 1 + ((index + 1) % 2)
-		errand := generateErrand(index)
 		resultsHolder.waitGroup.Add(delta)
-		pool <- errand
+		pool <- generateErrand(index)
 	}
-
-	defer close(pool)
 
 	if waitTimeoutDuration(&resultsHolder.waitGroup, time.Second * 2) {
 		t.Errorf("Did not complete processing errands in 2 seconds")
@@ -168,19 +183,18 @@ func Test_WorkerPool_Retry_Delay(t *testing.T) {
 
 func Test_WorkerPool_Max_Retry_Attempts(t *testing.T) {
 	resultsHolder := &resultsHolder{}
-	pool := bosh.StartWorkerPool(2, 100, resultsHolder.rejectSeven, defaultRetryDelay)
+	retryConfig := testRetryConfig()
+	pool := bosh.StartWorkerPool(2, 100, resultsHolder.rejectSeven, retryConfig)
+	defer close(pool)
 
 	for index := 1; index < 20; index++ {
 		if index != 7 {
 			resultsHolder.waitGroup.Add(1)
 		} else {
-			// TODO make this a var for max retry attempts
-			resultsHolder.waitGroup.Add(5)
+			resultsHolder.waitGroup.Add(retryConfig.MaxRetries)
 		}
 		pool <- generateErrand(index)
 	}
-
-	defer close(pool)
 
 	if waitTimeout(&resultsHolder.waitGroup) {
 		t.Errorf("Did not complete processing errands in 1 second")
@@ -195,6 +209,33 @@ func Test_WorkerPool_Max_Retry_Attempts(t *testing.T) {
 	}
 }
 
-func Test_WorkerPool_Backing_Data_Structure(t *testing.T) {
-	t.Skipf("Not yet implemented")
+func Test_WorkerPool_Avoid_Duplicate_Attempts(t *testing.T) {
+	resultsHolder := &resultsHolder{}
+	retryConfig := testRetryConfig()
+	retryConfig.RetryDelay = time.Second
+	pool := bosh.StartWorkerPool(2, 100, resultsHolder.retryOnce, retryConfig)
+	defer close(pool)
+
+	for index := 1; index < 20; index++ {
+		resultsHolder.waitGroup.Add(2)
+		pool <- generateErrand(index)
+	}
+
+	for index := 1; index < 20; index++ {
+		pool <- generateErrand(index)
+	}
+
+	if waitTimeoutDuration(&resultsHolder.waitGroup, time.Second * 3) {
+		t.Errorf("Did not complete processing errands in 2 seconds")
+	}
+
+	for index := 1; index < 20; index++ {
+		errand := generateErrand(index)
+		if !resultsHolder.wasProcessed(errand.HostName, errand.Deployment) {
+			t.Errorf("Errand %+v was not processed", errand)
+		}
+	}
+	if len(resultsHolder.errands) != 19 {
+		t.Errorf("Some errands were processed twice.  Expected 19 results, but had %d", len(resultsHolder.errands))
+	}
 }

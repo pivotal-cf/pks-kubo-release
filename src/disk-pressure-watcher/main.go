@@ -39,7 +39,7 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	errandChannel := bosh.StartWorkerPool(2, 100, bosh.RunErrand, time.Second * 10)
+	errandChannel := bosh.StartWorkerPool(2, 100, bosh.RunErrand, bosh.DefaultRetryConfig())
 
 	for {
 		watcher := core.GenerateWatcher()
