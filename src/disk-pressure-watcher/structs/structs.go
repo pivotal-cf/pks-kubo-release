@@ -13,4 +13,5 @@ type NodeInfo struct {
 type ErrandParameters struct {
 	HostName
 	Deployment
+	NumAttempts int
 }

@@ -39,6 +39,7 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
+	errandChannel := bosh.StartWorkerPool(2, 100, bosh.RunErrand)
 
 	for {
 		watcher := core.GenerateWatcher()
@@ -46,10 +47,10 @@ func main() {
 		// Handle the error and nil case here better
 		commands, _ := watcher.GenErrands(clientset)
 		for _, command := range commands {
-			bosh.RunErrand(command)
+			errandChannel <- command
 		}
 
-		time.Sleep(60 * time.Second)
+		time.Sleep(5 * time.Second)
 	}
 }
 

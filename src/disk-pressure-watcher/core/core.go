@@ -1,9 +1,9 @@
 package core
 
 import (
-	"errors"
 	"disk-pressure-watcher/k8s"
 	"disk-pressure-watcher/structs"
+	"errors"
 	v1 "k8s.io/api/core/v1"
 )
 
@@ -22,12 +22,12 @@ func GenerateWatcher() Watcher {
 	}
 }
 
-func (w *watcherImpl) GenErrands(clientset k8s.KubeClient) ([]*structs.ErrandParameters, error) {
-	if clientset == nil {
-		return nil, errors.New("Called GenErrands() with a nil cientset.")
+func (w *watcherImpl) GenErrands(clientSet k8s.KubeClient) ([]*structs.ErrandParameters, error) {
+	if clientSet == nil {
+		return nil, errors.New("called GenErrands() with a nil clientSet")
 	}
 
-	nodes, err := clientset.GetNodes()
+	nodes, err := clientSet.GetNodes()
 	if err != nil {
 		return nil, err
 	}
