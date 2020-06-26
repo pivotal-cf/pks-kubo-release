@@ -1,0 +1,7 @@
+---
+name: disk-pressure-watch
+
+templates:
+  ctl.erb: bin/ctl
+  watcher.sh.erb: bin/watcher.sh
+

@@ -1,0 +1,8 @@
+
+check process disk-pressure-watch
+  with pidfile /var/vcap/sys/run/disk-pressure-watch/disk-pressure-watch.pid
+  start program "/var/vcap/jobs/disk-pressure-watch/bin/ctl start"
+  stop program "/var/vcap/jobs/disk-pressure-watch/bin/ctl stop"
+  group vcap
+
+
