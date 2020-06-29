@@ -4,11 +4,11 @@ NODE_IP="$(ip addr show dev eth0 | grep -E '^[[:space:]]+inet[[:space:]]' | awk 
 
 while true; do
     echo "Sleeping until DiskPressure condition occurs on ${NODE_IP}";
-    until /var/vcap/packages/kubernetes/bin/kubectl --kubeconfig /var/vcap/jobs/kubelet/config/kubeconfig get node -o json | /var/vcap/packages/jq/bin/jq -e -r ".items[] | select ((.status.addresses[] | select (.type == \"InternalIP\"  and .address == \"${NODE_IP}\")) and ([ .status.conditions[] | select(.type == \"DiskPressure\" and .status == \"True\") ] | length) == 1) | .metadata.name "; do
+    until /var/vcap/packages/kubernetes/bin/kubectl --kubeconfig /var/vcap/jobs/kubelet/config/kubeconfig get node -o 'custom-columns=Pressure:.status.conditions[?(@.type == "DiskPressure")].status,Internal-IP:.status.addresses[?(@.type == "InternalIP")].address' --no-headers | awk -v STATUS=True -v IP="${NODE_IP}" -f /var/vcap/jobs/disk-pressure-watch/scripts/awkscript; do
         sleep 60;
     done
     echo "Detected DiskPressure condition on ${NODE_IP}, waiting for condition to lift, then reloading images";
-    until /var/vcap/packages/kubernetes/bin/kubectl --kubeconfig /var/vcap/jobs/kubelet/config/kubeconfig get node -o json | /var/vcap/packages/jq/bin/jq -e -r ".items[] | select ((.status.addresses[] | select (.type == \"InternalIP\"  and .address == \"${NODE_IP}\")) and ([ .status.conditions[] | select(.type == \"DiskPressure\" and .status == \"False\") ] | length) == 1) | .metadata.name "; do
+    until /var/vcap/packages/kubernetes/bin/kubectl --kubeconfig /var/vcap/jobs/kubelet/config/kubeconfig get node -o 'custom-columns=Pressure:.status.conditions[?(@.type == "DiskPressure")].status,Internal-IP:.status.addresses[?(@.type == "InternalIP")].address' --no-headers | awk -v STATUS=False -v IP="${NODE_IP}" -f /var/vcap/jobs/disk-pressure-watch/scripts/awkscript; do
         sleep 60;
     done
     echo "DiskPressure condition lifted on ${NODE_IP}, reloading images";
