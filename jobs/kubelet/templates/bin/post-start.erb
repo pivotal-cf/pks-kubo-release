@@ -5,32 +5,10 @@
 
 kubectl="/var/vcap/packages/kubernetes/bin/kubectl --kubeconfig=/var/vcap/jobs/kubelet/config/kubeconfig"
 
-DOCKER_SOCKET=unix:///var/vcap/sys/run/docker/docker.sock
-CONTAINER_IMAGE_DIR=/var/vcap/packages/kubernetes/container-images
-
-load_container() {
-    path=$1
-
-    echo "loading cached container: ${path}"
-    if sudo /var/vcap/jobs/kubelet/packages/docker/bin/docker -H ${DOCKER_SOCKET} load < "${path}"; then
-      echo "successfully loaded container: ${path}"
-    else
-      echo "failed to load container: ${path}"
-      exit 1
-    fi
-}
-
-load_cached_containers() {
-    for img in ${CONTAINER_IMAGE_DIR}/*.tgz; do
-        load_container ${img}
-    done
-}
-
 TIMEOUT=120
 
 if timeout "$TIMEOUT" /var/vcap/jobs/kubelet/bin/ensure_kubelet_up_and_running
 then
-  load_cached_containers
   node_name=$($kubectl get nodes -o wide -L bosh.id | grep "<%= spec.id %>$" | grep ' Ready' | awk '{print $1}')
   ${kubectl} uncordon ${node_name}
   ${kubectl} get nodes ${node_name} | grep -e ' Ready '

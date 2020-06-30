@@ -18,6 +18,7 @@ templates:
   config/docker.cert.erb: config/docker.cert
   config/docker.key.erb: config/docker.key
   config/docker_registry_certs.erb: config/docker_registry_certs
+  lib/wait_for_docker.sh: lib/wait_for_docker.sh
 
 provides:
 - name: docker
