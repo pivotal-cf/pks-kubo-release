@@ -71,6 +71,8 @@ builds:
     version: 0.22.0
   b11b7cde-3eb5-47b7-6764-2baf26bd146e:
     version: 0.39.0
+  b44a825f-1d18-4034-40ad-dbda1406828b:
+    version: 1.7.1-build.6-bump-kubernetes-1.16.12+vmware.1
   b944940f-1b3e-4a21-515e-ab92e646611a:
     version: 0.11.0
   bb8617ff-e3a8-434a-50f3-0277c25f7b4e:
