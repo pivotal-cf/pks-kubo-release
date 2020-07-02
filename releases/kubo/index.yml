@@ -53,6 +53,8 @@ builds:
     version: 1.7.0-build.99-1.7.x
   89ffc43c-9a7a-4f62-76bc-04224509a7de:
     version: 0.25.0
+  8fb1f9d4-a8ac-4fea-779d-2c5679ea2fcc:
+    version: 1.7.1-build.8-1.7.x
   916ada95-3ad9-40c7-7ee3-23035e8db3c9:
     version: 0.8.1
   91b96f90-4702-4ead-4805-ba020a1b4ce8:
