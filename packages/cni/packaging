@@ -3,9 +3,9 @@ set -exu
 mkdir -p ${BOSH_INSTALL_TARGET}/bin
 
 CNI_PACKAGE="cni-plugins"
-CNI_VERSION="0.7.5"
+CNI_VERSION="0.8.6"
 
-tar -xzf cni/${CNI_PACKAGE}-amd64-v${CNI_VERSION}.tgz -C ${BOSH_INSTALL_TARGET}/bin/
+tar -xzf cni/${CNI_PACKAGE}-v${CNI_VERSION}+vmware.1.tgz -C ${BOSH_INSTALL_TARGET}/bin/
 
 mkdir -p utillocal
 dpkg -x cni/util-linux*.deb utillocal/
