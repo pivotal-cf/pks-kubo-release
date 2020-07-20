@@ -136,7 +136,7 @@ def main(bora_number, kubernetes_version)
 end
 
 
-bora_number = "16143127"
-kubernetes_version = "1.16.9+vmware.1"
+bora_number = "16485926"
+kubernetes_version = "1.18.5+vmware.1"
 
 main(bora_number, kubernetes_version)
