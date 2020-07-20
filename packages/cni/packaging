@@ -3,32 +3,12 @@ set -exu
 mkdir -p ${BOSH_INSTALL_TARGET}/bin
 
 CNI_PACKAGE="cni-plugins"
-CNI_VERSION="0.7.5"
+CNI_VERSION="0.8.6+vmware.1"
 
 tar -xzf cni/${CNI_PACKAGE}-amd64-v${CNI_VERSION}.tgz -C ${BOSH_INSTALL_TARGET}/bin/
-
-mkdir -p utillocal
-dpkg -x cni/util-linux*.deb utillocal/
-
-cp -a utillocal/usr/bin/nsenter ${BOSH_INSTALL_TARGET}/bin
-
-chmod +x ${BOSH_INSTALL_TARGET}/bin/*
-
 
 # Open Source Licensing Information, used by the vmware OSM system
 # These license abbreviations are defined by the OSM system
 # See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
 
-CNI_LICENSE="Apache2.0"
-CNI_SOURCE_URL="https://github.com/containernetworking/plugins/archive/v${CNI_VERSION}.tar.gz"
-
-cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
-{ "packages": [
-    {
-    "name": "$CNI_PACKAGE",
-    "version": "$CNI_VERSION",
-    "url": "$CNI_SOURCE_URL",
-    "license": "$CNI_LICENSE"
-    }
-]}
-EOF
+# This comes from TKG in Buildweb here: https://buildweb.eng.vmware.com/ob/16451085/

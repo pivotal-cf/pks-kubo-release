@@ -19,7 +19,6 @@ templates:
 packages:
 - pid_utils
 - kubernetes
-- cni
 - socat
 - file-generator
 properties:

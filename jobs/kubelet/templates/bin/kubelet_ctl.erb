@@ -101,8 +101,6 @@ get_hostname_override() {
 }
 
 start_kubelet() {
-  ln -s -f /var/vcap/jobs/kubelet/packages/cni/bin/nsenter /usr/bin/nsenter
-
   <%-
     include_config = false
     if !iaas.nil? and iaas != "vsphere"
