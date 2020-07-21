@@ -1,0 +1,39 @@
+#!/bin/bash
+# vim: set ft=sh
+
+set -e
+
+RUN_DIR=/var/vcap/sys/run/disk-pressure-watch
+LOG_DIR=/var/vcap/sys/log/disk-pressure-watch
+PIDFILE=$RUN_DIR/disk-pressure-watch.pid
+
+case $1 in
+
+  start)
+    mkdir -p $RUN_DIR
+    chown -R vcap:vcap $RUN_DIR
+
+    mkdir -p $LOG_DIR
+    chown -R root:root $LOG_DIR
+
+    echo $$ > $PIDFILE
+
+    exec /var/vcap/jobs/disk-pressure-watch/bin/watcher.sh \
+      1>>$LOG_DIR/disk-pressure-watch.stdout.log \
+      2>>$LOG_DIR/disk-pressure-watch.stderr.log
+
+    ;;
+
+  stop)
+    if [ -f $PIDFILE ]; then
+      kill -9 `cat $PIDFILE` || true
+      rm -f $PIDFILE
+    fi
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+
+    ;;
+
+esac

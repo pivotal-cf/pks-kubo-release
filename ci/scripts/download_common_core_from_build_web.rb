@@ -67,14 +67,16 @@ end
 def git_commit_and_push(release_dir, kubernetes_version)
   Dir.chdir release_dir do
     execute_system_call("git co -b bump-kubernetes-#{kubernetes_version}")
-    execute_system_call("git add .")
+    execute_system_call("git add config/blobs.yml")
+    execute_system_call("git add packages/kubernetes/packaging")
+    execute_system_call("git add packages/kubernetes/spec")
     execute_system_call("git commit -m 'Bumps kubernetes #{kubernetes_version}'")
     execute_system_call("git push -u origin bump-kubernetes-#{kubernetes_version}")
   end
 end
 
 def main(bora_number, kubernetes_version)
-  release_dir = "/Users/pivotal/workspace/pks-kubernetes-release"
+  release_dir = "#{ENV['HOME']}/workspace/pks-kubernetes-release"
 
   staging_dir = execute_system_call("mktemp -d")
 
@@ -102,7 +104,7 @@ def main(bora_number, kubernetes_version)
       exit
     end
 
-    execute_system_call "sed -i '' s/KUBERNETES_VERSION=\"#{existing_k8s_version}\"/KUBERNETES_VERSION=\"#{kubernetes_version}\"/ packages/kubernetes/packaging"
+    execute_system_call "sed -i '' s/KUBERNETES_VERSION=\\\"#{existing_k8s_version}\\\"/KUBERNETES_VERSION=\\\"#{kubernetes_version}\\\"/ packages/kubernetes/packaging"
     execute_system_call "sed -i '' s/kubernetes-#{existing_k8s_version}/kubernetes-#{kubernetes_version}/ packages/kubernetes/spec"
   end
 
@@ -137,6 +139,9 @@ end
 
 
 bora_number = "16485926"
+# When setting this, be sure not to include the 'v' at the beginning of the version
+# as well as be sure to leave the build number off (...+vmware.1 is correct,
+# ...+vmware.1.68 is not).
 kubernetes_version = "1.18.5+vmware.1"
 
 main(bora_number, kubernetes_version)

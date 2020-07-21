@@ -1,6 +1,8 @@
 builds:
   006db8c2-21c1-4171-716e-49b2ddff80d2:
     version: 1.9.0-build.20
+  02be6502-4871-465a-7948-a5d8a47dbcb9:
+    version: 1.9.0-build.56-master
   06781654-e47d-4e51-567b-2f35860cfeca:
     version: 0.41.0
   07c7a55d-b2c6-4a63-46a7-a8fbf6c0f7b1:
@@ -11,8 +13,8 @@ builds:
     version: 1.7.0-build.73
   18cd3d40-ddf1-42d9-6988-6107be84f252:
     version: 0.0.3
-  1f105e0a-1519-49e9-6ca7-251e1a68f4bc:
-    version: 1.9.0-build.37-bump-kubernetes-1.18.1+vmware.1
+  1af221da-bb95-48a8-52b9-9e7d94fdcdf6:
+    version: 1.9.0-build.65-master
   255a7505-ecd5-4141-470f-9338b25cb944:
     version: 0.31.0
   2605f42c-2cf5-44af-773f-4fed45caa1c7:
@@ -25,8 +27,6 @@ builds:
     version: 0.0.2
   34996606-8c15-484c-7814-3ce2ff351695:
     version: 1.7.0-build.76
-  353c4db8-5e07-4fe4-55bc-4d9fb6fd483f:
-    version: 1.9.0-build.27-bump-kubernetes-1.18.1+vmware.1
   3572627e-340e-48b5-498e-a75ba06498f3:
     version: 0.20.0
   3a6fe5ab-d5b6-4d09-5836-3ce87c2a4a86:
@@ -37,10 +37,6 @@ builds:
     version: 1.9.0-build.10
   44b992f5-5eb6-402b-61d8-528577992ebe:
     version: 0.28.0
-  4971acc4-f5b3-42ca-7d80-a59305ad8945:
-    version: 1.9.0-build.11-replace-nginx
-  4da46e99-4350-46c8-7158-03dca79ce947:
-    version: 1.9.0-build.22-iaas-restart
   588ab971-a83e-446e-4dd7-58afaa42913e:
     version: 0.29.0
   5af44adb-ba09-4c37-5de7-d89b1d177aa9:
@@ -49,8 +45,6 @@ builds:
     version: 0.0.5
   61ee0a75-f9ae-4351-7f13-9862bd537c7f:
     version: 1.9.0-build.15-replace-nginx
-  6211fa68-ed9c-4c12-6763-e2001b5029cb:
-    version: 1.9.0-build.31-bump-kubernetes-1.18.1+vmware.1
   665d71a9-8522-4c64-692a-7899458abae6:
     version: 0.8.0
   744fe93d-7c3e-4f35-4932-e2f39b471420:
@@ -73,12 +67,12 @@ builds:
     version: 0.32.0
   976126d2-23e7-4e7b-4bb5-daf648cf9f5b:
     version: 0.6.0
+  977733e3-57f1-418e-4936-8cc1d2609e52:
+    version: 1.9.0-build.64-master
   9acf36fd-7449-410d-5732-9c1aa000f0a7:
     version: 0.18.0
   9b00911b-f2d5-47ef-6ef2-f68eb547cf0c:
     version: 0.15.0
-  9f9c79e8-e3d6-4a9e-5ba1-e4ec5f36b569:
-    version: 1.9.0-build.23-iaas-restart
   a4dccd15-2f95-4c08-6ef5-f2debb580418:
     version: 0.17.0
   a6ea6323-e579-4ac5-5b05-fa728c776102:
@@ -89,22 +83,18 @@ builds:
     version: 1.9.0-build.29-bump-kubernetes-1.18.1+vmware.1
   b11b7cde-3eb5-47b7-6764-2baf26bd146e:
     version: 0.39.0
-  b297f5c3-ecfd-4559-66b2-5a7115029553:
-    version: 1.9.0-build.30-bump-kubernetes-1.18.1+vmware.1
+  b496caab-6add-4c07-6312-edfe254db464:
+    version: 1.9.0-build.61-master
   b67fb323-49e5-4ddb-7171-2bca2c7e9bb0:
     version: 1.9.0-build.9
   b944940f-1b3e-4a21-515e-ab92e646611a:
     version: 0.11.0
   bc2eb970-2115-4588-6da6-a032610a9e9c:
     version: 1.7.0-build.75
-  c3a1a4b9-8cdd-40e3-5f40-4f4ab42bad8c:
-    version: 1.9.0-build.14-replace-nginx
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
     version: 0.27.0
   c9984ee5-d029-48d0-5c49-6ec099bf12b3:
     version: 0.0.1
-  ce46d78b-db94-49db-5c5a-527b735f40b0:
-    version: 1.9.0-build.13-update-nginx-bionic
   d09b9ed8-b725-4428-7b9e-8bf8a2873359:
     version: 0.11.1
   d5e86543-9e0c-449b-7f32-a4698615b75b:
@@ -117,8 +107,6 @@ builds:
     version: 1.9.0-build.18
   e8bebc9f-b75c-40c7-5313-2058b9c11c60:
     version: 0.30.0
-  edc15472-60fc-4fa6-731b-da803340d474:
-    version: 1.9.0-build.12-replace-nginx
   ef2b4733-e080-402d-499c-4a2eff28aa4a:
     version: 0.16.0
   f7c19373-2d57-421a-73ba-39816fce001f:
