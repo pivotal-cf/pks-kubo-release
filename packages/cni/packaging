@@ -5,7 +5,12 @@ mkdir -p ${BOSH_INSTALL_TARGET}/bin
 CNI_PACKAGE="cni-plugins"
 CNI_VERSION="0.8.6+vmware.1"
 
+NSENTER_VERSION="2.27.1"
+
 tar -xzf cni/${CNI_PACKAGE}-amd64-v${CNI_VERSION}.tgz -C ${BOSH_INSTALL_TARGET}/bin/
+cp cni/nsenter-${NSENTER_VERSION} ${BOSH_INSTALL_TARGET}/bin/nsenter
+
+chmod +x ${BOSH_INSTALL_TARGET}/bin/*
 
 # Open Source Licensing Information, used by the vmware OSM system
 # These license abbreviations are defined by the OSM system
