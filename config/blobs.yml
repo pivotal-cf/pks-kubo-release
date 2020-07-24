@@ -14,6 +14,10 @@ cni/cni-plugins-amd64-v0.8.6+vmware.1.tgz:
   size: 36876712
   object_id: 10464b29-a707-48c0-4f73-254ae53cb5cb
   sha: sha256:f56b6fb3d48cdb8ed859ffc2eb6e8d831f4f004eb6465b4dd8bd7a542d008b5e
+cni/nsenter-2.27.1:
+  size: 27520
+  object_id: f78a843e-4bf1-47c4-578b-786fcf8a2c94
+  sha: sha256:9999ffda41275f924bcbb1d9d7b129421838d917236511eccacae7dc0ad631a9
 common-core-kubernetes-1.18.5+vmware.1/kube-apiserver:
   size: 162380591
   object_id: 6636a968-3258-4652-64f7-4d2cd7d7053a
