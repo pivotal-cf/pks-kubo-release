@@ -112,11 +112,13 @@ start_kubelet() {
 # TODO - Remove this stuff in 1.10
 #
   f="/usr/bin/nsenter"
-  if [ -L "${f}" ] && [ "$(readlink -f "${f}")" == "/var/vcap/jobs/kubelet/packages/cni/bin/nsenter" ]; then
-    rm "${f}" && cp "/var/vcap/jobs/kubelent/packages/cni/bin/nsenter" "/usr/bin/" || {
+  if [ -L "${f}" ] && [ "$(readlink "${f}")" == "/var/vcap/jobs/kubelet/packages/cni/bin/nsenter" ]; then
+    local ret=0
+    rm "${f}" && cp "/var/vcap/jobs/kubelet/packages/cni/bin/nsenter" "/usr/bin/" || ret=$?
+    if [ "${ret}" != "0" ]; then
       >&2 printf "Error: Unable to replace symlink to old nsenter with actual binary.\n"
       exit 1
-    }
+    fi
   fi
 # -- END 1.9 nsenter hack
   <%-
