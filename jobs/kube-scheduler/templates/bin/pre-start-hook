@@ -21,9 +21,5 @@ wait_for_kube-apiserver() {
     set -e
 }
 
-# the following line is simply to make this release different than previous
-# TODO remove me
-echo "different"
-
 /var/vcap/jobs/kube-scheduler/bin/generate-config-files
 wait_for_kube-apiserver
