@@ -2,10 +2,11 @@
 
 set -exuo pipefail
 
-exec 1>&2
 NAME="${0##*/}"
 LOG_DIR=/var/vcap/sys/log/bbr-kube-apiserver
-exec 2> >(tee -a "$LOG_DIR/$NAME.stderr.log")
+# tee will preserve the output to a log file and echo back
+# bbr will capture the stderr and echo back to the user if necessary
+exec > >(tee -a "$LOG_DIR/$NAME.stdout.log" >&2) 2>&1
 
 echo "Starting kube-apiserver on $(date)"
 

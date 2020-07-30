@@ -4,8 +4,18 @@ set -euo pipefail
 
 source /var/vcap/jobs/etcd/bin/utils.sh
 
+
+NAME="${0##*/}"
+LOG_DIR=/var/vcap/sys/log/bbr-etcd
+# tee will preserve the output to a log file and echo back
+# bbr will capture the stderr and echo back to the user if necessary
+exec > >(tee -a "$LOG_DIR/$NAME.stdout.log" >&2) 2>&1
+
 export BBR_ARTIFACT_FILE_PATH="${BBR_ARTIFACT_DIRECTORY}/snapshotdb"
 export ETCDCTL_API=3
+
+echo "Deleting old etcd data"
+rm -rf /var/vcap/store/etcd
 
 echo "Restoring etcd data"
 

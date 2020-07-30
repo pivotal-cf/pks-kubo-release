@@ -2,10 +2,11 @@
 
 set -exuo pipefail
 
-exec 1>&2
 NAME="${0##*/}"
 LOG_DIR=/var/vcap/sys/log/bbr-etcd
-exec 2> >(tee -a "$LOG_DIR/$NAME.stderr.log")
+# tee will preserve the output to a log file and echo back
+# bbr will capture the stderr and echo back to the user if necessary
+exec > >(tee -a "$LOG_DIR/$NAME.stdout.log" >&2) 2>&1
 
 ensure_etcd_stopped() {
   if timeout "$TIMEOUT" /bin/bash <<EOF
@@ -37,15 +38,13 @@ main() {
 
   if [ "$retval" == "1" ]; then
     killall -9 etcd
+    TIMEOUT=300
     ensure_etcd_stopped
     if [ "$retval" == "1" ]; then
       echo "Unable to kill etcd in time"
       exit 1
     fi
   fi
-
-  echo "Deleting old etcd data"
-  rm -rf /var/vcap/store/etcd
 }
 
 main
