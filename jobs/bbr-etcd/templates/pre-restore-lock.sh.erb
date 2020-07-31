@@ -2,7 +2,7 @@
 
 set -exuo pipefail
 
-NAME="${0##*/}"
+NAME="$(basename "${0}")"
 LOG_DIR=/var/vcap/sys/log/bbr-etcd
 # tee will preserve the output to a log file and echo back
 # bbr will capture the stderr and echo back to the user if necessary
@@ -37,7 +37,8 @@ main() {
   ensure_etcd_stopped
 
   if [ "$retval" == "1" ]; then
-    killall -9 etcd
+    # in case monit stops the process between the last loop and here, we need "|| true"
+    killall -9 etcd || true
     TIMEOUT=300
     ensure_etcd_stopped
     if [ "$retval" == "1" ]; then

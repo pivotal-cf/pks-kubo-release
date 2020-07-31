@@ -5,7 +5,7 @@ set -euo pipefail
 source /var/vcap/jobs/etcd/bin/utils.sh
 
 
-NAME="${0##*/}"
+NAME="$(basename "${0}")"
 LOG_DIR=/var/vcap/sys/log/bbr-etcd
 # tee will preserve the output to a log file and echo back
 # bbr will capture the stderr and echo back to the user if necessary
