@@ -138,10 +138,10 @@ def main(bora_number, kubernetes_version)
 end
 
 
-bora_number = "16485919"
+bora_number = "16485926"
 # When setting this, be sure not to include the 'v' at the beginning of the version
 # as well as be sure to leave the build number off (...+vmware.1 is correct,
 # ...+vmware.1.68 is not).
-kubernetes_version = "1.16.12+vmware.1"
+kubernetes_version = "1.18.5+vmware.1"
 
 main(bora_number, kubernetes_version)

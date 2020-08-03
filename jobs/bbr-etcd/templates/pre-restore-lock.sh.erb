@@ -1,26 +1,51 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -exuo pipefail
 
-echo "Stopping etcd"
-/var/vcap/bosh/bin/monit stop etcd
+NAME="$(basename "${0}")"
+LOG_DIR=/var/vcap/sys/log/bbr-etcd
+# tee will preserve the output to a log file and echo back
+# bbr will capture the stderr and echo back to the user if necessary
+exec > >(tee -a "$LOG_DIR/$NAME.stdout.log" >&2) 2>&1
 
-TIMEOUT=60
+ensure_etcd_stopped() {
+  if timeout "$TIMEOUT" /bin/bash <<EOF
+#!/bin/bash
 
-if timeout "$TIMEOUT" /bin/bash <<EOF
-  #!/bin/bash
-
-  until /var/vcap/bosh/bin/monit summary | grep etcd | grep "not monitored" ; do
-    echo "waiting for etcd to stop..."
-    sleep 5
-  done
+until /var/vcap/bosh/bin/monit summary | grep etcd | grep "not monitored" ; do
+  echo "waiting for etcd to stop..."
+  monit summary | grep etcd
+  sleep 5
+done
 EOF
-then
-  echo "Etcd stopped"
-else
-  echo "Timed out stopping etcd after $TIMEOUT seconds"
-  exit 1
-fi
+  then
+    echo "Etcd stopped"
+    retval=0
+  else
+    echo "Timed out stopping etcd after $TIMEOUT seconds"
+    retval=1
+  fi
+}
 
-echo "Deleting old etcd data"
-rm -rf /var/vcap/store/etcd
+main() {
+  echo "Stopping etcd on $(date)"
+  /var/vcap/bosh/bin/monit stop etcd
+
+  TIMEOUT=60
+  retval=0
+
+  ensure_etcd_stopped
+
+  if [ "$retval" == "1" ]; then
+    # in case monit stops the process between the last loop and here, we need "|| true"
+    killall -9 etcd || true
+    TIMEOUT=300
+    ensure_etcd_stopped
+    if [ "$retval" == "1" ]; then
+      echo "Unable to kill etcd in time"
+      exit 1
+    fi
+  fi
+}
+
+main

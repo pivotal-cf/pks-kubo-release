@@ -25,14 +25,22 @@ builds:
     version: 0.12.0
   2c56c031-ee11-4c21-5362-ad01c8aa00e8:
     version: 0.0.2
+  2e52cae8-0a90-4da8-6416-d0e1f1e3c413:
+    version: 1.9.0-build.67-bump-kubernetes-1.18.5+vmware.1
+  2f0dcb03-bfa3-4e22-75b4-f76802c6aa3a:
+    version: 1.9.0-build.71-bump-kubernetes-1.18.5+vmware.1
   34996606-8c15-484c-7814-3ce2ff351695:
     version: 1.7.0-build.76
   3572627e-340e-48b5-498e-a75ba06498f3:
     version: 0.20.0
   3a6fe5ab-d5b6-4d09-5836-3ce87c2a4a86:
     version: 0.26.0
+  3c8e7c20-7382-4525-7285-dbd0d00a65af:
+    version: 1.9.0-build.69-bump-kubernetes-1.18.5+vmware.1
   3d10b0b5-9169-4c1a-4fe8-3252cf688457:
     version: 0.40.0
+  3fff7d06-acd4-4663-43a4-0de901cdcb46:
+    version: 1.9.0-build.70-bump-kubernetes-1.18.5+vmware.1
   4069751a-be33-4ab5-7d94-177379805c96:
     version: 1.9.0-build.10
   44b992f5-5eb6-402b-61d8-528577992ebe:
@@ -43,18 +51,26 @@ builds:
     version: 1.9.0-build.25
   5d9d225b-c595-4cf0-54d4-fd1c6d796aa4:
     version: 0.0.5
-  5e598329-9290-4c16-7368-5625a2e61102:
-    version: 1.9.0-build.60-simple-server-archive
+  61ee0a75-f9ae-4351-7f13-9862bd537c7f:
+    version: 1.9.0-build.15-replace-nginx
+  6211fa68-ed9c-4c12-6763-e2001b5029cb:
+    version: 1.9.0-build.31-bump-kubernetes-1.18.1+vmware.1
+  661aa1c0-4da7-43a9-500f-18debbf9f847:
+    version: 1.9.0-build.66-bump-kubernetes-1.18.5+vmware.1
   665d71a9-8522-4c64-692a-7899458abae6:
     version: 0.8.0
   744fe93d-7c3e-4f35-4932-e2f39b471420:
     version: 0.37.0
+  766034d0-0838-4269-5d5d-9d829aaed84e:
+    version: 1.9.0-build.72-bump-kubernetes-1.18.5+vmware.1
   7acb57cc-ef32-44ae-47ef-f476fca5a40a:
     version: 0.23.0
   7c1ab334-3ca4-467b-7829-66b428c8f95c:
     version: 0.33.0
   7ee39501-bde2-4a49-446b-50971371cdad:
     version: 0.14.0
+  7f50d9af-bb45-4282-5aee-76ebbe09c1f8:
+    version: 1.9.0-build.26-bump-kubernetes-1.18.1+vmware.1
   820a6517-f92b-42de-4d13-8661cdfe2605:
     version: 0.9.0
   89ffc43c-9a7a-4f62-76bc-04224509a7de:
@@ -77,6 +93,8 @@ builds:
     version: 0.7.0
   ace19e30-6c6a-4dbc-46c0-0070c0b31dc9:
     version: 0.22.0
+  afa14062-455d-4b2c-47f5-0d464fac402a:
+    version: 1.9.0-build.29-bump-kubernetes-1.18.1+vmware.1
   b11b7cde-3eb5-47b7-6764-2baf26bd146e:
     version: 0.39.0
   b496caab-6add-4c07-6312-edfe254db464:
@@ -87,6 +105,8 @@ builds:
     version: 0.11.0
   bc2eb970-2115-4588-6da6-a032610a9e9c:
     version: 1.7.0-build.75
+  c4203761-1927-405c-6e2c-6727e789aa46:
+    version: 1.9.0-build.68-bump-kubernetes-1.18.5+vmware.1
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
     version: 0.27.0
   c9984ee5-d029-48d0-5c49-6ec099bf12b3:

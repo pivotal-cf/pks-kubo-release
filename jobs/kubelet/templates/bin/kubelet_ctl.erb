@@ -103,8 +103,24 @@ get_hostname_override() {
 }
 
 start_kubelet() {
-  ln -s -f /var/vcap/jobs/kubelet/packages/cni/bin/nsenter /usr/bin/nsenter
-
+# Previous versions of this script contained a destructive symlinking of a packaged binary called
+# `nsenter` because the utiil-linux package did not contain that binary on some Ubuntu release years
+# ago that is no longer an issue. So now, we ship the version of `nsenter` as a binary and restore
+# the state of the system. This is required in an upgrade scenario. New installs will just have
+# the appropriate binary in the appropriate place already.
+#
+# TODO - Remove this stuff in 1.10
+#
+  f="/usr/bin/nsenter"
+  if [ -L "${f}" ] && [ "$(readlink "${f}")" == "/var/vcap/jobs/kubelet/packages/cni/bin/nsenter" ]; then
+    local ret=0
+    rm "${f}" && cp "/var/vcap/jobs/kubelet/packages/cni/bin/nsenter" "/usr/bin/" || ret=$?
+    if [ "${ret}" != "0" ]; then
+      >&2 printf "Error: Unable to replace symlink to old nsenter with actual binary.\n"
+      exit 1
+    fi
+  fi
+# -- END 1.9 nsenter hack
   <%-
     include_config = false
     if !iaas.nil? and iaas != "vsphere"

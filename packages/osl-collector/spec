@@ -11,7 +11,7 @@ dependencies:
   - docker-registry-certs
   - etcd
   - flanneld
-  - golang-1.12-linux
+  - golang-1.13-linux
   - ipset
   - jq
   - kubernetes

@@ -36,7 +36,7 @@ processes:
   - --config=/var/vcap/jobs/kube-scheduler/config/config.yml
   <%= "- --tls-cipher-suites=#{link('kube-apiserver').p('tls-cipher-suites')}" %>
   hooks:
-    pre_start: /var/vcap/jobs/kube-scheduler/bin/generate-config-files
+    pre_start: /var/vcap/jobs/kube-scheduler/bin/pre-start-hook
 <%
   ############################################################################################################
   # PLEASE KEEP THIS IN SYNC WITH KUBE-APISERVER, KUBE-CONTROLLER-MANAGER, KUBE-SCHEDULER, KUBELET, AND ETCD #
