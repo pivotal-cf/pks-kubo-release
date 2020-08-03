@@ -2,6 +2,7 @@
 name: kube-scheduler
 
 templates:
+  bin/pre-start-hook: bin/pre-start-hook
   bin/generate-config-files: bin/generate-config-files
   config/bpm.yml.erb: config/bpm.yml
   config/ca.pem.erb: config/ca.pem

@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -exuo pipefail
 
-echo "Starting etcd"
+NAME="$(basename "${0}")"
+LOG_DIR=/var/vcap/sys/log/bbr-etcd
+# tee will preserve the output to a log file and echo back
+# bbr will capture the stderr and echo back to the user if necessary
+exec > >(tee -a "$LOG_DIR/$NAME.stdout.log" >&2) 2>&1
 
-TIMEOUT=60
+echo "Starting etcd on $(date)"
+# monit takes a long time to acknowledge state changes in an application
+# so we need a long time to recognize if a program is in "not monitored - start pending" or "initializing"
+TIMEOUT=600
 if timeout "$TIMEOUT" /bin/bash <<EOF
   #!/bin/bash
 
@@ -25,6 +32,7 @@ if timeout "$TIMEOUT" /bin/bash <<EOF
 
   until /var/vcap/bosh/bin/monit summary | grep etcd | grep "running"; do
     echo "waiting for etcd daemon to start"
+    monit summary | grep etcd
     sleep 5
   done
 EOF
