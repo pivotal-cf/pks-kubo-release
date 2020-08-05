@@ -2,5 +2,5 @@
 name: cni
 
 files:
-- cni/cni-plugins-amd64-v0.8.6+vmware.1.tgz
+- cni/cni-plugins-amd64-v0.8.6+vmware.2.tgz
 - cni/nsenter-2.27.1

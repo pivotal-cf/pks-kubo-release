@@ -10,10 +10,10 @@ cifs-utils-6.7.tar.bz2:
   size: 363647
   object_id: c529967d-57fa-4b41-685e-ff0a507ffaad
   sha: 9ba5091d7c2418a90773c861f04a3f4a36854c14
-cni/cni-plugins-amd64-v0.8.6+vmware.1.tgz:
-  size: 36876712
-  object_id: 10464b29-a707-48c0-4f73-254ae53cb5cb
-  sha: sha256:f56b6fb3d48cdb8ed859ffc2eb6e8d831f4f004eb6465b4dd8bd7a542d008b5e
+cni/cni-plugins-amd64-v0.8.6+vmware.2.tgz:
+  size: 36876641
+  object_id: a623b3b9-5a61-42e7-4121-8f9e0698acd0
+  sha: sha256:501d701eec70ca8d4680fe648c78dd1197e3d502a6a0168913a4fe2574effea0
 cni/nsenter-2.27.1:
   size: 27520
   object_id: f78a843e-4bf1-47c4-578b-786fcf8a2c94
