@@ -26,6 +26,8 @@ A [BOSH](http://bosh.io/) release for [Kubernetes](http://kubernetes.io).  Forme
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
+To support Kubernetes terminology changes and [Community Values](https://github.com/kubernetes/community/blob/master/values.md),  master in CFCR documentation and property names has been changed to control plane and repo branches have been renamed from master to main.
+
 ## <a name='Tests'></a>Tests
 To run tests, run these commands:
 ```
