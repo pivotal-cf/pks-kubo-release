@@ -1,10 +1,14 @@
 #!/bin/bash
 
-set -euo pipefail
+set -exuo pipefail
 
-exec 1>&2
+NAME="$(basename "${0}")"
+LOG_DIR=/var/vcap/sys/log/bbr-kube-apiserver
+# tee will preserve the output to a log file and echo back
+# bbr will capture the stderr and echo back to the user if necessary
+exec > >(tee -a "$LOG_DIR/$NAME.stdout.log" >&2) 2>&1
 
-echo "Starting kube-apiserver"
+echo "Starting kube-apiserver on $(date)"
 
 # ask monit to start the process, within 60 seconds
 TIMEOUT=60
@@ -23,12 +27,24 @@ else
   exit 1
 fi
 
+# BBR starts all jobs on one node before moving on (instead of starting all of one job first)
+# etcd needs at least 2 workers for quorum, and kube-apiserver will crash if not enough etcd nodes are running
+# so we move on to the next node if we are on the first node, and allow monit to restart kube-apiserver if necessary
+set +e
+num_unhealthy_etcd_nodes=$(/var/vcap/jobs/etcd/bin/etcdctl endpoint health 2>&1 | grep "is unhealthy" | wc -l)
+set -e
+if [ "$num_unhealthy_etcd_nodes" == "3" ]; then
+  echo "this is the first node, continuing"
+  exit 0
+fi
+
 # now see if summary shows server has started
 if timeout "$TIMEOUT" /bin/bash <<EOF
 #!/bin/bash
 
 until /var/vcap/bosh/bin/monit summary | grep kube-apiserver | grep "running"; do
   echo "waiting for kube-apiserver to start"
+  monit summary | grep kube-apiserver
   sleep 5
 done
 EOF
@@ -44,14 +60,13 @@ fi
 # and a newly restored etcd has contradictory information about that pod
 
 TIMEOUT=30
-if timeout "$TIMEOUT" /bin/bash <<EOF
-#!/bin/bash
-
 apiserver="https://localhost:8443"
 cert=/var/vcap/jobs/kube-apiserver/config/kubernetes-ca.pem
 interval="2"
+if timeout "$TIMEOUT" /bin/bash <<EOF
+#!/bin/bash
 
-until $(curl -X GET -k --fail -o /dev/null   ${apiserver}/healthz --cacert ${cert}); do
+until curl -X GET -k --fail -o /dev/null ${apiserver}/healthz --cacert ${cert}; do
   sleep $interval
 done
 EOF
