@@ -19,7 +19,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
-    branch: master
+    branch: main
     private_key: ((git-ssh-key.private_key))
     ignore_paths: [ci]
 
@@ -29,7 +29,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-release.git
-    branch: master
+    branch: main
     private_key: ((git-ssh-key.private_key))
     paths: [ci]
 
@@ -37,7 +37,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pks-kubernetes-windows-release.git
-    branch: master
+    branch: main
     private_key: ((git-ssh-key.private_key))
 
 - name: gcp-linux-stemcell

@@ -26,6 +26,8 @@ A [BOSH](http://bosh.io/) release for [Kubernetes](http://kubernetes.io).  Forme
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
+To support Kubernetes terminology changes and [Community Values](https://github.com/kubernetes/community/blob/master/values.md),  master in CFCR documentation and property names has been changed to control plane and repo branches have been renamed from master to main.
+
 ## <a name='Tests'></a>Tests
 To run tests, run these commands:
 ```
@@ -37,9 +39,9 @@ rspec
 ##  <a name='Prerequisites'></a>Prerequisites
 - A BOSH Director configured with UAA, Credhub, and [BOSH DNS runtime config](https://raw.githubusercontent.com/cloudfoundry/bosh-deployment/master/runtime-configs/dns.yml). We recommend using [BOSH Bootloader](https://github.com/cloudfoundry/bosh-bootloader) for this.
 - [Latest kubo-deployment tarball](https://github.com/cloudfoundry-incubator/kubo-deployment/releases/latest)
-- Accessing the master:
-  - **Single Master:** Set up a DNS name pointing to your master's IP address
-  - **Multiple Masters:** A TCP load balancer for your master nodes.
+- Accessing the control plane:
+  - **Single Control Plane Node:** Set up a DNS name pointing to your control plane's IP address
+  - **Multiple Control Plane Nodes:** A TCP load balancer for your control plane nodes.
     - Use a TCP load balancer configured to connect to the master nodes on port 8443.
     - Add healthchecks using either a TCP dial or HTTPS by looking for a `200 OK` response from `/healthz`.
     - if you have used [BOSH Bootloader](https://github.com/cloudfoundry/bosh-bootloader) on GCP then you need to manually create a firewall rule.  Allow access to port TCP 8443 to VMs in your BBL network tagged `cfcr-master` from your load balancer's IP.
@@ -63,7 +65,7 @@ Kubernetes uses etcd as its datastore. The official infrastructure requirements 
 
 1. Deploy
 
-    ##### Option 1. Single Master
+    ##### Option 1. Single Control Plane Node
 
 	```bash
 	cd kubo-deployment
@@ -74,7 +76,7 @@ Kubernetes uses etcd as its datastore. The official infrastructure requirements 
 	  -v api-hostname=[DNS-NAME]
 	```
 
-    ##### Option 2. Three Masters
+    ##### Option 2. Three Control Plane Nodes
 
 	```bash
 	cd kubo-deployment

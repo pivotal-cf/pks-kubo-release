@@ -31,7 +31,7 @@ properties:
   admin-password:
     description: The admin password for the Kubernetes cluster
   tls.kubernetes:
-    description: Certificate and private key for the Kubernetes master
+    description: Certificate and private key for the Kubernetes control plane
   post-start-custom-specs:
     description: Kubernetes specs to be applied at post-start
     example:
