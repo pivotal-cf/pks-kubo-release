@@ -123,6 +123,8 @@ builds:
     version: 0.24.0
   dd20178a-f3ce-41ac-522a-4ec335faefe7:
     version: 0.38.0
+  dfe094e7-55fe-42e0-542f-5215506e19c4:
+    version: 1.9.0-build.78-main
   e15812e1-6fb0-41e0-626c-5fd4c75f316d:
     version: 1.9.0-build.8
   e759bbc3-8061-46ff-42f6-707070f8e7c9:
