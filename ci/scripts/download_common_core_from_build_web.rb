@@ -76,7 +76,7 @@ def git_commit_and_push(release_dir, kubernetes_version)
 end
 
 def main(bora_number, kubernetes_version)
-  release_dir = "#{ENV['HOME']}/workspace/pks-kubernetes-release"
+  release_dir = "#{ENV['HOME']}/go/src/github.com/pivotal-cf/pks-kubernetes-release"
 
   staging_dir = execute_system_call("mktemp -d")
 
@@ -138,10 +138,10 @@ def main(bora_number, kubernetes_version)
 end
 
 
-bora_number = "16485926"
+bora_number = "16796290"
 # When setting this, be sure not to include the 'v' at the beginning of the version
 # as well as be sure to leave the build number off (...+vmware.1 is correct,
 # ...+vmware.1.68 is not).
-kubernetes_version = "1.18.5+vmware.1"
+kubernetes_version = "1.18.8+vmware.1"
 
 main(bora_number, kubernetes_version)
