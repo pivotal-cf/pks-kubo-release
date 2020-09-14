@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -eu
+
+if [ -z ${BBR_VERSION+x} ]
+then
+  >&2 echo "Error: BBR_VERSION is not set, please ensure you are using the latest version of bbr"
+  exit 1
+fi
+
+function checkIsInteger() {
+  if ! [[ $1 =~ ^[0-9]+$ ]]
+  then
+    >&2 echo "Error: BBR version must be a valid semVer"
+    exit 1
+  fi
+}
+
+major=$(echo "$BBR_VERSION" | cut -f 1 -d '.')
+minor=$(echo "$BBR_VERSION" | cut -f 2 -d '.')
+
+checkIsInteger "$major"
+checkIsInteger "$minor"
+
+if (( major == 1 )); then
+   if ! (( minor >= 5 )); then
+      >&2 echo "Error: BBR version must be 1.5.0 or greater"
+      exit 1
+   fi
+fi
+
+if (( major < 1 )); then
+   >&2 echo "Error: BBR version must be 1.5.0 or greater"
+   exit 1
+fi
+
+echo "---
+restore_should_be_locked_before:
+- job_name: bbr-etcd
+  release: kubo"
