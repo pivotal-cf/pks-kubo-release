@@ -2,6 +2,7 @@
 name: bbr-kube-apiserver
 
 templates:
+  metadata.sh.erb: bin/bbr/metadata
   pre-restore-lock.erb: bin/bbr/pre-restore-lock
   post-restore-unlock.erb: bin/bbr/post-restore-unlock
 

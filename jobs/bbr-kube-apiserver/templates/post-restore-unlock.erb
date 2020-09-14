@@ -11,7 +11,7 @@ exec > >(tee -a "$LOG_DIR/$NAME.stdout.log" >&2) 2>&1
 echo "Starting kube-apiserver on $(date)"
 
 # ask monit to start the process, within 60 seconds
-TIMEOUT=60
+TIMEOUT=180
 if timeout "$TIMEOUT" /bin/bash <<EOF
 #!/bin/bash
 
