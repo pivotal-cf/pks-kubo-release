@@ -43,6 +43,8 @@ builds:
     version: 1.9.0-build.70-bump-kubernetes-1.18.5+vmware.1
   4069751a-be33-4ab5-7d94-177379805c96:
     version: 1.9.0-build.10
+  448d2485-9440-483a-559f-fae900768d4b:
+    version: 1.9.0-build.81-bbr_lock_etcd_before_apiserver
   44b992f5-5eb6-402b-61d8-528577992ebe:
     version: 0.28.0
   588ab971-a83e-446e-4dd7-58afaa42913e:
