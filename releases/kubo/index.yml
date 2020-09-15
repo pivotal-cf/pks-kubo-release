@@ -109,6 +109,8 @@ builds:
     version: 0.11.0
   bc2eb970-2115-4588-6da6-a032610a9e9c:
     version: 1.7.0-build.75
+  c0f8f094-cc6a-4ffa-6251-678f9a04dd1b:
+    version: 1.9.0-build.80-bbr_lock_etcd_before_apiserver
   c4203761-1927-405c-6e2c-6727e789aa46:
     version: 1.9.0-build.68-bump-kubernetes-1.18.5+vmware.1
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
