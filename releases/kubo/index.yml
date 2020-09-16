@@ -91,6 +91,8 @@ builds:
     version: 0.18.0
   9b00911b-f2d5-47ef-6ef2-f68eb547cf0c:
     version: 0.15.0
+  a094bdf4-53cf-4a55-7e6b-c8bb277ee334:
+    version: 1.9.0-build.83-bbr_lock_etcd_before_apiserver
   a4dccd15-2f95-4c08-6ef5-f2debb580418:
     version: 0.17.0
   a6ea6323-e579-4ac5-5b05-fa728c776102:
