@@ -37,7 +37,7 @@ module PksKubernetesRelease
       command = "docker load -i #{staging_dir}/#{filename}"
       execute_system_call command
 
-      command = "docker image ls --filter 'reference=registry.tkg.vmware.run/#{container_image}:#{version_tag}' --format '{{.ID}}'"
+      command = "docker image ls --filter 'reference=projects.registry.vmware.com/tkg/#{container_image}:#{version_tag}' --format '{{.ID}}'"
       image_id = execute_system_call command
 
       command = "docker create #{image_id}"
@@ -138,10 +138,10 @@ def main(bora_number, kubernetes_version)
 end
 
 
-bora_number = "16796290"
+bora_number = "16929038"
 # When setting this, be sure not to include the 'v' at the beginning of the version
 # as well as be sure to leave the build number off (...+vmware.1 is correct,
 # ...+vmware.1.68 is not).
-kubernetes_version = "1.18.8+vmware.1"
+kubernetes_version = "1.19.2+vmware.1"
 
 main(bora_number, kubernetes_version)
