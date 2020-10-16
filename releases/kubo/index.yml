@@ -55,6 +55,8 @@ builds:
     version: 1.9.0-build.15-replace-nginx
   6211fa68-ed9c-4c12-6763-e2001b5029cb:
     version: 1.9.0-build.31-bump-kubernetes-1.18.1+vmware.1
+  622fef4b-61b5-4a53-537d-2fa99d049c5e:
+    version: 1.10.0-build.0-bump-kubernetes-1.19.2+vmware.1
   661aa1c0-4da7-43a9-500f-18debbf9f847:
     version: 1.9.0-build.66-bump-kubernetes-1.18.5+vmware.1
   665d71a9-8522-4c64-692a-7899458abae6:
