@@ -54,10 +54,10 @@ container-images/simple-server.tgz:
   size: 11953836
   object_id: d362a1a2-0a96-4e73-67a6-2e8565edc489
   sha: sha256:8c0c566079241cb5ec0c6708b47e2ee71b5dc470caa1cef62b0b2c671e784ef8
-container-images/vmware_coredns:1.6.7_vmware.3.tgz:
-  size: 13478434
-  object_id: fb7b9618-03f8-4b33-7eb5-ebbc0b27d3a0
-  sha: sha256:c6d4777cd6484bf23d91bdbc27b565eda0755e18f8aadfd431f070264ae869f8
+container-images/vmware_coredns:1.7.0_vmware.2.tgz:
+  size: 12774204
+  object_id: 7c343447-46a7-435f-472a-bdc31be6e21f
+  sha: sha256:7aa6cc5231900a55f720c1d5f970dbb3c36999dc0de53c4388dad0251d1fe46d
 container-images/vmware_metrics-server-amd64:v0.3.6.tgz:
   size: 12062146
   object_id: 301b9879-c1bf-42bb-6d90-f05929118056
