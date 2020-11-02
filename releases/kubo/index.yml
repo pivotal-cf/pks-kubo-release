@@ -117,6 +117,8 @@ builds:
     version: 0.11.0
   bc2eb970-2115-4588-6da6-a032610a9e9c:
     version: 1.7.0-build.75
+  bf7a1762-c110-4167-4c02-095b9340adf6:
+    version: 1.10.0-build.10-apiserver-additional-volume
   c4203761-1927-405c-6e2c-6727e789aa46:
     version: 1.9.0-build.68-bump-kubernetes-1.18.5+vmware.1
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
