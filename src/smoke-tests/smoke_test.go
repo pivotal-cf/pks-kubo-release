@@ -110,11 +110,11 @@ var _ = Describe("Smoke Tests for pks-kubernetes-release", func() {
 			podName := string(session.Out.Contents())
 
 			session = k8sRunner.RunKubectlCommand("get", "nodes", "-o", "jsonpath={.items[0].status.addresses[?(@.type == \"InternalIP\")].address}")
-			Eventually(session).Should(gexec.Exit(0))
+			Eventually(session, "60s").Should(gexec.Exit(0))
 			nodeIP := session.Out.Contents()
 
 			session = k8sRunner.RunKubectlCommand("get", "svc", deploymentName, "-o", "jsonpath={.spec.ports[0].nodePort}")
-			Eventually(session).Should(gexec.Exit(0))
+			Eventually(session, "60s").Should(gexec.Exit(0))
 			port := session.Out.Contents()
 
 			endpoint := fmt.Sprintf("http://%s:%s", nodeIP, port)
