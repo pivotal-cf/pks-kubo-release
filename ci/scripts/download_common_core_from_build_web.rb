@@ -66,7 +66,7 @@ end
 
 def git_commit_and_push(release_dir, kubernetes_version)
   Dir.chdir release_dir do
-    execute_system_call("git co -b bump-kubernetes-#{kubernetes_version}")
+    execute_system_call("git checkout -b bump-kubernetes-#{kubernetes_version}")
     execute_system_call("git add config/blobs.yml")
     execute_system_call("git add packages/kubernetes/packaging")
     execute_system_call("git add packages/kubernetes/spec")
@@ -138,10 +138,10 @@ def main(bora_number, kubernetes_version)
 end
 
 
-bora_number = "16772990"
+bora_number = "17113719"
 # When setting this, be sure not to include the 'v' at the beginning of the version
 # as well as be sure to leave the build number off (...+vmware.1 is correct,
 # ...+vmware.1.68 is not).
-kubernetes_version = "1.17.11+vmware.1"
+kubernetes_version = "1.17.13+vmware.1"
 
 main(bora_number, kubernetes_version)
