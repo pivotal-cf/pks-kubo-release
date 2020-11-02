@@ -1,9 +1,23 @@
 #!/bin/bash
 set -eu
 
+NAME="${0##*/}"
+
 kubectl="/var/vcap/packages/kubernetes/bin/"
 export PATH=${kubectl}:$PATH
 export KUBECONFIG="/var/vcap/jobs/smoke-tests/config/kubeconfig"
+
+LOG_DIR=/var/vcap/sys/log/smoke-tests
+
+send_process_stdout_to_logfile() {
+  exec 1>> "$LOG_DIR/$NAME.stdout.log"
+}
+send_process_stderr_to_logfile() {
+  exec 2>> "$LOG_DIR/$NAME.stderr.log"
+}
+
+send_process_stdout_to_logfile
+send_process_stderr_to_logfile
 
 echo "Running smoke tests"
 /var/vcap/packages/smoke-tests/run-smoke-tests -ginkgo.randomizeAllSpecs -ginkgo.failOnPending  -ginkgo.v

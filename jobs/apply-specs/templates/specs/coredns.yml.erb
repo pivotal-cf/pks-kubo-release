@@ -58,8 +58,8 @@ data:
         health
         kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
-          upstream
           fallthrough in-addr.arpa ip6.arpa
+          ttl 30
         }
         prometheus :9153
         forward . /etc/resolv.conf {
@@ -102,7 +102,7 @@ spec:
           operator: "Exists"
       containers:
       - name: coredns
-        image: registry.tkg.vmware.run/coredns:v1.6.7_vmware.3
+        image: projects.registry.vmware.com/tkg/coredns:v1.7.0_vmware.2
         imagePullPolicy: IfNotPresent
         resources:
           limits:
