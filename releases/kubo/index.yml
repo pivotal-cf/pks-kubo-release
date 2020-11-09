@@ -45,6 +45,8 @@ builds:
     version: 1.9.0-build.10
   44b992f5-5eb6-402b-61d8-528577992ebe:
     version: 0.28.0
+  52efb628-ff86-47b1-72ec-997799359cfd:
+    version: 1.10.0-build.15-1.10-volumes
   588ab971-a83e-446e-4dd7-58afaa42913e:
     version: 0.29.0
   5af44adb-ba09-4c37-5de7-d89b1d177aa9:
