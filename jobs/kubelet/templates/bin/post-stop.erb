@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+nginx_images=$(/var/vcap/jobs/kubelet/packages/docker/bin/docker images| grep nginx-ingress-controller | awk '{print $3}')
+
+# https://pivotal-spike.atlassian.net/browse/PKS-901
+# Removing the cached layers of nginx-ingress-controller
+# https://github.com/helm/charts/issues/15994#issuecomment-545986998
+for img in ${nginx_images}; do
+    echo "removing image ${img}"
+    /var/vcap/jobs/kubelet/packages/docker/bin/docker rmi -f ${img}
+done
+
+exit 0
