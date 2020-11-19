@@ -23,6 +23,13 @@ processes:
   executable: /var/vcap/packages/kubernetes/bin/kube-apiserver
   limits:
     open_files: 65535
+  <% if_p('k8s-args.egress-selector-config-file') do |egress_selector_config_file| %>
+  additional_volumes:
+  - path: /var/vcap/store/kubo-apiserver
+    writable: false
+  - path: /var/vcap/data/kubo-apiserver
+    writable: true
+  <% end %>
   args:
   <%
     if_p('k8s-args') do |args|
