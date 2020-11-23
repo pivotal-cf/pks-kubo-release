@@ -133,6 +133,8 @@ builds:
     version: 1.10.0-build.17-main
   d5e86543-9e0c-449b-7f32-a4698615b75b:
     version: 0.24.0
+  dac7b88e-3885-45db-6036-53a13841958f:
+    version: 1.10.0-build.23-enable-etcd-peer-verify
   dd20178a-f3ce-41ac-522a-4ec335faefe7:
     version: 0.38.0
   dfe094e7-55fe-42e0-542f-5215506e19c4:
