@@ -61,6 +61,5 @@ fi
   --peer-cert-file="/var/vcap/jobs/etcd/config/peer.crt" \
   --peer-key-file="/var/vcap/jobs/etcd/config/peer.key" \
   --cipher-suites=<%= CIPHER_SUITES %> \
-  --experimental-peer-skip-client-san-verification=true \
   --enable-v2=true \
 <% if_p("etcd.metrics_protocol", "etcd.metrics_port") do |protocol, port| %>  --listen-metrics-urls=<%= protocol %>://0.0.0.0:<%= port %> \<% end %>
