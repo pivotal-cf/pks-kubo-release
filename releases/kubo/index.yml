@@ -41,6 +41,8 @@ builds:
     version: 0.40.0
   3fff7d06-acd4-4663-43a4-0de901cdcb46:
     version: 1.9.0-build.70-bump-kubernetes-1.18.5+vmware.1
+  4004958d-6a4c-403b-654c-da51782e3618:
+    version: 1.10.0-build.25-1.10-antrea
   4069751a-be33-4ab5-7d94-177379805c96:
     version: 1.9.0-build.10
   44b992f5-5eb6-402b-61d8-528577992ebe:
