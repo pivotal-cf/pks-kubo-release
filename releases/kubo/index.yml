@@ -117,6 +117,8 @@ builds:
     version: 1.10.0-build.16-add-smoke-test-log-also-to-stdout
   c4203761-1927-405c-6e2c-6727e789aa46:
     version: 1.9.0-build.68-bump-kubernetes-1.18.5+vmware.1
+  c4d6cfed-8081-4d4c-4fc8-a3f33ec2f719:
+    version: 1.10.0-build.25-main
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
     version: 0.27.0
   c9984ee5-d029-48d0-5c49-6ec099bf12b3:
