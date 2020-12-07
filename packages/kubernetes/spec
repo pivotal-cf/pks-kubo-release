@@ -3,4 +3,4 @@ name: kubernetes
 
 files:
 - container-images/*
-- common-core-kubernetes-1.19.2+vmware.1/*
+- common-core-kubernetes-1.19.4+vmware.2/*

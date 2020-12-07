@@ -10,38 +10,38 @@ cifs-utils-6.7.tar.bz2:
   size: 363647
   object_id: c529967d-57fa-4b41-685e-ff0a507ffaad
   sha: 9ba5091d7c2418a90773c861f04a3f4a36854c14
-cni/cni-plugins-amd64-v0.8.7+vmware.1.tgz:
-  size: 38217016
-  object_id: 6fbbd9b3-fc62-4a1f-7184-fdacc3a1632f
-  sha: sha256:80aa901a72b6713575ac73948482c2f3c6065adc756ffb4fc85d7576f10243f8
+cni/cni-plugins-amd64-v0.8.7+vmware.3.tgz:
+  size: 39810209
+  object_id: aa18f17d-8729-43a8-5be8-89f1b1fe5b9a
+  sha: sha256:f50c9c152223f03ddbfa0d8deafebce9ea2720ecd838c28aee4e4680ce3be5e3
 cni/nsenter-2.27.1:
   size: 27520
   object_id: f78a843e-4bf1-47c4-578b-786fcf8a2c94
   sha: sha256:9999ffda41275f924bcbb1d9d7b129421838d917236511eccacae7dc0ad631a9
-common-core-kubernetes-1.19.2+vmware.1/kube-apiserver:
-  size: 159619692
-  object_id: 06c19242-2445-45f8-782b-2cb8cd7e370f
-  sha: sha256:03b6fd31d75797688d3af66c1bd3ebdbad48ca7ef0e884ce25536ff9ee3b6cbb
-common-core-kubernetes-1.19.2+vmware.1/kube-controller-manager:
-  size: 149971855
-  object_id: bb7c8dbd-7d56-4ddc-7a2e-97606b282e1e
-  sha: sha256:09c02fcda2de409cf1b89101231ac0bef5c1245b54f184d2d7877b029c2b8c97
-common-core-kubernetes-1.19.2+vmware.1/kube-proxy:
-  size: 55047343
-  object_id: 1d814700-d092-48a2-7705-7c639806448d
-  sha: sha256:f55600f9617165de5de0e11c377244ec3fb0bc47e1b90e45e6609b4ce1c2b7c9
-common-core-kubernetes-1.19.2+vmware.1/kube-scheduler:
-  size: 60277969
-  object_id: 3bb7d914-373d-4f6b-49a7-fa20b213a348
-  sha: sha256:d6373666634e8366d721772807c82013b3a2ec84ab4c1a857b1f0f9e77392172
-common-core-kubernetes-1.19.2+vmware.1/kubectl:
-  size: 60377237
-  object_id: 14d64caf-e6e8-446c-62e4-c909e34d976f
-  sha: sha256:5cc21aa1b4e9afd2f3496f5054d08ebb286afe1ae086f0275929950b4f2a4d93
-common-core-kubernetes-1.19.2+vmware.1/kubelet:
-  size: 151173584
-  object_id: b0b1acd2-0bf9-4ebe-78af-e1b3b7604708
-  sha: sha256:ebc4856d79784f47c06f84d8500ab256a80ac4c9cceabe42d948eaa95141279e
+common-core-kubernetes-1.19.4+vmware.2/kube-apiserver:
+  size: 159647947
+  object_id: c89a4daf-4535-43c9-7bc4-047f29ff067d
+  sha: sha256:1e757258ac3a314a7e016ad9767d4e4c25456d035636ab4c00d63d52961714f4
+common-core-kubernetes-1.19.4+vmware.2/kube-controller-manager:
+  size: 150002895
+  object_id: 62409d4e-2932-4efc-6e36-f5d5316f40df
+  sha: sha256:6f8f853fbb16cca13e606976918ef7a1f012cf5c078474817040347714e8eb20
+common-core-kubernetes-1.19.4+vmware.2/kube-proxy:
+  size: 55039006
+  object_id: 83a3e83a-71fa-4109-4ab9-31d7d6a24ee9
+  sha: sha256:cb27d12caf5982b375fe4e6684520bf91c9999dd0ee0e29a798abb28d9eec183
+common-core-kubernetes-1.19.4+vmware.2/kube-scheduler:
+  size: 60286325
+  object_id: ec79a468-8b1a-4496-6eff-58dfd1226514
+  sha: sha256:517901883e2f84add2de4595f0b8004c68aba8a3dfba805e027c4edf5e7a5141
+common-core-kubernetes-1.19.4+vmware.2/kubectl:
+  size: 60377130
+  object_id: de74ac08-9806-4b00-636a-9a3c342d52b2
+  sha: sha256:15c137143d4a36c3ac25640f6672cb226c471a822cc4f2cf5a094c645ed68624
+common-core-kubernetes-1.19.4+vmware.2/kubelet:
+  size: 151223088
+  object_id: 77eb03c2-c639-461b-44e8-f4ac3be54f73
+  sha: sha256:10745bea3f8892733fd5c42e8093e7107948c50939fe6192eb9ae97b34792371
 conntrack/conntrack_1.4.3-3_amd64.deb:
   size: 27346
   object_id: 0c4aa633-3de8-4a8c-7170-36b3fc9e4a9c
@@ -54,10 +54,10 @@ container-images/simple-server.tgz:
   size: 11953836
   object_id: d362a1a2-0a96-4e73-67a6-2e8565edc489
   sha: sha256:8c0c566079241cb5ec0c6708b47e2ee71b5dc470caa1cef62b0b2c671e784ef8
-container-images/vmware_coredns:1.7.0_vmware.2.tgz:
-  size: 12774204
-  object_id: 7c343447-46a7-435f-472a-bdc31be6e21f
-  sha: sha256:7aa6cc5231900a55f720c1d5f970dbb3c36999dc0de53c4388dad0251d1fe46d
+container-images/vmware_coredns:1.7.0_vmware.5.tgz:
+  size: 12776123
+  object_id: 9f034b25-3ad2-46dd-6178-ddce67d40224
+  sha: sha256:bb48764845902bb7b2fc38a77315156c5dd7b512189790655c23a1f060c200b6
 container-images/vmware_metrics-server-amd64:v0.3.6.tgz:
   size: 12062146
   object_id: 301b9879-c1bf-42bb-6d90-f05929118056
@@ -78,10 +78,10 @@ docker/bridge-utils-1.5.tar.gz:
   size: 33472
   object_id: 8235dfbc-d475-4b0f-7682-cc912fc8fdcd
   sha: sha256:80c18ef50bff135f406bfc503ca832f9e3a33f314cce85717a4dbd2b36409bd2
-docker/docker-19.03.5.tgz:
-  size: 63252595
-  object_id: 427f7190-8cbf-49c5-60a8-41ed40db58d0
-  sha: sha256:50cdf38749642ec43d6ac50f4a3f1f7f6ac688e8d8b4e1c5b7be06e1a82f06e9
+docker/docker-19.03.13.tgz:
+  size: 62219270
+  object_id: 5a45a4e1-e930-4a16-6ad0-affbdef607a1
+  sha: sha256:ddb13aff1fcdcceb710bf71a210169b9c1abfd7420eeaf42cf7975f8fae2fcc8
 etcd/etcd-v3.4.13-linux-amd64.tar.gz:
   size: 17373136
   object_id: dbe2cf3f-a669-4075-5c27-d88cbc577a2e
