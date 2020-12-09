@@ -6,6 +6,7 @@ templates:
   config/audit_policy.yml.erb: config/audit_policy.yml
   config/bpm.yml.erb: config/bpm.yml
   config/cloud-provider.ini.erb: config/cloud-provider.ini
+  config/cluster-signing-ca.pem.erb: config/cluster-signing-ca.pem
   config/etcd-ca.crt.erb: config/etcd-ca.crt
   config/etcd-client.crt.erb: config/etcd-client.crt
   config/etcd-client.key.erb: config/etcd-client.key
@@ -28,6 +29,8 @@ properties:
     description: The password for the admin account
   admin-username:
     description: The admin username for the Kubernetes cluster
+  cluster-signing:
+    description: "CA Certificate and private key for the certificate controller to issue certificates"
   audit-policy:
     description: The file contents for the API server's audit policy
   http_proxy:
