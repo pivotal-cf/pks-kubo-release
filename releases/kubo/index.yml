@@ -125,6 +125,8 @@ builds:
     version: 1.7.0-build.75
   bd5916aa-6369-4227-7705-9e1a9bcccd72:
     version: 1.10.0-build.16-add-smoke-test-log-also-to-stdout
+  bdc4cb3c-a132-4543-5b13-e2810df6d2e8:
+    version: 1.10.0-build.32-wht-add-apiserver-ca
   c4203761-1927-405c-6e2c-6727e789aa46:
     version: 1.9.0-build.68-bump-kubernetes-1.18.5+vmware.1
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
