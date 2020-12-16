@@ -123,7 +123,7 @@ retry() {
       echo "Successfully ${func}"
       return 0
     fi
-    printf "[%s] Unsuccessful ${func}, retrying attempt %d out of %d" "$(date +"%Y-%m-%d %T %Z")" "$attempts_remaining" "$max_attempts" >&2
+    printf "[%s] Unsuccessful ${func}, retrying attempt %d out of %d" "$(date +"%Y-%m-%d %T.%6N %Z")" "$attempts_remaining" "$max_attempts" >&2
     attempts_remaining=$((attempts_remaining + 1))
     sleep 1
   done
