@@ -97,6 +97,8 @@ builds:
     version: 0.6.0
   977733e3-57f1-418e-4936-8cc1d2609e52:
     version: 1.9.0-build.64-master
+  980145dc-ba4e-4bfa-6b6e-8b34b2f0df9a:
+    version: 1.10.0-build.37-kube-proxy-limits
   9acf36fd-7449-410d-5732-9c1aa000f0a7:
     version: 0.18.0
   9b00911b-f2d5-47ef-6ef2-f68eb547cf0c:
