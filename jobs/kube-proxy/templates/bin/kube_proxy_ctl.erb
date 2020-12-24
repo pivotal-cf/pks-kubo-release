@@ -45,6 +45,8 @@ start_kubernetes_proxy() {
 
   sed -i "s|HOSTNAMEOVERRIDE|$(get_hostname_override)|g"  /var/vcap/jobs/kube-proxy/config/config.yml
 
+ ulimit -n 65535
+
  kube-proxy \
   <%-
     if_p('k8s-args') do |args|
