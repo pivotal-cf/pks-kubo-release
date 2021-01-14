@@ -37,6 +37,8 @@ builds:
     version: 1.10.0-build.30-main
   3572627e-340e-48b5-498e-a75ba06498f3:
     version: 0.20.0
+  372edb06-b4ae-4a85-7f47-68e4bd427d8d:
+    version: 1.10.0-build.41-wht-node-drain
   3a6fe5ab-d5b6-4d09-5836-3ce87c2a4a86:
     version: 0.26.0
   3c8e7c20-7382-4525-7285-dbd0d00a65af:
