@@ -25,6 +25,8 @@ builds:
     version: 0.12.0
   2c56c031-ee11-4c21-5362-ad01c8aa00e8:
     version: 0.0.2
+  2d774e4b-fc7c-4a93-4e07-93c4f0c1db53:
+    version: 1.10.0-build.42-add-force-kill-to-docker-job
   2e52cae8-0a90-4da8-6416-d0e1f1e3c413:
     version: 1.9.0-build.67-bump-kubernetes-1.18.5+vmware.1
   2f0dcb03-bfa3-4e22-75b4-f76802c6aa3a:
