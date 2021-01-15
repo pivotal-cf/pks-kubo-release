@@ -91,6 +91,8 @@ builds:
     version: 0.25.0
   8b0e3a6a-98ce-4fa8-4d49-97a02518dc1c:
     version: 1.10.0-build.19-main
+  8b87f406-4578-4ef6-701e-8b38fadbc1da:
+    version: 1.10.0-build.43-add-force-kill-to-docker-job
   916ada95-3ad9-40c7-7ee3-23035e8db3c9:
     version: 0.8.1
   91b96f90-4702-4ead-4805-ba020a1b4ce8:
