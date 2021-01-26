@@ -41,6 +41,7 @@ kubectl="/var/vcap/packages/kubernetes/bin/kubectl --kubeconfig=/var/vcap/jobs/k
 
   if iaas=="vsphere"
     labels << "failure-domain.beta.kubernetes.io/zone=#{spec.az}"
+    labels << "topology.kubernetes.io/zone=#{spec.az}"
   end
 
   if_p('k8s-args') do |args|
