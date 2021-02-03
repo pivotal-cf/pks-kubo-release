@@ -155,6 +155,8 @@ builds:
     version: 1.9.0-build.78-main
   e15812e1-6fb0-41e0-626c-5fd4c75f316d:
     version: 1.9.0-build.8
+  e286c980-0464-42cb-615d-fd877e69063f:
+    version: 1.10.0-build.45-coredns-pods-resillient
   e4e4e93a-2a43-429b-6217-be7b3530f054:
     version: 1.10.0-build.21-main
   e641a64f-b4c1-4c35-653c-3b957156bec0:
