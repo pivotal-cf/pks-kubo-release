@@ -31,6 +31,8 @@ builds:
     version: 1.9.0-build.67-bump-kubernetes-1.18.5+vmware.1
   2f0dcb03-bfa3-4e22-75b4-f76802c6aa3a:
     version: 1.9.0-build.71-bump-kubernetes-1.18.5+vmware.1
+  331dfc92-4155-4b8b-6131-c2a0d337fc42:
+    version: 1.9.0-build.103-1.9.x
   34996606-8c15-484c-7814-3ce2ff351695:
     version: 1.7.0-build.76
   3572627e-340e-48b5-498e-a75ba06498f3:
