@@ -93,6 +93,8 @@ builds:
     version: 0.8.1
   91b96f90-4702-4ead-4805-ba020a1b4ce8:
     version: 0.32.0
+  957f6d31-8e80-4c96-6435-cb05854d7ed0:
+    version: 1.9.0-build.118-bump-kubernetes-1.18.15+vmware.1
   9687f88d-4b0c-4461-5a33-8092fa348c77:
     version: 1.9.0-build.76-main
   976126d2-23e7-4e7b-4bb5-daf648cf9f5b:
