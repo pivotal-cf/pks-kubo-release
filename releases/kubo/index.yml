@@ -49,6 +49,8 @@ builds:
     version: 0.26.0
   3c8e7c20-7382-4525-7285-dbd0d00a65af:
     version: 1.9.0-build.69-bump-kubernetes-1.18.5+vmware.1
+  3cf533e4-7bb7-4c2a-4292-509e33bf945f:
+    version: 1.9.0-build.121-bump-docker-19.03.14-on-1.9.x
   3d10b0b5-9169-4c1a-4fe8-3252cf688457:
     version: 0.40.0
   3fff7d06-acd4-4663-43a4-0de901cdcb46:
