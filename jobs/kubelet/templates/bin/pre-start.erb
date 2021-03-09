@@ -1,0 +1,78 @@
+#!/bin/bash -exu
+
+CONFIG_DIR=/var/vcap/jobs/kubelet/config
+JQ_CMD=/var/vcap/packages/jq/bin/jq
+PKS_API_URL="https://<%= link('pks_api_shared').p('pks.fqdn') %>:9021/internal/certificates/kubelet"
+NODE_IP="<%= spec.ip %>"
+BOSH_ID="<%= spec.id %>"
+DEPOLYMENT_NAME="<%= spec.deployment %>"
+## For information only
+NODE_NAME="<%= spec.name %>"
+
+CLUSTER_UUID=$(echo "${DEPOLYMENT_NAME}" | cut -d'_' -f 2)
+KUBELET_CERT_PATH="${CONFIG_DIR}/kubelet.pem"
+KUBELET_KEY_PATH="${CONFIG_DIR}/kubelet-key.pem"
+
+
+CONFIG_FILE_NAME="${CONFIG_DIR}/file-arguments.json"
+
+generate_post_data(){
+cat <<EOF
+{
+  "cluster_uuid": "${CLUSTER_UUID}",
+  "bosh_id": "${BOSH_ID}",
+  "ip": "${NODE_IP}"
+}
+EOF
+}
+
+do_kubelet_certificate_sign(){
+    set +e
+    if [[ "$1" == "true" ]]; then 
+        api_url="${PKS_API_URL}/generate"
+    else
+        api_url="${PKS_API_URL}/generate_if_not_present"
+    fi
+    api_call='curl -X POST --data "$(generate_post_data)" -H "Content-Type: application/json" --cacert /var/vcap/jobs/kubelet/certificates/pks.crt "${api_url}"'
+    rety_count=0
+    api_output=$(eval "${api_call}")
+    while [[ "$rety_count" -lt 3 && "$api_output" =~ .*error.* ]]; do
+        sleep 5
+        rety_count=$(( 1 + rety_count ))
+        api_output=$(eval "${api_call}")
+    done
+    if [[ "$api_output" =~ .*error.* ]]; then
+        echo "Failed to get kubelet certificate."
+        exit 1
+    else
+        certificate_pem=$(echo "${api_output}" | ${JQ_CMD} -r '.value.certificate')
+        private_key_pem=$(echo "${api_output}" | ${JQ_CMD} -r '.value.private_key')
+        $(echo "${certificate_pem}" > "${KUBELET_CERT_PATH}")
+        $(echo "${private_key_pem}" > "${KUBELET_KEY_PATH}")
+        echo "successfully prepared kubelet certificate."
+    fi
+    set -e 
+}
+
+main(){
+    if [ -f $CONFIG_FILE_NAME ]; then
+        chmod +x /var/vcap/packages/file-generator/bin/file_generator
+        /var/vcap/packages/file-generator/bin/file_generator $CONFIG_FILE_NAME kubelet
+    fi
+
+    if [ ! -f $KUBELET_CERT_PATH ];then
+        ## Sign kubelet certificate for the first boot
+        echo "Start to sign kubelet certificate..."
+        do_kubelet_certificate_sign "true"
+    else
+        ## parse the content of the certificate, sign if the ip address does not match.
+        ip_in_cert=$(openssl x509 -text -noout -in $KUBELET_CERT_PATH -certopt no_subject,no_header,no_version,no_serial,no_signame,no_validity,no_issuer,no_pubkey,no_sigdump,no_aux | grep "IP Address" | cut -d":" -f2)
+        if [[ $NODE_IP == $ip_in_cert ]]; then
+            do_kubelet_certificate_sign "false"
+        else
+            do_kubelet_certificate_sign "true"
+        fi 
+    fi
+}
+
+main
