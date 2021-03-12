@@ -81,6 +81,8 @@ builds:
     version: 1.9.0-build.117-1.9.x
   744fe93d-7c3e-4f35-4932-e2f39b471420:
     version: 0.37.0
+  7451f482-aa68-45aa-79fc-afe0020acac9:
+    version: 1.9.0-build.132-bump-docker-19.03.14-on-1.9.x
   7522b282-5130-430d-4f62-c615ab208347:
     version: 1.9.0-build.109-1.9.x
   766034d0-0838-4269-5d5d-9d829aaed84e:
