@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e -x
+
+CPUS=`grep -c ^processor /proc/cpuinfo`
+
+tar xzf Python-3.9.*.tgz
+pushd Python-3.9.*
+	./configure --prefix=${BOSH_INSTALL_TARGET}
+
+	make -j${CPUS}
+	make install
+    #export PATH=${PATH}:${BOSH_INSTALL_TARGET}/bin
+popd
