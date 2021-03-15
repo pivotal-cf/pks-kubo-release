@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -e -x
+
+PYTHON2_PACKAGE="python2"
+PYTHON2_VERSION="2.7.18"
+
+CPUS=`grep -c ^processor /proc/cpuinfo`
+
+tar xzf Python-2.7.*.tgz
+pushd Python-2.7.*
+	./configure --prefix=${BOSH_INSTALL_TARGET}
+
+	make -j${CPUS}
+	make install
+	ln -s ${BOSH_INSTALL_TARGET}/bin/python2  /usr/bin/python2
+	ln -s ${BOSH_INSTALL_TARGET}/bin/python2  /usr/bin/python
+popd
+
+
+# Open Source Licensing Information, used by the vmware OSM system
+# These license abbreviations are defined by the OSM system
+# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
+
+PYTHON2_SOURCE_URL="https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz"
+PYTHON2_LICENSE="PSF"
+
+cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
+{ "packages": [
+    {
+    "name": "$PYTHON2_PACKAGE",
+    "version": "$PYTHON2_VERSION",
+    "url": "$PYTHON2_SOURCE_URL",
+    "license": "$PYTHON2_LICENSE"
+    }
+]}
+EOF
