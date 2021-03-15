@@ -7,6 +7,8 @@ builds:
     version: 0.10.0
   0cbc93b8-cad3-4d3a-7b09-2713be6937d7:
     version: 1.7.0-build.73
+  13441103-cb10-42e3-65b3-44012c988b83:
+    version: 1.8.0-build.59-add-python3.9.2-package
   18cd3d40-ddf1-42d9-6988-6107be84f252:
     version: 0.0.3
   2263d41e-4b66-4fc4-51a0-757895713f1c:
