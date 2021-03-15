@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e -x
+
+CPUS=`grep -c ^processor /proc/cpuinfo`
+
+tar xzf Python-2.7.*.tgz
+pushd Python-2.7.*
+	./configure --prefix=${BOSH_INSTALL_TARGET}
+
+	make -j${CPUS}
+	make install
+    export PATH=${PATH}:${BOSH_INSTALL_TARGET}/bin
+popd

@@ -1,3 +1,11 @@
+Python-2.7.18.tgz:
+  size: 17539408
+  object_id: b5c53ae4-9dd5-47a8-56a1-314e6f64d670
+  sha: sha256:da3080e3b488f648a3d7a4560ddee895284c3380b11d6de75edb986526b9a814
+Python-3.9.2.tgz:
+  size: 25399571
+  object_id: bf0f5e65-b787-41ab-6827-8f269faa642a
+  sha: sha256:7899e8a6f7946748830d66739f2d8f2b30214dad956e56b9ba216b3de5581519
 autoconf-2.69.tar.gz:
   size: 1927468
   object_id: 2e4a01bd-aa1e-4fbc-5f56-80aa40d805e3

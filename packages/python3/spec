@@ -1,0 +1,7 @@
+---
+name: python3
+
+dependencies: []
+
+files:
+  - Python-3.9.2.tgz # From  https://www.python.org/ftp/python/3.9.2/Python-3.9.2.tgz
