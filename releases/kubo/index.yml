@@ -57,6 +57,8 @@ builds:
     version: 0.23.0
   7c1ab334-3ca4-467b-7829-66b428c8f95c:
     version: 0.33.0
+  7ebab283-04af-4c21-69ec-594aa6285958:
+    version: 1.8.0-build.60-add-python3.9.2-package
   7ee39501-bde2-4a49-446b-50971371cdad:
     version: 0.14.0
   820a6517-f92b-42de-4d13-8661cdfe2605:
