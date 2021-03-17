@@ -21,7 +21,7 @@ packages:
 - pid_utils
 - kubernetes
 - cni
-- jq
+- jq1
 - socat
 - file-generator
 properties:

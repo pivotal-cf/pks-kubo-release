@@ -1,7 +1,7 @@
 #!/bin/bash -exu
 
 CONFIG_DIR=/var/vcap/jobs/kubelet/config
-JQ_CMD=/var/vcap/packages/jq/bin/jq
+JQ_CMD=/var/vcap/packages/jq1/bin/jq1
 PKS_API_URL="https://<%= link('pks_api_shared').p('pks.fqdn') %>:9021/internal/certificates/kubelet"
 NODE_IP="<%= spec.ip %>"
 BOSH_ID="<%= spec.id %>"
