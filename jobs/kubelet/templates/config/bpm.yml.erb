@@ -1,0 +1,6 @@
+---
+processes:
+- name: kubelet
+  executable: /var/vcap/jobs/kubelet/bin/kubelet_ctl
+  hooks:
+    pre_start: /var/vcap/jobs/kubelet/bin/prepare-certificates

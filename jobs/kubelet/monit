@@ -1,6 +1,6 @@
 check process kubelet
   with pidfile /var/vcap/sys/run/kubernetes/kubelet.pid
-  start program "/var/vcap/jobs/kubelet/bin/kubelet_ctl start" with timeout 120 seconds
-  stop program "/var/vcap/jobs/kubelet/bin/kubelet_ctl stop"
+  start program "/var/vcap/jobs/bpm/bin/bpm start kubelet" with timeout 120 seconds
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop kubelet"
   group vcap
   depends on docker
