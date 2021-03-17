@@ -1,18 +1,16 @@
 #!/bin/bash -exu
 
 CONFIG_DIR=/var/vcap/jobs/kubelet/config
-JQ_CMD=/var/vcap/packages/jq/bin/jq
-PKS_API_URL="https://<%= link('pks_api_shared').p('pks.fqdn') %>:9021/internal/certificates/kubelet"
+JQ_CMD=/var/vcap/packages/jq1/bin/jq1
+PKS_API_HOST="<%= link('pks_api_shared').p('pks.fqdn') %>"
+PKS_API_URL="https://${PKS_API_HOST}:9021/internal/certificates/kubelet"
 NODE_IP="<%= spec.ip %>"
 BOSH_ID="<%= spec.id %>"
 DEPOLYMENT_NAME="<%= spec.deployment %>"
-## For information only
-NODE_NAME="<%= spec.name %>"
 
 CLUSTER_UUID=$(echo "${DEPOLYMENT_NAME}" | cut -d'_' -f 2)
 KUBELET_CERT_PATH="${CONFIG_DIR}/kubelet.pem"
 KUBELET_KEY_PATH="${CONFIG_DIR}/kubelet-key.pem"
-
 
 CONFIG_FILE_NAME="${CONFIG_DIR}/file-arguments.json"
 
@@ -26,6 +24,17 @@ cat <<EOF
 EOF
 }
 
+wait_for_pks_master_dns_resolve(){
+## wait for 5*24 = 120 seconds 
+retry=0
+while [[ $retry -lt 24 ]]; do
+  ping -c 3 "${PKS_API_HOST}" && break
+  echo "pks_master_aliases dns not resolving ,wait for 5 seconds to retry..."
+  retry=$(( 1 + retry ))
+  sleep 5
+done
+}
+
 do_kubelet_certificate_sign(){
     set +e
     if [[ "$1" == "true" ]]; then 
@@ -34,14 +43,14 @@ do_kubelet_certificate_sign(){
         api_url="${PKS_API_URL}/generate_if_not_present"
     fi
     api_call='curl -X POST --data "$(generate_post_data)" -H "Content-Type: application/json" --cacert /var/vcap/jobs/kubelet/certificates/pks.crt "${api_url}"'
-    rety_count=0
+    retry_count=0
     api_output=$(eval "${api_call}")
-    while [[ "$rety_count" -lt 3 && "$api_output" =~ .*error.* ]]; do
+    while [[ "$retry_count" -lt 3 && ( -z $api_output || $api_output =~ .*error.* )]]; do
         sleep 5
-        rety_count=$(( 1 + rety_count ))
+        retry_count=$(( 1 + retry_count ))
         api_output=$(eval "${api_call}")
     done
-    if [[ "$api_output" =~ .*error.* ]]; then
+    if [[ -z $api_output || $api_output =~ .*error.* ]]; then
         echo "Failed to get kubelet certificate."
         exit 1
     else
@@ -59,6 +68,8 @@ main(){
         chmod +x /var/vcap/packages/file-generator/bin/file_generator
         /var/vcap/packages/file-generator/bin/file_generator $CONFIG_FILE_NAME kubelet
     fi
+    
+    wait_for_pks_master_dns_resolve
 
     if [ ! -f $KUBELET_CERT_PATH ];then
         ## Sign kubelet certificate for the first boot
