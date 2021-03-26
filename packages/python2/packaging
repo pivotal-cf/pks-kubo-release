@@ -2,6 +2,12 @@
 
 set -e -x
 
+if [ -e /usr/bin/python2 ]
+then
+    echo "python2 already exists"
+    exit
+fi
+
 PYTHON2_PACKAGE="python2"
 PYTHON2_VERSION="2.7.18"
 
@@ -14,7 +20,8 @@ pushd Python-2.7.*
 	make -j${CPUS}
 	make install
 	ln -s ${BOSH_INSTALL_TARGET}/bin/python2  /usr/bin/python2
-	ln -s ${BOSH_INSTALL_TARGET}/bin/python2  /usr/bin/python
+	echo "using python2 as default python"
+	ln -sf ${BOSH_INSTALL_TARGET}/bin/python2  /usr/bin/python
 popd
 
 
