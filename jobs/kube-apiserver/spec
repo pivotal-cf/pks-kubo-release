@@ -18,6 +18,7 @@ templates:
   config/oidc-ca.pem.erb: config/oidc-ca.pem
   config/openstack-ca.crt.erb: config/openstack-ca.crt
   config/service-account-public-key.pem.erb: config/service-account-public-key.pem
+  config/service-account-private-key.pem.erb: config/service-account-private-key.pem
   config/service_key.json.erb: config/service_key.json
   config/tokens.csv.erb: config/tokens.csv
 packages:
@@ -62,6 +63,8 @@ properties:
       interactions)
   service-account-public-key:
     description: Public key used to verify service account tokens
+  service-account-private-key:
+    description: "Private key used to sign generated service account tokens"
   tls-cipher-suites:
     description: Comma-separated list of cipher suites.
     example: |
