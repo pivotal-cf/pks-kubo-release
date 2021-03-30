@@ -2,13 +2,13 @@
 
 wait_for_kube-apiserver() {
     set +e  # if the health server check returns an error, we want to keep trying
-    KUBE_APISERVER_PORT="8080"
+    KUBE_APISERVER_PORT="8443"
     startup_duration=0
     kube_apiserver_health_response=""
     while [[ "$startup_duration" -lt 120 && "$kube_apiserver_health_response" != "ok" ]]; do
         sleep 5
         startup_duration=$(( 5 + startup_duration ))
-        kube_apiserver_health_response="$(curl localhost:$KUBE_APISERVER_PORT/healthz)"
+        kube_apiserver_health_response="$(curl https://localhost:$KUBE_APISERVER_PORT/healthz -k)"
 
         echo "Have waited $startup_duration seconds for kube-apiserver to report healthy, currently:"
         echo "$kube_apiserver_health_response"
