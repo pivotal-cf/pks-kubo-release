@@ -26,36 +26,4 @@ chmod +x ${BOSH_INSTALL_TARGET}/bin/*
 # These license abbreviations are defined by the OSM system
 # See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
 
-AUTOCONF_LICENSE=GPL2.0
-AUTOCONF_SOURCE_URL="http://ftp.gnu.org/gnu/autoconf/$AUTOCONF_PACKAGE-$AUTOCONF_VERSION.tar.gz"
-BRIDGE_UTILS_SOURCE_URL="https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/bridge-utils/1.5-15ubuntu1/bridge-utils_1.5.orig.tar.gz"
-BRIDGE_UTILS_LICENSE="GPL2.0"
-
-# source: https://github.com/docker/docker-ce/blob/v18.09.8/components/engine/LICENSE
-DOCKER_LICENSE="Apache2.0"
-DOCKER_SOURCE_URL="https://github.com/docker/docker-ce/archive/v18.09.8.zip"
-
-cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
-{ "packages": [
-    {
-    "name": "$AUTOCONF_PACKAGE",
-    "version": "$AUTOCONF_VERSION",
-    "url": "$AUTOCONF_SOURCE_URL",
-    "license": "$AUTOCONF_LICENSE"
-    },
-    {
-    "name": "$BRIDGE_UTILS_PACKAGE",
-    "version": "$BRIDGE_UTILS_VERSION",
-    "url": "$BRIDGE_UTILS_SOURCE_URL",
-    "license": "$BRIDGE_UTILS_LICENSE"
-    },
-    {
-    "name": "$DOCKER_PACKAGE",
-    "version": "$DOCKER_VERSION",
-    "url": "$DOCKER_SOURCE_URL",
-    "license": "$DOCKER_LICENSE"
-    }
-]}
-EOF
-
 #https://github.com/containerd/containerd/releases/download/v1.4.3/cri-containerd-cni-1.4.3-linux-amd64.tar.gz
