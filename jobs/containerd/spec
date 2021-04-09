@@ -5,8 +5,13 @@ packages:
 - containerd
 
 templates:
+  bin/cgroupfs-mount: bin/cgroupfs-mount
   bin/containerd_ctl.erb: bin/containerd_ctl
   config/config.toml.erb: config/config.toml
+  bin/pre-start.erb: bin/pre-start
+  bin/envrc: bin/envrc
+  bin/setup-user-env: bin/setup-user-env
+  lib/wait_for_containerd.sh: lib/wait_for_containerd.sh
 
 
 
