@@ -7,6 +7,8 @@ builds:
     version: 0.41.0
   07c7a55d-b2c6-4a63-46a7-a8fbf6c0f7b1:
     version: 0.13.0
+  081d3cca-b3fd-43d5-498b-3c4e240b7666:
+    version: 1.11.0-build.12-add-containerd
   0ac3a6b6-6130-47fa-465f-d29d9975ad2d:
     version: 1.10.0-build.38-main
   0bdbfd2b-222b-4c6d-532a-5183acbc6589:
