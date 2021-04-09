@@ -2,6 +2,8 @@
 
 set -e
 
+source /var/vcap/packages/bosh-helpers/ctl_setup.sh 'containerd'
+
 JOB_NAME=containerd
 RUN_DIR=/var/vcap/sys/run/$JOB_NAME
 LOG_DIR=/var/vcap/sys/log/$JOB_NAME
