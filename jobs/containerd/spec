@@ -2,7 +2,8 @@
 name: containerd
 
 packages:
-- containerd
+  - bosh-helpers
+  - containerd
 
 templates:
   bin/cgroupfs-mount: bin/cgroupfs-mount
