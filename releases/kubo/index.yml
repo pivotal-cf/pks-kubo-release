@@ -17,6 +17,8 @@ builds:
     version: 1.11.0-build.8-main
   18cd3d40-ddf1-42d9-6988-6107be84f252:
     version: 0.0.3
+  196f66db-8b2b-44b2-765a-77f60b6223d9:
+    version: 1.11.0-build.14-add-containerd
   1af221da-bb95-48a8-52b9-9e7d94fdcdf6:
     version: 1.9.0-build.65-master
   255a7505-ecd5-4141-470f-9338b25cb944:
