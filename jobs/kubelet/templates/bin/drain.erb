@@ -31,7 +31,8 @@ main() {
       <% end %>
     <% end %>
   fi
-
+  echo "start sleeping 30s..."
+  sleep 30
   if [[ -z "${k8s_disks}" ]]; then
     echo "No attached PVs"
   else
