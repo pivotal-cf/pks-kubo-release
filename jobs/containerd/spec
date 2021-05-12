@@ -12,11 +12,11 @@ templates:
   bin/pre-start.erb: bin/pre-start
   bin/envrc: bin/envrc
   bin/setup-user-env: bin/setup-user-env
+  bin/job_properties.sh.erb: bin/job_properties.sh
   lib/wait_for_containerd.sh: lib/wait_for_containerd.sh
 
 
-
-provides:
+provides: {}
 
 
 properties:
@@ -24,6 +24,18 @@ properties:
   config_toml.custom:
     description: "add custom inside config.toml file"
     default: ""
+
+  ulimit.nofile:
+    description: "Maximum number of open files"
+    default: 65535
+  
+  shared_mounts_enable:
+    description: "Enable shared_mounts"
+    default: false
+
+  vm.max_map_count:
+    description: "If set, sets vm.max_map_count on VM"
+    default: ""  
 
     
   proxy.https:

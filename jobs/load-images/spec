@@ -2,8 +2,11 @@
 name: load-images
 
 templates:
-  bin/load_container_images.sh: bin/load_container_images.sh
+  bin/load_container_images.sh.erb: bin/load_container_images.sh
   bin/run: bin/run
   bin/post-start: bin/post-start
 
-properties: {}
+properties:
+  containerd:
+    description: "Enable containerd support"
+    default: true
