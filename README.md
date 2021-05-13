@@ -164,4 +164,3 @@ You may notice that a `kube-dns` service remains, this is also required by the C
 CFCR had a set of scripts, including `deploy_bosh` and `deploy_k8s`, that were the primary mechanism we supported to deploy BOSH and Kubernetes clusters. We no longer support these and have removed the corresponding documentation from https://docs-cfcr.cfapps.io
 
 The BOSH oriented method documented in this README.md is the supported method to deploy Kubernetes clusters with CFCR.
-
