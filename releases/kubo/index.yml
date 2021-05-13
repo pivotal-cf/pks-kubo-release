@@ -129,6 +129,8 @@ builds:
     version: 1.9.0-build.61-master
   b67fb323-49e5-4ddb-7171-2bca2c7e9bb0:
     version: 1.9.0-build.9
+  b6a3a696-cb8b-4c9e-5f7d-20fe97b88de3:
+    version: 1.10.0-build.56-bump-kubernetes-1.19.10+vmware.1
   b74df06c-f6c3-4c36-443e-463218d46494:
     version: 1.10.0-build.24-main
   b944940f-1b3e-4a21-515e-ab92e646611a:
