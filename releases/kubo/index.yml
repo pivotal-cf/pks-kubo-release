@@ -125,6 +125,8 @@ builds:
     version: 0.25.0
   8f879943-0de8-412e-671c-299f3c3702cf:
     version: 1.9.0-build.94-1.9.x
+  90f9ddad-b2c4-43ce-72a3-55afaefb085b:
+    version: 1.9.0-build.142-1.9.x
   916ada95-3ad9-40c7-7ee3-23035e8db3c9:
     version: 0.8.1
   91b96f90-4702-4ead-4805-ba020a1b4ce8:
