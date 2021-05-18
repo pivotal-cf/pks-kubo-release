@@ -59,6 +59,8 @@ builds:
     version: 1.10.0-build.40-main
   588ab971-a83e-446e-4dd7-58afaa42913e:
     version: 0.29.0
+  593b20ef-79bd-4ef8-40f3-e2825ab0e3d8:
+    version: 1.10.0-build.58-1.10.x
   599b63c8-d791-4b04-5c48-412db02f887f:
     version: 1.10.0-build.29-bump-kubernetes-1.19.4+vmware.2
   5af44adb-ba09-4c37-5de7-d89b1d177aa9:
