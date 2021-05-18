@@ -38,7 +38,7 @@ start_containerd() {
   ${JOB_DIR}/bin/cgroupfs-mount
 
   # Setup ssh env vars
-  ${JOB_DIR}/bin/setup-user-env
+  # ${JOB_DIR}/bin/setup-user-env
 
   # LYZ Do we need create bridge for containerd case?
   #create_network_bridge
