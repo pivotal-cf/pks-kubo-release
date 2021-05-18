@@ -55,6 +55,8 @@ builds:
     version: 0.28.0
   4c3e74d1-73ef-4f44-5138-e69c5a723d11:
     version: 1.10.0-build.22-main
+  563095a3-1cad-463a-5056-be6e937fac78:
+    version: 1.11.0-build.25-main
   579dbbc6-2882-4535-73a7-7651fbd22ac9:
     version: 1.10.0-build.40-main
   588ab971-a83e-446e-4dd7-58afaa42913e:
