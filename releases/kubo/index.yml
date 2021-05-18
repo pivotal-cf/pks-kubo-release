@@ -55,6 +55,8 @@ builds:
     version: 1.9.0-build.10
   44b992f5-5eb6-402b-61d8-528577992ebe:
     version: 0.28.0
+  49b86118-2a4e-40ee-6ea3-dc64cf50652c:
+    version: 1.11.0-build.26-add-containerd
   4c3e74d1-73ef-4f44-5138-e69c5a723d11:
     version: 1.10.0-build.22-main
   563095a3-1cad-463a-5056-be6e937fac78:
