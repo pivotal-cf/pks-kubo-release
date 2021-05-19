@@ -3,6 +3,8 @@ builds:
     version: 1.9.0-build.20
   02be6502-4871-465a-7948-a5d8a47dbcb9:
     version: 1.9.0-build.56-master
+  02e699e5-090e-402d-7895-d455089992ea:
+    version: 1.11.0-build.27-add-containerd
   06781654-e47d-4e51-567b-2f35860cfeca:
     version: 0.41.0
   07c7a55d-b2c6-4a63-46a7-a8fbf6c0f7b1:
