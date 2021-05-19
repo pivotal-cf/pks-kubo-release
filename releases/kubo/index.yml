@@ -9,6 +9,8 @@ builds:
     version: 0.13.0
   09ca3898-fcc4-493d-474b-3cc292fd5a07:
     version: 1.11.0-build.24-main
+  0a70befb-a031-421b-43ce-40f39fda7076:
+    version: 1.11.0-build.28-add-containerd
   0ac3a6b6-6130-47fa-465f-d29d9975ad2d:
     version: 1.10.0-build.38-main
   0bdbfd2b-222b-4c6d-532a-5183acbc6589:
