@@ -2,10 +2,9 @@
 
 NAME="${0##*/}"
 
-#source /var/vcap/jobs/docker/lib/wait_for_docker.sh
-source /var/vcap/jobs/containerd/lib/wait_for_containerd.sh #LYZ need check container-runtime here
+source /var/vcap/jobs/kubelet/lib/wait_for_containerd.sh 
 
-export PATH=/var/vcap/packages/kubernetes/bin/:/var/vcap/packages/docker/sbin/:/var/vcap/packages/socat/bin/:$PATH
+export PATH=/var/vcap/packages/kubernetes/bin/:/var/vcap/packages/socat/bin/:$PATH
 
 RUN_DIR=/var/vcap/sys/run/kubernetes
 PIDFILE=$RUN_DIR/kubelet.pid
@@ -267,8 +266,7 @@ case $1 in
     send_process_stdout_to_logfile
     send_process_stderr_to_logfile
 
-    #wait_for_docker
-    wait_for_containerd #LYZ
+    wait_for_runtime
 
     pid_guard "$PIDFILE" "Kubelet"
 
