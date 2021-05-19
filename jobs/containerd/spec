@@ -13,7 +13,6 @@ templates:
   bin/envrc: bin/envrc
   bin/setup-user-env: bin/setup-user-env
   bin/job_properties.sh.erb: bin/job_properties.sh
-  lib/wait_for_containerd.sh: lib/wait_for_containerd.sh
 
 
 properties:
