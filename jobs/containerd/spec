@@ -16,9 +16,6 @@ templates:
   lib/wait_for_containerd.sh: lib/wait_for_containerd.sh
 
 
-provides: {}
-
-
 properties:
 
   config_toml.custom:
