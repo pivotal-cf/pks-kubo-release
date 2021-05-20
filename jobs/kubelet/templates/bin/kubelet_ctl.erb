@@ -2,7 +2,7 @@
 
 NAME="${0##*/}"
 
-source /var/vcap/jobs/kubelet/lib/wait_for_containerd.sh 
+source /var/vcap/jobs/kubelet/lib/wait_for_runtime.sh 
 
 export PATH=/var/vcap/packages/kubernetes/bin/:/var/vcap/packages/socat/bin/:$PATH
 
