@@ -23,7 +23,7 @@ properties:
 
   ulimit.nofile:
     description: "Maximum number of open files"
-    default: 65535
+    default: 1048576
   
   shared_mounts_enable:
     description: "Enable shared_mounts"
