@@ -157,6 +157,8 @@ builds:
     version: 1.7.0-build.75
   bd5916aa-6369-4227-7705-9e1a9bcccd72:
     version: 1.10.0-build.16-add-smoke-test-log-also-to-stdout
+  c0842043-3361-4f09-4994-1889ae638d5b:
+    version: 1.11.0-build.29-add-containerd
   c25f6dd3-b9b2-4d47-49bd-1ab5ce45f5c5:
     version: 1.11.0-build.10-main
   c4203761-1927-405c-6e2c-6727e789aa46:
