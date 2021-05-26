@@ -23,7 +23,7 @@ write_pidfile() {
 }
 
 start_containerd() {
-  log "starting containerd"
+  log "Starting containerd"
   exec 1>> $LOG_DIR/containerd.stdout.log
   exec 2>> $LOG_DIR/containerd.stderr.log
 
@@ -40,7 +40,7 @@ start_containerd() {
   # Setup ssh env vars
   # ${JOB_DIR}/bin/setup-user-env
 
-  # LYZ Do we need create bridge for containerd case?
+  # LYZ Do we need create bridge for containerd case? No. the flannel flag is always false
   #create_network_bridge
 
   # Enable shared_mounts
@@ -54,9 +54,36 @@ start_containerd() {
 }
 
 stop_containerd() {
-  log "stopping containerd"
-  kill "$(cat $PID_FILEPATH)"
-  rm -f $PID_FILEPATH
+  set +e
+  # Stop leftover pods using crictl
+  local crictl='/var/vcap/packages/containerd/bin/crictl --runtime-endpoint unix:///var/vcap/sys/run/containerd/containerd.sock'
+  timeout 60 ${crictl} rmp --all -f
+  # Stop leftover containers using ctr
+  local ctr='/var/vcap/packages/containerd/bin/ctr --address /var/vcap/sys/run/containerd/containerd.sock -n k8s.io'
+  timeout 60 ${ctr} tasks ls -q | xargs -n 50 ${ctr} tasks delete -f
+  # Stop leftover process using kill
+  
+  pids=$(pgrep containerd-shim)
+  if [ ! -z "$pids" ]; then
+  # Let's wait grace-period time for ctr stop finish.
+    echo "Kill the leftover containers: $containers"
+    timeout 60 killall -I containerd-shim-runc-v2 --wait ||  "Fail to kill leftover containers in 60s"
+  fi
+
+  pids=$(pgrep containerd-shim)
+  if [ ! -z "$pids" ]; then
+    echo "Need force killing leftover containers: $(ps aux | grep [c]ontainerd-shim)"
+    kill -9 $pids
+  fi
+
+  if [ ! -z "$(pgrep containerd-shim)" ]; then
+    echo "there're still leftover containers after force killing: $(ps aux | grep [c]ontainerd-shim)"
+  fi
+  set -e
+
+  # Stop containerd daemon
+  log "Stopping containerd"
+  kill_and_wait ${PID_FILEPATH}
 }
 
 log() {
