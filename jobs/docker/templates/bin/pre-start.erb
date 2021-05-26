@@ -11,7 +11,7 @@ cat << EOF > /etc/security/limits.d/62-ulimit.conf
 * hard nofile 65535
 EOF
 
-monit_pid=$( ps -e | grep monit | awk '{print $1}' )
+monit_pid=$( ps -e | grep -w monit | awk '{print $1}' )
 
 if [ ! -z "$monit_pid" ]; then
   prlimit --pid $monit_pid --nofile=65535:65535
