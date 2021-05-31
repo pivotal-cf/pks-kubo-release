@@ -143,6 +143,8 @@ builds:
     version: 1.10.0-build.44-main
   b11b7cde-3eb5-47b7-6764-2baf26bd146e:
     version: 0.39.0
+  b4731034-306c-4ee5-47b4-694ce3a65368:
+    version: 1.12.0-build.1.main
   b496caab-6add-4c07-6312-edfe254db464:
     version: 1.9.0-build.61-master
   b67fb323-49e5-4ddb-7171-2bca2c7e9bb0:
