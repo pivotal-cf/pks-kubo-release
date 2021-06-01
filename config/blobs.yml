@@ -82,10 +82,10 @@ docker/bridge-utils-1.5.tar.gz:
   size: 33472
   object_id: 8235dfbc-d475-4b0f-7682-cc912fc8fdcd
   sha: sha256:80c18ef50bff135f406bfc503ca832f9e3a33f314cce85717a4dbd2b36409bd2
-docker/docker-19.03.14-containerd-1.4.4-runc93.tgz:
-  size: 68830116
-  object_id: 9bdc9a64-b03e-4e9a-7ed5-a9fff2807625
-  sha: sha256:a396b27fb4f17b6228d683984a1da4b6c7e181519bd241227d9ed0fdf4686d4b
+docker/docker-20.10.5.tgz:
+  size: 69158342
+  object_id: a8e4aecd-faaf-4388-6149-1c6f2d286a50
+  sha: 29f61397680a3344eee58dba9d341ab8bd3b2bc8
 etcd/etcd-v3.4.13-linux-amd64.tar.gz:
   size: 17373136
   object_id: dbe2cf3f-a669-4075-5c27-d88cbc577a2e
