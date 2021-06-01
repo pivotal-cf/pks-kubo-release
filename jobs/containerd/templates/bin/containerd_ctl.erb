@@ -27,6 +27,8 @@ start_containerd() {
   exec 1>> $LOG_DIR/containerd.stdout.log
   exec 2>> $LOG_DIR/containerd.stderr.log
 
+  echo 1 > /proc/sys/net/ipv4/ip_forward
+
   # Set ulimits
   ulimit -n ${CONTAINERD_ULIMIT_NOFILE}
 
