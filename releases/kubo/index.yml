@@ -163,6 +163,8 @@ builds:
     version: 0.27.0
   c9984ee5-d029-48d0-5c49-6ec099bf12b3:
     version: 0.0.1
+  caf54619-d687-4e9b-520b-0ec5e5d5b335:
+    version: 1.12.0-build.5.bump-docker-20.10.5-on-1.12.x
   d09b9ed8-b725-4428-7b9e-8bf8a2873359:
     version: 0.11.1
   d0f4cffb-5f1f-4556-5fa2-c86ad85269de:
