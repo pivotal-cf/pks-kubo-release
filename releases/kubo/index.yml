@@ -175,6 +175,8 @@ builds:
     version: 1.10.0-build.17-main
   d5e86543-9e0c-449b-7f32-a4698615b75b:
     version: 0.24.0
+  d8190633-26dd-4d4d-7a83-8f38e8508890:
+    version: 1.12.0-build.12.bump-kubernetes-1.21.1+vmware.4
   dac7b88e-3885-45db-6036-53a13841958f:
     version: 1.10.0-build.23-enable-etcd-peer-verify
   dd20178a-f3ce-41ac-522a-4ec335faefe7:
