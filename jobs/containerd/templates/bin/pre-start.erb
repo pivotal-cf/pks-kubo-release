@@ -17,14 +17,10 @@ if [ ! -z "$monit_pid" ]; then
   prlimit --pid $monit_pid --nofile=65535:65535
 fi
 
-
 # 除了这玩意，我们还需要提前设置一些内核参数，应该是在这里设置，搜一下其它的modprobe
 
 /sbin/modprobe overlay
 /sbin/modprobe br_netfilter
-
-mount --make-rshared /
-
 
 # LYZ 这是来自官方systemd.service
 
