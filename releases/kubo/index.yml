@@ -133,6 +133,8 @@ builds:
     version: 1.11.0-build.9-bump-kubernetes-1.20.5+vmware.1
   afa14062-455d-4b2c-47f5-0d464fac402a:
     version: 1.9.0-build.29-bump-kubernetes-1.18.1+vmware.1
+  afaed1ef-0bef-471c-4551-6c9b7957b822:
+    version: 1.12.0-build.13.mount-make-rshared
   b0cd81b8-dba1-4679-716e-b5e9a661af85:
     version: 1.10.0-build.44-main
   b11b7cde-3eb5-47b7-6764-2baf26bd146e:
