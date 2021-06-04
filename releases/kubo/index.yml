@@ -161,6 +161,8 @@ builds:
     version: 1.11.0-build.4-main
   c7dfdc07-8afe-4be9-61f5-3c8617ba243a:
     version: 0.27.0
+  c87cd64e-5286-4ce8-5164-43e0370c3796:
+    version: 1.12.0-build.16.main
   c9984ee5-d029-48d0-5c49-6ec099bf12b3:
     version: 0.0.1
   d09b9ed8-b725-4428-7b9e-8bf8a2873359:
