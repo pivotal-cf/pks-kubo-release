@@ -7,3 +7,5 @@ config_file_name=/var/vcap/jobs/kubelet/config/file-arguments.json
 if [ -f $config_file_name ]; then
     /var/vcap/packages/file-generator/bin/file_generator $config_file_name kubelet
 fi
+
+mount --make-rshared /
