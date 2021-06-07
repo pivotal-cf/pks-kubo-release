@@ -77,6 +77,8 @@ builds:
     version: 0.8.0
   69d1b13f-6cee-4509-6fc9-0f95ab81b7f8:
     version: 1.12.0-build.20.main
+  6b31c2bf-8aad-4d6c-6d99-fa8c6fb7f813:
+    version: 1.12.0-build.21.main
   744fe93d-7c3e-4f35-4932-e2f39b471420:
     version: 0.37.0
   74d55365-e281-4995-520a-b649c92ea540:
