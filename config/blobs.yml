@@ -14,38 +14,38 @@ cifs-utils-6.7.tar.bz2:
   size: 363647
   object_id: c529967d-57fa-4b41-685e-ff0a507ffaad
   sha: 9ba5091d7c2418a90773c861f04a3f4a36854c14
-cni/cni-plugins-amd64-v0.8.7+vmware.8.tgz:
-  size: 39904904
-  object_id: 9e708494-c04f-4683-63cf-6be7d028e9e1
-  sha: ac11c49d26d2cb317c9d67e31673916fea97593a
+cni/cni-plugins-amd64-v0.8.7+vmware.11.tgz:
+  size: 39905597
+  object_id: 317f3f76-09ed-4c83-5f9e-4d63fbeb91a9
+  sha: ced7309ddd2b55ac5004ccf506c23c4c5fa37cfc
 cni/nsenter-2.27.1:
   size: 27520
   object_id: f78a843e-4bf1-47c4-578b-786fcf8a2c94
   sha: sha256:9999ffda41275f924bcbb1d9d7b129421838d917236511eccacae7dc0ad631a9
-common-core-kubernetes-1.20.6+vmware.1/kube-apiserver:
-  size: 118177792
-  object_id: 558a29d0-4d2d-4373-58cb-23d46df9da18
-  sha: e27aa49931df83920e4ba174de6bf82898a86e56
-common-core-kubernetes-1.20.6+vmware.1/kube-controller-manager:
-  size: 112713728
-  object_id: 9d07b37b-b119-427e-55be-077166f15b81
-  sha: e80bd1b238426154fd0fc8f2b80eb50fcc89f69f
-common-core-kubernetes-1.20.6+vmware.1/kube-proxy:
-  size: 39469056
-  object_id: 313bd446-1eb0-4876-4794-7fd98a18eb80
-  sha: 646874d39eb94e55ae454b519f9634ad4148e32a
-common-core-kubernetes-1.20.6+vmware.1/kube-scheduler:
-  size: 43696128
-  object_id: 70aa5f8e-5c24-4e87-64ed-88fafb1e43ed
-  sha: 11e8cc7f99568fe903b35e51ce0778698116cb94
-common-core-kubernetes-1.20.6+vmware.1/kubectl:
-  size: 40210432
-  object_id: 139611a4-8bad-4d98-788f-70ca1d87fad1
-  sha: adc6ccf377c012369b53c2a1a1a02a2ffbfc728b
-common-core-kubernetes-1.20.6+vmware.1/kubelet:
-  size: 114064488
-  object_id: 13941490-8df4-4bb3-6f97-bf9b3f547e74
-  sha: 6da4dfa09dde18ea85be1e93ac402d36b8b85634
+common-core-kubernetes-1.21.1+vmware.4/kube-apiserver:
+  size: 122056704
+  object_id: a7112e86-b5d2-4209-45c2-30949a819a5f
+  sha: 166396fddc30a014f0e769bc6e2a702241b90292
+common-core-kubernetes-1.21.1+vmware.4/kube-controller-manager:
+  size: 116264960
+  object_id: b0bcb3c9-a4e7-4395-4a0f-f7f17faf8054
+  sha: 81d84ee1a9cdfb53998b601833c5b709a1811d44
+common-core-kubernetes-1.21.1+vmware.4/kube-proxy:
+  size: 43118592
+  object_id: 73cb5f40-63c3-401c-54e5-f95cda747742
+  sha: 44158d33f42e2facf345e8d9e0cdbc449385966a
+common-core-kubernetes-1.21.1+vmware.4/kube-scheduler:
+  size: 47087616
+  object_id: b92fca42-b0a6-46e0-74e0-b4c5134d17d5
+  sha: 9fe943a283230bfffeb2ffbe07fdc93ffc200820
+common-core-kubernetes-1.21.1+vmware.4/kubectl:
+  size: 47566848
+  object_id: 9cadfbd1-1756-4934-5cb0-b74181074483
+  sha: 6620441f192efbe30fcb2af1740c2cd036d28c44
+common-core-kubernetes-1.21.1+vmware.4/kubelet:
+  size: 118054736
+  object_id: e414c149-8865-44f0-62d4-7cb8fe26469e
+  sha: d18f5a32201d7f239c7acfb3fec810688f322e6a
 conntrack/conntrack_1.4.3-3_amd64.deb:
   size: 27346
   object_id: 0c4aa633-3de8-4a8c-7170-36b3fc9e4a9c
@@ -58,10 +58,10 @@ container-images/simple-server.tgz:
   size: 11953836
   object_id: d362a1a2-0a96-4e73-67a6-2e8565edc489
   sha: sha256:8c0c566079241cb5ec0c6708b47e2ee71b5dc470caa1cef62b0b2c671e784ef8
-container-images/vmware_coredns:1.7.0_vmware.10.tgz:
-  size: 12793164
-  object_id: 2b1c96cf-bd68-468f-55e8-8fdec955979d
-  sha: 37530313de6b2c6898e6eac98e6dca7adc5c9c4f
+container-images/vmware_coredns:1.8.0_vmware.4.tgz:
+  size: 12571978
+  object_id: c84fdbfd-0d06-4701-48c1-9ee03bfeaf56
+  sha: 7e7b0930124a88b1613e256689acfdb7a7778ae3
 container-images/vmware_metrics-server-amd64:v0.3.6.tgz:
   size: 12062146
   object_id: 301b9879-c1bf-42bb-6d90-f05929118056
@@ -82,10 +82,10 @@ docker/bridge-utils-1.5.tar.gz:
   size: 33472
   object_id: 8235dfbc-d475-4b0f-7682-cc912fc8fdcd
   sha: sha256:80c18ef50bff135f406bfc503ca832f9e3a33f314cce85717a4dbd2b36409bd2
-docker/docker-19.03.14-containerd-1.4.4-runc93.tgz:
-  size: 68830116
-  object_id: 9bdc9a64-b03e-4e9a-7ed5-a9fff2807625
-  sha: sha256:a396b27fb4f17b6228d683984a1da4b6c7e181519bd241227d9ed0fdf4686d4b
+docker/docker-20.10.5.tgz:
+  size: 69158342
+  object_id: f2b50f6e-024f-4013-7588-1c68a1dcf9c1
+  sha: 29f61397680a3344eee58dba9d341ab8bd3b2bc8
 etcd/etcd-v3.4.13-linux-amd64.tar.gz:
   size: 17373136
   object_id: dbe2cf3f-a669-4075-5c27-d88cbc577a2e
