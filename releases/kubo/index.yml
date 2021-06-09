@@ -97,6 +97,8 @@ builds:
     version: 1.10.0-build.26-main
   89ffc43c-9a7a-4f62-76bc-04224509a7de:
     version: 0.25.0
+  8a8ae783-8ab4-4d30-46b3-ef4ac83cc394:
+    version: 1.10.0-build.62.1.10.x
   8b0e3a6a-98ce-4fa8-4d49-97a02518dc1c:
     version: 1.10.0-build.19-main
   916ada95-3ad9-40c7-7ee3-23035e8db3c9:
