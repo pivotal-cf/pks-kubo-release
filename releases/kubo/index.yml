@@ -117,6 +117,8 @@ builds:
     version: 0.6.0
   977733e3-57f1-418e-4936-8cc1d2609e52:
     version: 1.9.0-build.64-master
+  9a3506fc-9db8-436a-600b-6a964edef33a:
+    version: 1.11.0-build.38.1.11.x
   9acf36fd-7449-410d-5732-9c1aa000f0a7:
     version: 0.18.0
   9b00911b-f2d5-47ef-6ef2-f68eb547cf0c:
