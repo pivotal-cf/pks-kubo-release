@@ -41,6 +41,8 @@ builds:
     version: 1.10.0-build.30-main
   3572627e-340e-48b5-498e-a75ba06498f3:
     version: 0.20.0
+  39a18a0b-4367-4fb3-4845-171b1ce3fb31:
+    version: 1.11.0-build.39-bump-docker-20.10.7-on-1.11.x
   3a6fe5ab-d5b6-4d09-5836-3ce87c2a4a86:
     version: 0.26.0
   3c8e7c20-7382-4525-7285-dbd0d00a65af:
