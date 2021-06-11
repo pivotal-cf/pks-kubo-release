@@ -16,36 +16,36 @@ cifs-utils-6.7.tar.bz2:
   sha: 9ba5091d7c2418a90773c861f04a3f4a36854c14
 cni/cni-plugins-amd64-v0.8.7+vmware.11.tgz:
   size: 39905597
-  object_id: 317f3f76-09ed-4c83-5f9e-4d63fbeb91a9
+  object_id: 48b31c99-a19b-4609-786d-58e07c9ea8d4
   sha: ced7309ddd2b55ac5004ccf506c23c4c5fa37cfc
 cni/nsenter-2.27.1:
   size: 27520
   object_id: f78a843e-4bf1-47c4-578b-786fcf8a2c94
   sha: sha256:9999ffda41275f924bcbb1d9d7b129421838d917236511eccacae7dc0ad631a9
-common-core-kubernetes-1.21.1+vmware.4/kube-apiserver:
+common-core-kubernetes-1.21.1+vmware.5/kube-apiserver:
   size: 122056704
-  object_id: a7112e86-b5d2-4209-45c2-30949a819a5f
-  sha: 166396fddc30a014f0e769bc6e2a702241b90292
-common-core-kubernetes-1.21.1+vmware.4/kube-controller-manager:
+  object_id: 21266424-abc4-4e08-7b7d-872e3f375379
+  sha: e7765c57f08fa435d89dcc4861aaff649ec178ef
+common-core-kubernetes-1.21.1+vmware.5/kube-controller-manager:
   size: 116264960
-  object_id: b0bcb3c9-a4e7-4395-4a0f-f7f17faf8054
-  sha: 81d84ee1a9cdfb53998b601833c5b709a1811d44
-common-core-kubernetes-1.21.1+vmware.4/kube-proxy:
+  object_id: 817da2d1-a856-49af-7bf6-479c9cbe5fac
+  sha: 8ce070e263af30a4cbb0897d46de1df9bc96c1c7
+common-core-kubernetes-1.21.1+vmware.5/kube-proxy:
   size: 43118592
-  object_id: 73cb5f40-63c3-401c-54e5-f95cda747742
-  sha: 44158d33f42e2facf345e8d9e0cdbc449385966a
-common-core-kubernetes-1.21.1+vmware.4/kube-scheduler:
+  object_id: 2819a44b-34da-4534-4930-402056a4ba81
+  sha: d1ffd9a0a09f6a4c13f3633d67615cec5d5e4fac
+common-core-kubernetes-1.21.1+vmware.5/kube-scheduler:
   size: 47087616
-  object_id: b92fca42-b0a6-46e0-74e0-b4c5134d17d5
-  sha: 9fe943a283230bfffeb2ffbe07fdc93ffc200820
-common-core-kubernetes-1.21.1+vmware.4/kubectl:
+  object_id: 1b7a17a9-8f3a-42e6-497a-e839a0f6ab40
+  sha: 682fcd99451075ebe763d3a5a570bcd4e5f1e079
+common-core-kubernetes-1.21.1+vmware.5/kubectl:
   size: 47566848
-  object_id: 9cadfbd1-1756-4934-5cb0-b74181074483
-  sha: 6620441f192efbe30fcb2af1740c2cd036d28c44
-common-core-kubernetes-1.21.1+vmware.4/kubelet:
+  object_id: d955fd7b-61db-4ef6-7c17-dc681459b0f6
+  sha: c0d811035cece0eb5f97154aa85c2240cd5016e1
+common-core-kubernetes-1.21.1+vmware.5/kubelet:
   size: 118054736
-  object_id: e414c149-8865-44f0-62d4-7cb8fe26469e
-  sha: d18f5a32201d7f239c7acfb3fec810688f322e6a
+  object_id: 5d14cafa-3c95-4cf4-4fd9-794d929b2500
+  sha: 9923d7d6b561a4dcb80ef3b4f6db66cbeda996a7
 conntrack/conntrack_1.4.3-3_amd64.deb:
   size: 27346
   object_id: 0c4aa633-3de8-4a8c-7170-36b3fc9e4a9c
@@ -60,7 +60,7 @@ container-images/simple-server.tgz:
   sha: sha256:8c0c566079241cb5ec0c6708b47e2ee71b5dc470caa1cef62b0b2c671e784ef8
 container-images/vmware_coredns:1.8.0_vmware.4.tgz:
   size: 12571978
-  object_id: c84fdbfd-0d06-4701-48c1-9ee03bfeaf56
+  object_id: ffdad721-5029-4a5d-6d7c-e6e07bc79d74
   sha: 7e7b0930124a88b1613e256689acfdb7a7778ae3
 container-images/vmware_metrics-server-amd64:v0.3.6.tgz:
   size: 12062146
