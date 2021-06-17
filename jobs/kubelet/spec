@@ -1,6 +1,6 @@
 name: kubelet
 templates:
-  bin/pre-stop.erb: bin/pre-stop
+  bin/drain.erb: bin/drain
   bin/ensure_kubelet_up_and_running.erb: bin/ensure_kubelet_up_and_running
   bin/kubelet_ctl.erb: bin/kubelet_ctl
   bin/pre-start: bin/pre-start
