@@ -1,0 +1,7 @@
+set -eu
+
+mkdir -p $BOSH_INSTALL_TARGET/bin
+
+tar -xzf local-sign-linux-amd64.tgz
+chmod +x local-sign-linux-amd64
+mv local-sign-linux-amd64 $BOSH_INSTALL_TARGET/bin/local-sign

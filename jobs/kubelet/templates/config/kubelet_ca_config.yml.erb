@@ -1,0 +1,9 @@
+<% require 'yaml' %>
+<%=
+
+config = {
+    "ca" => p('tls.kubelet-ca.ca'),
+    "private_key" => p('tls.kubelet-ca.private_key')
+}
+
+config.to_yaml %>

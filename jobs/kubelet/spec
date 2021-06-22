@@ -3,7 +3,7 @@ templates:
   bin/pre-stop.erb: bin/pre-stop
   bin/ensure_kubelet_up_and_running.erb: bin/ensure_kubelet_up_and_running
   bin/kubelet_ctl.erb: bin/kubelet_ctl
-  bin/pre-start: bin/pre-start
+  bin/pre-start.erb: bin/pre-start
   bin/post-start.erb: bin/post-start
   config/apiserver-ca.pem.erb: config/apiserver-ca.pem
   config/cloud-provider.ini.erb: config/cloud-provider.ini
@@ -11,18 +11,19 @@ templates:
   config/kubeconfig-drain.erb: config/kubeconfig-drain
   config/kubeconfig.erb: config/kubeconfig
   config/kubelet-client-ca.pem.erb: config/kubelet-client-ca.pem
-  config/kubelet-key.pem.erb: config/kubelet-key.pem
-  config/kubelet.pem.erb: config/kubelet.pem
   config/kubeletconfig.yml.erb: config/kubeletconfig.yml
   config/openstack-ca.crt.erb: config/openstack-ca.crt
   config/service_key.json.erb: config/service_key.json
   lib/wait_for_runtime.sh: lib/wait_for_runtime.sh
+  config/kubelet_ca_config.yml.erb: config/kubelet_ca_config.yml
+  config/kubelet_certificate_template.yml.erb: config/kubelet_certificate_template.yml
 packages:
 - pid_utils
 - kubernetes
 - cni
 - socat
 - file-generator
+- local-sign
 properties:
   api-token:
     description: The token to access Kubernetes API
@@ -71,6 +72,12 @@ properties:
         client-ca-file: base64 encoded config
   no_proxy:
     description: no_proxy env var for cloud provider interactions, i.e. for the kubelet
+  tls.kubelet-ca.ca:
+    description: CA certificate for kubelet
+  tls.kubelet-ca.certificate:
+    description: Certificate for the kubelet CA
+  tls.kubelet-ca.private_key:
+    description: Private key for the kubelet CA
   tls.kubelet:
     description: Certificate and private key for the Kubernetes worker
     parameters:

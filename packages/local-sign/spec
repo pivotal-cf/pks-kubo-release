@@ -1,0 +1,5 @@
+---
+name: local-sign
+dependencies: []
+files:
+- local-sign-linux-amd64.tgz
