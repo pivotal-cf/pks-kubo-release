@@ -113,6 +113,8 @@ builds:
     version: 1.11.0-build.17-add-containerd
   87e65015-b612-4afa-7adf-4094df574137:
     version: 1.11.0-build.18-main
+  891211c5-36b8-4a14-78e9-16a418a30b6f:
+    version: 1.12.0-build.29.add-containerd
   89d3f95e-7b5b-46f6-4d38-00cecf8edb22:
     version: 1.10.0-build.26-main
   89ffc43c-9a7a-4f62-76bc-04224509a7de:
