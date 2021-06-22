@@ -143,6 +143,8 @@ builds:
     version: 0.7.0
   ace19e30-6c6a-4dbc-46c0-0070c0b31dc9:
     version: 0.22.0
+  ad0c0180-5a93-4e35-49a6-47431a965f9d:
+    version: 1.12.0-build.28.add-containerd
   ae525364-7717-4a5d-602f-a9a353368063:
     version: 1.11.0-build.9-bump-kubernetes-1.20.5+vmware.1
   afa14062-455d-4b2c-47f5-0d464fac402a:
