@@ -66,10 +66,10 @@ container-images/vmware_pause:3.2.tar.gz:
   size: 286604
   object_id: 27038a71-2c6d-4ada-4e4d-705925c8b315
   sha: sha256:a35cc98a91d6c6b9cecccfae0a11ffb2b7c553b77bdf49d4223b762f11d4e7cb
-containerd/cri-containerd-cni-1.4.3-linux-amd64.tar.gz:
-  size: 99176835
-  object_id: eda76a68-1a7c-4e2e-6f7e-5d3bafdd1d9e
-  sha: sha256:2697a342e3477c211ab48313e259fd7e32ad1f5ded19320e6a559f50a82bff3d
+containerd/cri-containerd-v1.4.6+vmware.1.linux-amd64.tar.gz:
+  size: 76874577
+  object_id: ba2549ad-ce8c-4751-5135-887c16a33d92
+  sha: sha256:c959a6024fb94c1035b38c996f9f9eb717df893a47079f7374d9c1ae93d63bf5
 ctop/ctop-0.5.1-linux-amd64:
   size: 5667856
   object_id: df4344f1-26d6-453c-52da-e728cb94332a

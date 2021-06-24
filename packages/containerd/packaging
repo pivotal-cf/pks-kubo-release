@@ -3,8 +3,8 @@
 set -eu
 
 # Extract containerd package
-CONTAINERD_VERSION=1.4.3
-tar xzvf containerd/cri-containerd-cni-${CONTAINERD_VERSION}-linux-amd64.tar.gz
+CONTAINERD_VERSION=1.4.6+vmware.1
+tar xzvf containerd/cri-containerd-v${CONTAINERD_VERSION}.linux-amd64.tar.gz
 if [[ $? != 0 ]] ; then
   echo "Failed extracting containerd ${CONTAINERD_VERSION}"
   exit 1
@@ -16,9 +16,3 @@ mkdir -p ${BOSH_INSTALL_TARGET}/bin
 cp usr/local/bin/* ${BOSH_INSTALL_TARGET}/bin
 cp usr/local/sbin/* ${BOSH_INSTALL_TARGET}/bin
 chmod +x ${BOSH_INSTALL_TARGET}/bin/*
-
-# Open Source Licensing Information, used by the vmware OSM system
-# These license abbreviations are defined by the OSM system
-# See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
-
-# https://github.com/containerd/containerd/releases/download/v1.4.3/cri-containerd-cni-1.4.3-linux-amd64.tar.gz

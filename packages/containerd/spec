@@ -2,4 +2,4 @@
 name: containerd
 
 files:
-- containerd/cri-containerd-cni-1.4.3-linux-amd64.tar.gz
+- containerd/cri-containerd-v1.4.6+vmware.1.linux-amd64.tar.gz
