@@ -121,6 +121,8 @@ builds:
     version: 0.25.0
   8b0e3a6a-98ce-4fa8-4d49-97a02518dc1c:
     version: 1.10.0-build.19-main
+  8fef4e93-1049-428c-74c4-c7eca94fd9d9:
+    version: 1.12.0-build.30.add-containerd
   916ada95-3ad9-40c7-7ee3-23035e8db3c9:
     version: 0.8.1
   91b96f90-4702-4ead-4805-ba020a1b4ce8:
