@@ -17,13 +17,8 @@ cp usr/local/bin/* ${BOSH_INSTALL_TARGET}/bin
 cp usr/local/sbin/* ${BOSH_INSTALL_TARGET}/bin
 chmod +x ${BOSH_INSTALL_TARGET}/bin/*
 
-# LYZ 我们应该决定需要使用哪些Binaries，是不是有些没必要进去。CNI肯定没必要，因为我们有单独的CNI packages
-# 目前有的bin包含, 我们也需要知道这些binaries分别做啥
-# containerd  containerd-shim  containerd-shim-runc-v1  containerd-shim-runc-v2  crictl  critest  ctr  runc
-
-
 # Open Source Licensing Information, used by the vmware OSM system
 # These license abbreviations are defined by the OSM system
 # See https://github.com/pivotal-cf/pks-bosh-lifecycle-home/tree/master/osl/osm-blob-manifests
 
-#https://github.com/containerd/containerd/releases/download/v1.4.3/cri-containerd-cni-1.4.3-linux-amd64.tar.gz
+# https://github.com/containerd/containerd/releases/download/v1.4.3/cri-containerd-cni-1.4.3-linux-amd64.tar.gz

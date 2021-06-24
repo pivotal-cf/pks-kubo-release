@@ -13,5 +13,3 @@ checkenv() {
 }
 
 checkenv
-
-#LYZ 我们也需要这玩意，来设置环境变量

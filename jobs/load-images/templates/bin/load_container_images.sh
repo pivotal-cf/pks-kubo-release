@@ -2,7 +2,6 @@
 set -eux
 set -o pipefail
 
-
 load_one_container() {
   image=$1
   local job_dir=${BOSH_JOB_DIR:-/var/vcap/jobs}

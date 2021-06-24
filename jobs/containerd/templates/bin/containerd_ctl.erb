@@ -35,20 +35,19 @@ start_containerd() {
   # Set vm.max_map_count
   [ -n "${CONTAINERD_VM_MAX_MAP_COUNT}" ] && sysctl -w vm.max_map_count=${DOCKER_VM_MAX_MAP_COUNT}
 
-  # LYZ do we still need this cgroupfs-mount?
   # Mount cgroupfs hierarchy
   ${JOB_DIR}/bin/cgroupfs-mount
 
   # Setup ssh env vars
   # ${JOB_DIR}/bin/setup-user-env
 
-  # LYZ Do we need create bridge for containerd case? No. the flannel flag is always false
+  # Do we need create bridge for containerd case? No. the flannel flag is always false
   #create_network_bridge
 
   # Enable shared_mounts
   [ "${CONTAINERD_SHARED_MOUNTS_ENABLE}" = "true" ] && mount --make-shared /
 
-  # LYZ Do we still need this to provide certs for private docker registry?
+  # Do we still need this to provide certs for private docker registry?
   # Create certs for private docker registry
   # /var/vcap/packages/docker-registry-certs/bin/generate_certs ${JOB_DIR}/config/docker_registry_certs
 

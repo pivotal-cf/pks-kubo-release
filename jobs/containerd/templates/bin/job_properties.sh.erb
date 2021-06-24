@@ -22,7 +22,6 @@ export CONTAINERD_VM_MAX_MAP_COUNT=<%= p('vm.max_map_count') %>
 # Enable shared_mounts LYZ: do we really need this setting
 export CONTAINERD_SHARED_MOUNTS_ENABLE=<%= p('shared_mounts_enable') %>
 
-
 # Proxy configuration
 <% if_p('env.http_proxy') do |http_proxy| %>
 export HTTP_PROXY='<%= http_proxy %>'

@@ -47,5 +47,3 @@ fi
 )
 
 exit 0
-
-# LYZ我们可能也需要这玩意，毕竟这是默认加载cgroupfs，ubuntu可能不存在这个玩意
