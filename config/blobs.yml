@@ -30,6 +30,10 @@ common-core-kubernetes-1.21.2+vmware.1/kube-controller-manager:
   size: 116273152
   object_id: 01793834-13a2-4b3f-68aa-3b5301836a77
   sha: 1ff43461aedfc7e7da239b1f2ff7771d5110f2e7
+common-core-kubernetes-1.21.2+vmware.1/kube-proxy:
+  size: 43122688
+  object_id: ea818649-602f-4bfd-5370-e68c13255f31
+  sha: a08e604988c1195a62af6f0b80a547187c47edcd
 common-core-kubernetes-1.21.2+vmware.1/kube-scheduler:
   size: 47095808
   object_id: 730bfbe0-d262-4343-525d-b8f9bf72833b
