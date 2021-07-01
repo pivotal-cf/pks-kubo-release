@@ -5,6 +5,7 @@ templates:
   bin/kubelet_ctl.erb: bin/kubelet_ctl
   bin/pre-start: bin/pre-start
   bin/post-start.erb: bin/post-start
+  bin/post-stop.erb: bin/post-stop
   config/apiserver-ca.pem.erb: config/apiserver-ca.pem
   config/cloud-provider.ini.erb: config/cloud-provider.ini
   config/file-arguments.json.erb: config/file-arguments.json
