@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+#
+# Containerd properties
+#
+
+# Directory to store the Containerd configuration files
+export CONTAINERD_CONF_DIR=${JOB_DIR}/config
+
+# Directory to store the Containerd logs
+export CONTAINERD_LOG_DIR=${LOG_DIR}
+
+# Directory to store the Containerd process IDs
+export CONTAINERD_PID_DIR=${RUN_DIR}
+
+# Maximum number of open files
+export CONTAINERD_ULIMIT_NOFILE=<%= p('ulimit.nofile') %>
+
+# mmap counts   LYZ: do we really need this setting
+export CONTAINERD_VM_MAX_MAP_COUNT=<%= p('vm.max_map_count') %>
+
+# Enable shared_mounts LYZ: do we really need this setting
+export CONTAINERD_SHARED_MOUNTS_ENABLE=<%= p('shared_mounts_enable') %>
+
+# Proxy configuration
+<% if_p('env.http_proxy') do |http_proxy| %>
+export HTTP_PROXY='<%= http_proxy %>'
+export http_proxy='<%= http_proxy %>'
+<% end %>
+<% if_p('env.https_proxy') do |https_proxy| %>
+export HTTPS_PROXY='<%= https_proxy %>'
+export https_proxy='<%= https_proxy %>'
+<% end %>
+<% if_p('env.no_proxy') do |no_proxy| %>
+export NO_PROXY="<%= no_proxy %>"
+export no_proxy="<%= no_proxy %>"
+<% end %>

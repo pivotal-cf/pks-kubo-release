@@ -40,9 +40,6 @@ case $1 in
     # Mount cgroupfs hierarchy
     ${JOB_DIR}/bin/cgroupfs-mount
 
-    # Setup ssh env vars
-    ${JOB_DIR}/bin/setup-user-env
-
     create_network_bridge
 
     # Enable shared_mounts

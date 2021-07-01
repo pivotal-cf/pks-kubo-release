@@ -9,6 +9,8 @@ builds:
     version: 0.13.0
   09ca3898-fcc4-493d-474b-3cc292fd5a07:
     version: 1.11.0-build.24-main
+  0a70befb-a031-421b-43ce-40f39fda7076:
+    version: 1.11.0-build.28-add-containerd
   0ac3a6b6-6130-47fa-465f-d29d9975ad2d:
     version: 1.10.0-build.38-main
   0bdbfd2b-222b-4c6d-532a-5183acbc6589:
@@ -21,6 +23,8 @@ builds:
     version: 0.0.3
   1af221da-bb95-48a8-52b9-9e7d94fdcdf6:
     version: 1.9.0-build.65-master
+  2205feb0-bc33-4f09-73c0-ae074e61a89a:
+    version: 1.11.0-build.15-add-containerd
   255a7505-ecd5-4141-470f-9338b25cb944:
     version: 0.31.0
   2605f42c-2cf5-44af-773f-4fed45caa1c7:
@@ -105,14 +109,20 @@ builds:
     version: 1.9.0-build.26-bump-kubernetes-1.18.1+vmware.1
   820a6517-f92b-42de-4d13-8661cdfe2605:
     version: 0.9.0
+  860e5082-0f75-4d0a-4054-c3f3a36acb5f:
+    version: 1.11.0-build.17-add-containerd
   87e65015-b612-4afa-7adf-4094df574137:
     version: 1.11.0-build.18-main
+  891211c5-36b8-4a14-78e9-16a418a30b6f:
+    version: 1.12.0-build.29.add-containerd
   89d3f95e-7b5b-46f6-4d38-00cecf8edb22:
     version: 1.10.0-build.26-main
   89ffc43c-9a7a-4f62-76bc-04224509a7de:
     version: 0.25.0
   8b0e3a6a-98ce-4fa8-4d49-97a02518dc1c:
     version: 1.10.0-build.19-main
+  8fef4e93-1049-428c-74c4-c7eca94fd9d9:
+    version: 1.12.0-build.30.add-containerd
   916ada95-3ad9-40c7-7ee3-23035e8db3c9:
     version: 0.8.1
   91b96f90-4702-4ead-4805-ba020a1b4ce8:
@@ -135,8 +145,12 @@ builds:
     version: 0.17.0
   a6ea6323-e579-4ac5-5b05-fa728c776102:
     version: 0.7.0
+  a96f043a-36fe-4667-51e0-e1b0a0f2822a:
+    version: 1.12.0-build.31.add-containerd
   ace19e30-6c6a-4dbc-46c0-0070c0b31dc9:
     version: 0.22.0
+  ad0c0180-5a93-4e35-49a6-47431a965f9d:
+    version: 1.12.0-build.28.add-containerd
   ae525364-7717-4a5d-602f-a9a353368063:
     version: 1.11.0-build.9-bump-kubernetes-1.20.5+vmware.1
   afa14062-455d-4b2c-47f5-0d464fac402a:
@@ -197,6 +211,8 @@ builds:
     version: 1.10.0-build.21-main
   e641a64f-b4c1-4c35-653c-3b957156bec0:
     version: 1.10.0-build.11-main
+  e66641b1-6214-4c1f-5048-43ba08b38bf2:
+    version: 1.12.0-build.4.add-containerd
   e759bbc3-8061-46ff-42f6-707070f8e7c9:
     version: 1.9.0-build.18
   e7874af4-7677-4c10-5db9-e4aea8b86157:
@@ -205,6 +221,8 @@ builds:
     version: 0.30.0
   ef2b4733-e080-402d-499c-4a2eff28aa4a:
     version: 0.16.0
+  f1f35668-9243-4d03-7df5-74833b190171:
+    version: 1.11.0-build.31-add-containerd
   f7c19373-2d57-421a-73ba-39816fce001f:
     version: 0.35.0
   f91420a0-cf05-49e9-6650-e1a00ad087d0:
@@ -213,6 +231,8 @@ builds:
     version: 1.9.0-build.75-bump-kubernetes-1.18.6+vmware.1
   fa9e51fb-acae-4226-62f1-08852ec833a8:
     version: 1.10.0-build.36-main
+  fc4aa759-b303-44f6-4d3f-29fe9ec10b2a:
+    version: 1.11.0-build.16-add-containerd
   ffb2db6d-d62a-4528-51d6-3ace1deb4375:
     version: 0.21.0
 format-version: "2"

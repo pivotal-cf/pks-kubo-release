@@ -38,7 +38,7 @@ make install
 
 # Extract docker package
 DOCKER_PACKAGE=docker
-DOCKER_VERSION="20.10.5"
+DOCKER_VERSION="20.10.7"
 echo "Extracting docker ${DOCKER_VERSION}..."
 tar xzvf ${BOSH_COMPILE_TARGET}/docker/${DOCKER_PACKAGE}-${DOCKER_VERSION}.tgz
 if [[ $? != 0 ]] ; then
@@ -61,9 +61,9 @@ AUTOCONF_SOURCE_URL="http://ftp.gnu.org/gnu/autoconf/$AUTOCONF_PACKAGE-$AUTOCONF
 BRIDGE_UTILS_SOURCE_URL="https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/bridge-utils/1.5-15ubuntu1/bridge-utils_1.5.orig.tar.gz"
 BRIDGE_UTILS_LICENSE="GPL2.0"
 
-# source: https://github.com/docker/docker-ce/blob/v19.03.14/components/engine/LICENSE
+# source: https://github.com/moby/moby/blob/v20.10.7/LICENSE
 DOCKER_LICENSE="Apache2.0"
-DOCKER_SOURCE_URL="https://github.com/docker/docker-ce/archive/v19.03.14.zip"
+DOCKER_SOURCE_URL="https://github.com/moby/moby/archive/refs/tags/v20.10.7.zip"
 
 cat <<EOF > ${BOSH_INSTALL_TARGET}/osl-package.json
 { "packages": [

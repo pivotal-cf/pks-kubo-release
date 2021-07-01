@@ -1,0 +1,115 @@
+#!/bin/bash
+
+set -e
+
+source /var/vcap/packages/bosh-helpers/ctl_setup.sh 'containerd'
+
+JOB_NAME=containerd
+RUN_DIR=/var/vcap/sys/run/$JOB_NAME
+LOG_DIR=/var/vcap/sys/log/$JOB_NAME
+DATA_DIR=/var/vcap/data/$JOB_NAME
+STATE_DIR=/var/vcap/store/$JOB_NAME
+PID_FILEPATH=$RUN_DIR/$JOB_NAME.pid
+CONFIG_FILEPATH=/var/vcap/jobs/$JOB_NAME/config/config.toml
+
+export PATH=$PATH:/var/vcap/packages/containerd/bin
+
+create_dirs() {
+  mkdir -p $RUN_DIR $LOG_DIR $DATA_DIR $STATE_DIR
+}
+
+write_pidfile() {
+  echo $$ > $PID_FILEPATH
+}
+
+start_containerd() {
+  log "Starting containerd"
+  exec 1>> $LOG_DIR/containerd.stdout.log
+  exec 2>> $LOG_DIR/containerd.stderr.log
+
+  echo 1 > /proc/sys/net/ipv4/ip_forward
+
+  # Set ulimits
+  ulimit -n ${CONTAINERD_ULIMIT_NOFILE}
+
+  # Set vm.max_map_count
+  [ -n "${CONTAINERD_VM_MAX_MAP_COUNT}" ] && sysctl -w vm.max_map_count=${DOCKER_VM_MAX_MAP_COUNT}
+
+  # Mount cgroupfs hierarchy
+  ${JOB_DIR}/bin/cgroupfs-mount
+
+  # Setup ssh env vars
+  # ${JOB_DIR}/bin/setup-user-env
+
+  # Do we need create bridge for containerd case? No. the flannel flag is always false
+  #create_network_bridge
+
+  # Enable shared_mounts
+  [ "${CONTAINERD_SHARED_MOUNTS_ENABLE}" = "true" ] && mount --make-shared /
+
+  # Do we still need this to provide certs for private docker registry?
+  # Create certs for private docker registry
+  # /var/vcap/packages/docker-registry-certs/bin/generate_certs ${JOB_DIR}/config/docker_registry_certs
+
+  exec containerd -c $CONFIG_FILEPATH
+}
+
+stop_containerd() {
+  set +e
+  # Stop leftover pods using crictl
+  local crictl='/var/vcap/packages/containerd/bin/crictl --runtime-endpoint unix:///var/vcap/sys/run/containerd/containerd.sock'
+  timeout 60 ${crictl} rmp --all -f
+  # Stop leftover containers using ctr
+  local ctr='/var/vcap/packages/containerd/bin/ctr --address /var/vcap/sys/run/containerd/containerd.sock -n k8s.io'
+  timeout 60 ${ctr} tasks ls -q | xargs -n 50 ${ctr} tasks delete -f
+  # Stop leftover process using kill
+  
+  pids=$(pgrep containerd-shim)
+  if [ ! -z "$pids" ]; then
+  # Let's wait grace-period time for ctr stop finish.
+    echo "Kill the leftover containers: $containers"
+    timeout 60 killall -I containerd-shim-runc-v2 --wait ||  "Fail to kill leftover containers in 60s"
+  fi
+
+  pids=$(pgrep containerd-shim)
+  if [ ! -z "$pids" ]; then
+    echo "Need force killing leftover containers: $(ps aux | grep [c]ontainerd-shim)"
+    kill -9 $pids
+  fi
+
+  if [ ! -z "$(pgrep containerd-shim)" ]; then
+    echo "there're still leftover containers after force killing: $(ps aux | grep [c]ontainerd-shim)"
+  fi
+  set -e
+
+  # Stop containerd daemon
+  log "Stopping containerd"
+  kill_and_wait ${PID_FILEPATH}
+}
+
+log() {
+  local msg
+  local time
+
+  msg=$1
+  time=$(date +"%e/%m/%Y - %T")
+
+  echo "$time $msg" >> $LOG_DIR/containerd_ctl.log
+}
+
+case $1 in
+  start)
+    create_dirs
+    write_pidfile
+    start_containerd
+  ;;
+
+  stop)
+    stop_containerd
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+    exit 1
+  ;;
+esac

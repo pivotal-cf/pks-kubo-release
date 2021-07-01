@@ -3,4 +3,3 @@ check process kubelet
   start program "/var/vcap/jobs/kubelet/bin/kubelet_ctl start" with timeout 120 seconds
   stop program "/var/vcap/jobs/kubelet/bin/kubelet_ctl stop"
   group vcap
-  depends on docker

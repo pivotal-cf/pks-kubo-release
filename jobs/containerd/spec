@@ -1,0 +1,51 @@
+---
+name: containerd
+
+packages:
+  - bosh-helpers
+  - containerd
+
+templates:
+  bin/cgroupfs-mount: bin/cgroupfs-mount
+  bin/containerd_ctl.erb: bin/containerd_ctl
+  config/config.toml.erb: config/config.toml
+  bin/pre-start.erb: bin/pre-start
+  bin/envrc: bin/envrc
+  bin/setup-user-env: bin/setup-user-env
+  bin/job_properties.sh.erb: bin/job_properties.sh
+
+
+properties:
+
+  config_toml.custom:
+    description: "add custom inside config.toml file"
+    default: ""
+
+  ulimit.nofile:
+    description: "Maximum number of open files"
+    default: 1048576
+  
+  shared_mounts_enable:
+    description: "Enable shared_mounts"
+    default: false
+
+  vm.max_map_count:
+    description: "If set, sets vm.max_map_count on VM"
+    default: ""  
+
+  env.http_proxy:
+    description: "HTTP proxy that Containerd should use"
+    default: ""
+
+  env.https_proxy:
+    description: "HTTPS proxy that Containerd should use"
+    default: ""
+
+  env.no_proxy:
+    description: "List of comma-separated hosts that Containerd should skip connecting to the proxy"
+    example: "127.0.0.1, localhost, *.internal.paas"
+    default: ""
+
+  store_dir:
+    description: "Path to use as the root of the Containerd runtime"
+    default: "/var/vcap/store"

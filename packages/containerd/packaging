@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -eu
+
+# Extract containerd package
+CONTAINERD_VERSION=1.4.6+vmware.1
+tar xzvf containerd/cri-containerd-v${CONTAINERD_VERSION}.linux-amd64.tar.gz
+if [[ $? != 0 ]] ; then
+  echo "Failed extracting containerd ${CONTAINERD_VERSION}"
+  exit 1
+fi
+
+echo "Copying containerd ${CONTAINERD_VERSION} binaries..."
+
+mkdir -p ${BOSH_INSTALL_TARGET}/bin
+cp usr/local/bin/* ${BOSH_INSTALL_TARGET}/bin
+cp usr/local/sbin/* ${BOSH_INSTALL_TARGET}/bin
+chmod +x ${BOSH_INSTALL_TARGET}/bin/*
