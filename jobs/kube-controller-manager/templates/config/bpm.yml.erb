@@ -33,11 +33,16 @@ processes:
       end
     end
   %>
+  <% iaas = nil %>
   <%- if_link('cloud-provider') do |cloud_provider| -%>
+      <% iaas = cloud_provider %>
   - --cloud-provider=<%= cloud_provider.p('cloud-provider.type') %>
   - --cloud-config=/var/vcap/jobs/kube-controller-manager/config/cloud-provider.ini
   <%- end -%>
   <%= "- --tls-cipher-suites=#{link('kube-apiserver').p('tls-cipher-suites')}" %>
+  <%- if iaas=="vsphere" -%>
+  - --feature-gates=CSIMigration=true,CSIMigrationvSphere=true
+  <%- end -%>
   hooks:
     pre_start: /var/vcap/jobs/kube-controller-manager/bin/chmod-product-serial
   env:
