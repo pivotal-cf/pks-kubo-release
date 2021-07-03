@@ -4,4 +4,4 @@ dependencies: []
 files:
   - docker/autoconf-2.69.tar.gz
   - docker/bridge-utils-1.5.tar.gz
-  - docker/docker-20.10.7.tgz
+  - docker/docker-20.10.6.tgz
