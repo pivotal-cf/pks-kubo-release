@@ -57,6 +57,8 @@ builds:
     version: 0.28.0
   4c3e74d1-73ef-4f44-5138-e69c5a723d11:
     version: 1.10.0-build.22-main
+  524d9d68-0ca4-41ca-78cb-9763da20806a:
+    version: 1.11.0-build.41-bump-kubernetes-1.20.8+vmware.1
   563095a3-1cad-463a-5056-be6e937fac78:
     version: 1.11.0-build.25-main
   579dbbc6-2882-4535-73a7-7651fbd22ac9:
