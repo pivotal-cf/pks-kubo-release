@@ -21,6 +21,8 @@ templates:
   config/service-account-private-key.pem.erb: config/service-account-private-key.pem
   config/service_key.json.erb: config/service_key.json
   config/tokens.csv.erb: config/tokens.csv
+  config/cluster-signing-ca.pem.erb: config/cluster-signing-ca.pem
+  config/cluster-signing-key.pem.erb: config/cluster-signing-key.pem
 packages:
 - kubernetes
 - file-generator
@@ -29,6 +31,8 @@ properties:
     description: The password for the admin account
   admin-username:
     description: The admin username for the Kubernetes cluster
+  cluster-signing:
+    description: "CA Certificate and private key for the certificate controller to issue certificates"
   audit-policy:
     description: The file contents for the API server's audit policy
   http_proxy:
