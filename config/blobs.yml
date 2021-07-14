@@ -119,9 +119,9 @@ libtool-2.4.6.tar.gz:
   object_id: 670cc8a2-75d8-4fb5-465f-270395cb9373
   sha: 25b6931265230a06f0fc2146df64c04e5ae6ec33
 local-sign-linux-amd64.tgz:
-  size: 3085984
-  object_id: 2a731738-2593-4657-4c66-5d41647d96db
-  sha: sha256:39663d7170f2271df8fd7985e31af4c8a17817657c26f2ff601d52236a04c146
+  size: 3251089
+  object_id: cbabbf87-741d-4320-5601-478aca209cc0
+  sha: sha256:2cff6d79ee457bcce7cd9781049f0cb01156a90e7383cc4c1e2c5b26e3bbc470
 nfs-debs/keyutils_1.5.9-8ubuntu1_amd64.deb:
   size: 47054
   object_id: e1b42c34-4e88-426b-7268-99d1bdfd40c1
