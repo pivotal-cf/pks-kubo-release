@@ -4,6 +4,17 @@
 
 TIMEOUT=60
 
+<% if_link('cloud-provider') do |cloud_provider| %>
+  iaas="<%= cloud_provider.p('cloud-provider.type').downcase %>"
+  if [[ "azure" == $iaas ]]; then
+    byo_dns_cnt=$(cat /etc/resolv.conf | awk '$1=="nameserver" && $2!="169.254.0.2" && $2!="168.63.129.16"' | wc -l)
+    if [[ $byo_dns_cnt -gt "0" ]]; then
+      echo "search bosh-agent-id" >> /etc/resolvconf/resolv.conf.d/tail
+      /sbin/resolvconf -u
+    fi
+  fi
+<% end %>
+
 if timeout "$TIMEOUT" /var/vcap/jobs/kube-apiserver/bin/ensure_apiserver_healthy
 then
   echo "Kubernetes api is healthy"
