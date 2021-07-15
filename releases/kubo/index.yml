@@ -137,6 +137,8 @@ builds:
     version: 1.9.0-build.64-master
   9acf36fd-7449-410d-5732-9c1aa000f0a7:
     version: 0.18.0
+  9adcdcd6-a454-4734-4997-b4202e871951:
+    version: 1.12.0-build.34.azure-byo-dns
   9b00911b-f2d5-47ef-6ef2-f68eb547cf0c:
     version: 0.15.0
   9e0ff938-2070-4495-7f79-ac5e34bcf2a4:
