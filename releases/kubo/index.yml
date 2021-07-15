@@ -111,6 +111,8 @@ builds:
     version: 1.9.0-build.26-bump-kubernetes-1.18.1+vmware.1
   820a6517-f92b-42de-4d13-8661cdfe2605:
     version: 0.9.0
+  8241935f-8c2f-42dc-4931-f5f4f3b6523d:
+    version: 1.12.0-build.33.azure-byo-dns
   860e5082-0f75-4d0a-4054-c3f3a36acb5f:
     version: 1.11.0-build.17-add-containerd
   87e65015-b612-4afa-7adf-4094df574137:
