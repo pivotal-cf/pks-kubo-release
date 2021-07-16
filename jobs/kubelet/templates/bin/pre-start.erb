@@ -17,10 +17,27 @@ KUBELET_KEY_PATH="${CONFIG_DIR}/kubelet-key.pem"
 
 CONFIG_FILE_NAME="${CONFIG_DIR}/file-arguments.json"
 
+<% if_p('cloud-provider') do |cloud_provider| %>
+    cloud_provider="<%= cloud_provider %>"
+<% end %>
+
+get_hostname() {
+  if [[ "aws" == "$cloud_provider" ]]; then
+        # The hostname needs to be set to the instance name so the gce cloud provider can manage the instance
+        hostname_override=$(curl http://169.254.169.254/latest/meta-data/hostname)
+  elif [[ "gce" == "$cloud_provider" ]]; then
+    hostname_override=$(curl http://metadata.google.internal/computeMetadata/v1/instance/name -H "Metadata-Flavor: Google")
+  else
+    hostname_override=$(hostname)
+  fi
+
+  echo $hostname_override
+}
+
 
 do_kubelet_certificate_sign(){
     set +e
-    sed -i "s|NODENAME|$(hostname)|g" ${CERTIFICATE_TEMPLATE_PATH}
+    sed -i "s|NODENAME|$(get_hostname)|g" ${CERTIFICATE_TEMPLATE_PATH}
     $(${SIGN_CMD} certificate --config ${CA_CONFIG_PATH} --template ${CERTIFICATE_TEMPLATE_PATH} --out ${CERTIFICATE_OUTPUT_DIR})
     mv ${CERTIFICATE_OUTPUT_DIR}/certificate.pem ${KUBELET_CERT_PATH}
     mv ${CERTIFICATE_OUTPUT_DIR}/key.pem ${KUBELET_KEY_PATH}

@@ -91,7 +91,10 @@ delete_stale_drained_node() {
 }
 
 get_hostname_override() {
-  if [[ "gce" == "$cloud_provider" ]]; then
+  if [[ "aws" == "$cloud_provider" ]]; then
+    # The hostname needs to be set to the instance name so the aws cloud provider can manage the instance
+    hostname_override=$(curl http://169.254.169.254/latest/meta-data/hostname)
+  elif [[ "gce" == "$cloud_provider" ]]; then
     hostname_override=$(curl http://metadata.google.internal/computeMetadata/v1/instance/name -H "Metadata-Flavor: Google")
   elif [[ "azure" == "$cloud_provider" ]]; then
     # K8s 1.9 Azure provider assumes  the hostname == nodename and is required to resolve the VM instance ID
