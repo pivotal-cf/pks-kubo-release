@@ -27,6 +27,8 @@ builds:
     version: 1.9.0-build.65-master
   2205feb0-bc33-4f09-73c0-ae074e61a89a:
     version: 1.11.0-build.15-add-containerd
+  22afbd59-0fd7-4813-5a89-b1b54fc8b487:
+    version: 1.12.0-build.35.load-antrea-images
   255a7505-ecd5-4141-470f-9338b25cb944:
     version: 0.31.0
   2605f42c-2cf5-44af-773f-4fed45caa1c7:
