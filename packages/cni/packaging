@@ -3,7 +3,7 @@ set -exu
 mkdir -p ${BOSH_INSTALL_TARGET}/bin
 
 CNI_PACKAGE="cni-plugins"
-CNI_VERSION="0.8.7+vmware.8"
+CNI_VERSION="0.8.7+vmware.13"
 
 NSENTER_VERSION="2.27.1"
 

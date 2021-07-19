@@ -1,7 +1,7 @@
 set -e
 
 KUBERNETES_PACKAGE=common-core-kubernetes
-KUBERNETES_VERSION="1.20.6+vmware.1"
+KUBERNETES_VERSION="1.20.8+vmware.1"
 
 main() {
   create_target_dir
