@@ -19,6 +19,11 @@ main() {
   check_if_pid_is_running
 
   retry cordon_node
+
+  attached_disks_num=$(get_disks_num)
+
+  vcp_disks_num=$(get_vcp_disks_num)
+
   k8s_disks=$(get_k8s_disks)
   echo "Mounted volumes: $k8s_disks"
   if ! drain_node ; then
@@ -37,6 +42,12 @@ main() {
   else
     watch_disks "${k8s_disks}"
   fi
+
+  if [[ ${vcp_disks_num} -gt 0 ]]; then
+    watch_vcp_disks ${vcp_disks_num}
+    wait_for_disks_detach ${attached_disks_num} ${vcp_disks_num}
+  fi
+
   retry delete_drained_node
 }
 
@@ -178,6 +189,49 @@ check_if_pidfile_exists() {
 kill_node() {
   kill -9 "$(head -1 "$PIDFILE")"
   rm -f $PIDFILE
+}
+
+watch_vcp_disks() {
+  local current_vcp_disks_num=$1
+
+  echo "$(date): checking for attached VCP PVs..."
+
+  while (( current_vcp_disks_num != 0 ))
+  do
+    echo "$(date): ${current_vcp_disks_num} VCP disks still attached"
+    sleep 2
+    current_vcp_disks_num=$(get_vcp_disks_num)
+  done
+}
+
+get_vcp_disks_num() {
+  <%-
+    root_dir = p('k8s-args', {}).fetch('root-dir', "/var/lib/kubelet")
+  -%>
+  disks_patten="<%= root_dir %>/plugins/kubernetes.io/vsphere-volume|<%= root_dir %>/plugins/kubernetes.io/csi/volumeDevices/publish/pvc"
+  echo $(mount | grep -E $disks_patten | wc -l)
+}
+
+get_disks_num() {
+  echo $(lsblk -dnl | grep disk | wc -l)
+}
+
+wait_for_disks_detach() {
+  local attached_disks_num=$1
+  local vcp_disks_num=$2
+
+  echo "$(date): checking for attached disks..."
+
+  for (( i=1; i<=120; i++ ))
+  do
+    current_attached_disks_num=$(get_disks_num)
+
+    if [[ $(( ${attached_disks_num} - ${current_attached_disks_num} )) -ge  ${vcp_disks_num} ]]; then
+      break
+    fi
+
+    sleep 2
+  done
 }
 
 main
