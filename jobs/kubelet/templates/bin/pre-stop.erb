@@ -24,6 +24,8 @@ main() {
 
   vcp_disks_num=$(get_vcp_disks_num)
 
+  k8s_disks_num=$(get_k8s_disks_num)
+
   k8s_disks=$(get_k8s_disks)
   echo "Mounted volumes: $k8s_disks"
   if ! drain_node ; then
@@ -45,7 +47,9 @@ main() {
 
   if [[ ${vcp_disks_num} -gt 0 ]]; then
     watch_vcp_disks ${vcp_disks_num}
-    wait_for_disks_detach ${attached_disks_num} ${vcp_disks_num}
+
+    expected_detached_disks_num=$(( ${k8s_disks_num} + ${vcp_disks_num} ))
+    wait_for_disks_detach ${attached_disks_num} ${expected_detached_disks_num}
   fi
 
   retry delete_drained_node
@@ -218,7 +222,7 @@ get_disks_num() {
 
 wait_for_disks_detach() {
   local attached_disks_num=$1
-  local vcp_disks_num=$2
+  local expected_detached_disks_num=$2
 
   echo "$(date): checking for attached disks..."
 
@@ -226,12 +230,19 @@ wait_for_disks_detach() {
   do
     current_attached_disks_num=$(get_disks_num)
 
-    if [[ $(( ${attached_disks_num} - ${current_attached_disks_num} )) -ge  ${vcp_disks_num} ]]; then
+    if [[ $(( ${attached_disks_num} - ${current_attached_disks_num} )) -ge  ${expected_detached_disks_num} ]]; then
       break
     fi
 
     sleep 2
   done
+}
+
+get_k8s_disks_num() {
+<%-
+  root_dir = p('k8s-args', {}).fetch('root-dir', "/var/lib/kubelet").gsub("/", "\\/")
+-%>
+  echo $(lsblk -dnl -o NAME,TYPE,MOUNTPOINT | awk '/<%= root_dir %>/ {print $1}' | wc -l)
 }
 
 main
