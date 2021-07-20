@@ -50,6 +50,8 @@ main() {
 
     expected_detached_disks_num=$(( ${k8s_disks_num} + ${vcp_disks_num} ))
     wait_for_disks_detach ${attached_disks_num} ${expected_detached_disks_num}
+  else
+    echo "No attached VCP PVs"
   fi
 
   retry delete_drained_node
@@ -228,6 +230,7 @@ wait_for_disks_detach() {
 
   for (( i=1; i<=120; i++ ))
   do
+    echo "$(date): waiting for disks to detach..."
     current_attached_disks_num=$(get_disks_num)
 
     if [[ $(( ${attached_disks_num} - ${current_attached_disks_num} )) -ge  ${expected_detached_disks_num} ]]; then

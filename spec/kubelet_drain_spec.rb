@@ -5,7 +5,7 @@ require 'spec_helper'
 
 def get_k8s_disks_dir(rendered_drain)
   lsblk_line = rendered_drain.split("\n").select { |line| line[/MOUNTPOINT/i] }
-  expect(lsblk_line.length).to be(1)
+  expect(lsblk_line.length).to be(2)
   lsblk_line[0].match(/awk '\/(.+)\/ {print \$1}'/).captures[0]
 end
 
