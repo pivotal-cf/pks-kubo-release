@@ -226,7 +226,7 @@ wait_for_disks_detach() {
   local attached_disks_num=$1
   local expected_detached_disks_num=$2
 
-  echo "$(date): checking the attached disks..."
+  echo "$[(date)] checking the attached disks..."
 
   for (( i=1; i<=120; i++ ))
   do
@@ -239,7 +239,7 @@ wait_for_disks_detach() {
 
     sleep 2
   done
-  echo "$(date): all disks are detached"
+  echo "[$(date)] all disks are detached"
 }
 
 get_k8s_disks_num() {
