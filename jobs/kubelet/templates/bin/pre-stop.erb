@@ -27,20 +27,20 @@ main() {
   k8s_disks_num=$(get_k8s_disks_num)
 
   k8s_disks=$(get_k8s_disks)
-  echo "Mounted volumes: $k8s_disks"
+  echo "[$(date)] attached CSI volumes: $k8s_disks"
   if ! drain_node ; then
     <% if_p("kubelet-drain-force-node") do |prop| %>
       <% if prop %>
         force_kill_pods
       <% else %>
-        echo "Unsuccessful function drain_node"
+        echo "[$(date)] Unsuccessful function drain_node"
         exit 1
       <% end %>
     <% end %>
   fi
 
   if [[ -z "${k8s_disks}" ]]; then
-    echo "No attached PVs"
+    echo "[$(date)] No attached PVs"
   else
     watch_disks "${k8s_disks}"
   fi
@@ -51,7 +51,7 @@ main() {
     expected_detached_disks_num=$(( ${k8s_disks_num} + ${vcp_disks_num} ))
     wait_for_disks_detach ${attached_disks_num} ${expected_detached_disks_num}
   else
-    echo "No attached VCP PVs"
+    echo "[$(date)] no any attached VCP volumes"
   fi
 
   retry delete_drained_node
@@ -226,11 +226,11 @@ wait_for_disks_detach() {
   local attached_disks_num=$1
   local expected_detached_disks_num=$2
 
-  echo "$(date): checking for attached disks..."
+  echo "$(date): checking the attached disks..."
 
   for (( i=1; i<=120; i++ ))
   do
-    echo "$(date): waiting for disks to detach..."
+    echo "[$(date)] waiting for disks to detach, expected disks number to be detached: ${expected_detached_disks_num} , there are still $(( ${attached_disks_num} - ${current_attached_disks_num} )) disks attached"
     current_attached_disks_num=$(get_disks_num)
 
     if [[ $(( ${attached_disks_num} - ${current_attached_disks_num} )) -ge  ${expected_detached_disks_num} ]]; then
@@ -239,6 +239,7 @@ wait_for_disks_detach() {
 
     sleep 2
   done
+  echo "$(date): all disks are detached"
 }
 
 get_k8s_disks_num() {
