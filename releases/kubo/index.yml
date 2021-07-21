@@ -5,6 +5,8 @@ builds:
     version: 1.9.0-build.56-master
   06781654-e47d-4e51-567b-2f35860cfeca:
     version: 0.41.0
+  072e71a7-0334-4287-42b7-c8748b0c3e91:
+    version: 1.12.0-build.42.wait-for-vcp-disks-to-detach
   07c7a55d-b2c6-4a63-46a7-a8fbf6c0f7b1:
     version: 0.13.0
   09ca3898-fcc4-493d-474b-3cc292fd5a07:
