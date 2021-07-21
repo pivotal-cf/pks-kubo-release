@@ -87,6 +87,8 @@ builds:
     version: 1.9.0-build.66-bump-kubernetes-1.18.5+vmware.1
   665d71a9-8522-4c64-692a-7899458abae6:
     version: 0.8.0
+  67dd54db-7708-43d3-50e1-26e3cfcbb141:
+    version: 1.12.0-build.37.wait-for-vcp-disks-to-detach
   69d1b13f-6cee-4509-6fc9-0f95ab81b7f8:
     version: 1.12.0-build.20.main
   6b31c2bf-8aad-4d6c-6d99-fa8c6fb7f813:
