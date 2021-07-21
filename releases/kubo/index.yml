@@ -103,6 +103,8 @@ builds:
     version: 1.11.0-build.7-main
   797689ff-a6ac-4af3-44cc-25c556818531:
     version: 1.9.0-build.77-bump-kubernetes-1.18.8+vmware.1
+  799b6a03-735a-4044-6b0b-55ef2cd5413b:
+    version: 1.12.0-build.37.wait-for-vcp-disks-to-detach
   7a4de372-3618-4789-4c0d-2c054e44244a:
     version: 1.11.0-build.23-main
   7acb57cc-ef32-44ae-47ef-f476fca5a40a:
